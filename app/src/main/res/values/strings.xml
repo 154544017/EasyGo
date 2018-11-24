@@ -30,4 +30,6 @@
     <string name="password_length">Password must contain minimum 8 characters</string>
     <string name="passwords_check">Passwords do not match!</string>
 
+    <string name="attractions_search_menu">Search</string>
+
 </resources>

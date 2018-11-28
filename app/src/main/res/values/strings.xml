@@ -31,5 +31,49 @@
     <string name="passwords_check">Passwords do not match!</string>
 
     <string name="attractions_search_menu">Search</string>
+    <string name="schedule_add_menu">Add</string>
 
+    <string name="details_address">Address</string>
+    <string name="details_introduction">Introduction</string>
+    <string name="details_telephone">Telephone</string>
+    <string name="details_transport">Transport</string>
+
+    <string name="schedule_address">Address</string>
+    <string name="begin_time">BeginTime</string>
+    <string name="end_time">EndTime</string>
+    <string name="schedule_date">Date</string>
+    <string name="schedule_remark">Remark for the schedule.</string>
+
+    <string name="delete_text">Del</string>
+
+    <string name="new_schedule_type">Type</string>
+    <string name="new_schedule_address">Address</string>
+    <string name="new_schedule_date">Date:xx/xx/xx</string>
+    <string name="new_schedule_time">Time:xx:xx</string>
+    <string name="new_schedule_cost">PlannedCost</string>
+    <string name="new_schedule_remark">Remark</string>
+    <string name="new_schedule_button_text">ADD</string>
+    <string-array name="schedule_type_list">
+        <item>ATTRACTIONS</item>
+        <item>DINING</item>
+        <item>TRANSPORT</item>
+        <item>HOTEL</item>
+    </string-array>
+
+    <string name="schedule_title">Travel Schedule</string>
+    
+    <string name="user_profile">UserProfile</string>
+    <string name="user_past_schedule_list">PreviousScheduleList</string>
+    <string name="user_system_setting">SystemSetting</string>
+    <string name="about">About</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+
+    <string name="new_journal_photo">Upload&#160;your&#160;photo.</string>
+
+    <string name="new_journal_title">Title</string>
+    <string name="new_journal_date">Date:xx/xx/xx</string>
+    <string name="new_journal_location">Location</string>
+    <string name="new_journal_friends">Friends</string>
+    <string name="new_journal_content">Content:something&#160;happened&#160;in&#160;your&#160;travel</string>
 </resources>

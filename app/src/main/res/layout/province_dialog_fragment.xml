@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/card_bac"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:scaleType="centerCrop" />
+
+    <LinearLayout
+        android:id="@+id/unlock_layout"
+        android:visibility="gone"
+        android:gravity="center"
+        android:background="#8000"
+        android:layout_centerInParent="true"
+        android:padding="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:padding="20dp"
+            android:id="@+id/dialog_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="您还未解锁该省份"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="解锁"
+                android:textSize="20sp"
+                android:padding="10dp"/>
+
+            <ImageButton
+                android:id="@+id/unlock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@mipmap/lock" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="查看介绍"
+                android:textSize="20sp"
+               />
+
+
+            <ImageButton
+                android:id="@+id/local_attractions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@mipmap/star"
+/>
+
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/locked_go_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@mipmap/back" />
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/dialog_back"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/back" />
+
+    <ImageButton
+        android:id="@+id/dialog_journal"
+        android:visibility="gone"
+        android:layout_width="100sp"
+        android:layout_height="50sp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/button"
+        android:scaleType="centerCrop"/>
+</RelativeLayout>

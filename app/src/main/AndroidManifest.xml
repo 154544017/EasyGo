@@ -3,20 +3,32 @@
     package="com.software.tongji.easygo">
 
     <application
+        android:name="org.litepal.LitePalApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"></activity>
-        <activity android:name=".login.LoginActivity">
+        <activity android:name=".MainActivity" />
+        <activity android:name=".login.LoginActivity"
+            android:theme="@style/AppNoBarTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".navigation.NavigationActivity"
+            android:theme="@style/AppNoBarTheme"/>
+        <activity android:name=".details.DetailsActivity"
+            android:theme="@style/AppNoBarTheme"/>
+        <activity android:name=".newschedule.NewScheduleActivity"
+            android:theme="@style/AppNoBarTheme" />
+        <activity android:name=".journaledit.JournalEditActivity"
+            android:theme="@style/AppNoBarTheme"/>
+        <activity android:name=".journal.JournalShowActivity"
+            android:theme="@style/AppNoBarTheme"/>
     </application>
 
 </manifest>

@@ -1,5 +1,8 @@
 package com.software.tongji.easygo.login;
 
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -16,6 +19,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.dd.processbutton.FlatButton;
 import com.mukesh.OtpView;
 import com.software.tongji.easygo.R;
+import com.software.tongji.easygo.navigation.NavigationActivity;
 
 
 import java.util.regex.Matcher;
@@ -129,7 +133,12 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
             public void onClick(View view) {
                 String email = mEmailLogin.getText().toString();
                 String password = mPassLogin.getText().toString();
-                mLoginPresenter.okLogin(email, password, mHandler);
+                //mLoginPresenter.okLogin(email, password, mHandler);
+
+                //test
+                Intent intent = new Intent(LoginActivity.this, NavigationActivity.class);
+                startActivity(intent);
+
             }
         });
 

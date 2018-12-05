@@ -13,15 +13,17 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
         android:background="@color/black" >
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:alpha="0.3"
-            android:background="@drawable/login_background7"
+            android:alpha="0.5"
+            android:background="@drawable/login_background_red"
             android:padding="10dp"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:fitsSystemWindows="true"/>
 
         <LinearLayout
             android:layout_width="match_parent"

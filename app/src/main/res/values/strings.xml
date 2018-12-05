@@ -43,6 +43,7 @@
     <string name="end_time">EndTime</string>
     <string name="schedule_date">Date</string>
     <string name="schedule_remark">Remark for the schedule.</string>
+    <string name="no_schedule_alert">No&#160;schedule&#160;yet</string>
 
     <string name="delete_text">Del</string>
 
@@ -76,4 +77,6 @@
     <string name="new_journal_location">Location</string>
     <string name="new_journal_friends">Friends</string>
     <string name="new_journal_content">Content:something&#160;happened&#160;in&#160;your&#160;travel</string>
+
+    <string name="journal_search_menu">Search</string>
 </resources>

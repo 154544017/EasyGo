@@ -8,8 +8,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <ImageView
             android:id="@+id/journal_cover"
             android:src="@drawable/guilin"
@@ -24,7 +25,7 @@
             android:id="@+id/journal_title"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.5"
+            android:layout_weight="1"
             android:text="日志题目"
             android:layout_gravity="center"
             android:textSize="20dp"
@@ -32,7 +33,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.5"
+            android:layout_weight="1"
             android:paddingTop="3dp"
             android:paddingLeft="16dp"
             android:orientation="horizontal">

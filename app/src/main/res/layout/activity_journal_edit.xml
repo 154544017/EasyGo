@@ -33,7 +33,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
-                android:src="@drawable/new_journal_holder"/>
+                android:src="@drawable/new_journal_holder"
+                android:scaleType="centerCrop"/>
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
@@ -73,7 +74,7 @@
                         android:id="@+id/new_journal_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/new_schedule_cost" />
+                        android:hint="@string/new_journal_title" />
 
                 </android.support.design.widget.TextInputLayout>
 

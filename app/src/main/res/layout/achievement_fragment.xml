@@ -4,10 +4,9 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    >
+    android:fitsSystemWindows="true">
 
     <android.support.design.widget.TabLayout
-        android:background="#8000"
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         app:tabMode="fixed"
@@ -15,15 +14,16 @@
 
         <android.support.design.widget.TabItem
             android:id="@+id/map"
-            android:icon="@mipmap/map_icon"
+            android:icon="@mipmap/earth_icon"
             android:layout_width="wrap_content"
             android:layout_height="match_parent" />
 
         <android.support.design.widget.TabItem
             android:id="@+id/display"
-            android:icon="@mipmap/local_image"
+            android:icon="@mipmap/trophy_icon"
             android:layout_width="wrap_content"
             android:layout_height="match_parent" />
+
     </android.support.design.widget.TabLayout>
 
     <FrameLayout

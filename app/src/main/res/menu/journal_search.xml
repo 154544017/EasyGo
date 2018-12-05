@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/attractions_search"
+        android:id="@+id/journal_search"
         android:icon="@drawable/ic_search_white_36dp"
-        android:title="@string/attractions_search_menu"
+        android:title="@string/journal_search_menu"
         app:showAsAction="always"
         app:actionViewClass="android.support.v7.widget.SearchView" />
 

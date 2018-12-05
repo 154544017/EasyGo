@@ -1,11 +1,13 @@
 package com.software.tongji.easygo.login;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -90,8 +92,12 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
     OtpView mResetCode;
 
     private MaterialDialog mDialog;
+    private SharedPreferences mSharedPreferences;
     private Handler mHandler;
     private String mOptCode;
+
+    public static final String USER_EMAIL = "user_email";
+    public static final String USER_TOKEN = "user_token";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -102,7 +108,10 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
         ButterKnife.bind(this);
 
         mHandler = new Handler(Looper.getMainLooper());
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
+        //Check for Showing Daily Quote
+        checkUserSession();
         //Open SignUp
         mSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,12 +142,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
             public void onClick(View view) {
                 String email = mEmailLogin.getText().toString();
                 String password = mPassLogin.getText().toString();
-                //mLoginPresenter.okLogin(email, password, mHandler);
-
-                //test
-                Intent intent = new Intent(LoginActivity.this, NavigationActivity.class);
-                startActivity(intent);
-
+                mLoginPresenter.okLogin(email, password, mHandler);
             }
         });
 
@@ -319,6 +323,36 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
     }
 
     @Override
+    public void checkUserSession() {
+        if (mSharedPreferences.getString(USER_TOKEN, null) != null) {
+            Intent intent = new Intent(LoginActivity.this, NavigationActivity.class);
+            startActivity(intent);
+            finish();
+        }
+    }
+
+
+    @Override
+    public void rememberUserInfo(String token, String email) {
+          SharedPreferences.Editor editor = mSharedPreferences.edit();
+          editor.putString(USER_TOKEN, token);
+          editor.putString(USER_EMAIL, email);
+          editor.apply();
+    }
+
+    @Override
+    public void startMainActivity() {
+        Intent intent=new Intent();
+
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        intent.setClass(LoginActivity.this,NavigationActivity.class);
+
+        startActivity(intent);
+
+    }
+
+    @Override
     public void showLoadingDialog() {
         mDialog = new MaterialDialog.Builder(this)
                 .title(R.string.app_name)
@@ -328,7 +362,20 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
     }
 
     @Override
+    public void showError(String error) {
+        Snackbar snackbar = Snackbar
+                .make(findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG);
+        snackbar.show();
+    }
+
+    @Override
     public void dismissLoadingDialog() {
         mDialog.dismiss();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mLoginPresenter.unbind();
     }
 }

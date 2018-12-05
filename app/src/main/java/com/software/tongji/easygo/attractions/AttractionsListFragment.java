@@ -4,6 +4,7 @@ package com.software.tongji.easygo.attractions;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,8 +29,8 @@ public class AttractionsListFragment extends Fragment {
 
     @BindView(R.id.attractions_recycler_view)
     RecyclerView mRecyclerView;
-    @BindView(R.id.search_tool_bar)
-    Toolbar mSearch;
+    @BindView(R.id.attractions_search_view)
+    SearchView mSearchView;
 
     private AttractionsAdapter mAttractionsAdapter;
 
@@ -37,7 +38,6 @@ public class AttractionsListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -46,7 +46,6 @@ public class AttractionsListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
         ButterKnife.bind(this, view);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(mSearch);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         List<String> name = new ArrayList<>();
@@ -56,16 +55,8 @@ public class AttractionsListFragment extends Fragment {
         mAttractionsAdapter = new AttractionsAdapter(name);
         mRecyclerView.setAdapter(mAttractionsAdapter);
 
-        return view;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.attractions_search, menu);
-
-        MenuItem item = menu.findItem(R.id.attractions_search);
-        SearchView searchView = (SearchView) item.getActionView();
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        mSearchView.setQueryHint("Search attractions");
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
@@ -76,5 +67,7 @@ public class AttractionsListFragment extends Fragment {
                 return false;
             }
         });
+
+        return view;
     }
 }

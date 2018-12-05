@@ -10,16 +10,13 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.software.tongji.easygo.R;
 
-import java.sql.Time;
 import java.util.Calendar;
 
 import butterknife.BindView;
@@ -29,9 +26,12 @@ public class NewScheduleActivity extends AppCompatActivity implements NewSchedul
 
     private NewSchedulePresenter mNewSchedulePresenter;
 
-    public static final String NEW_TYPE = "new_type";
-    public static final String NEW_ADDRESS = "new_address";
-    public static final String NEW_BEGIN_TIME = "new_begin_time";
+    public static final String NEW_SCHEDULE_TYPE = "new_schedule_type";
+    public static final String NEW_SCHEDULE_ADDRESS = "new_schedule_address";
+    public static final String NEW_SCHEDULE_DATE = "new_schedule_date";
+    public static final String NEW_SCHEDULE_TIME = "new_schedule_time";
+    public static final String NEW_SCHEDULE_COST = "new_schedule_cost";
+    public static final String NEW_SCHEDULE_REMARK = "new_schedule_remark";
 
     @BindView(R.id.new_schedule_address)
     TextInputEditText mScheduleAddress;
@@ -90,8 +90,19 @@ public class NewScheduleActivity extends AppCompatActivity implements NewSchedul
         mNewScheduleOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //put extra
-                finish();
+                Intent intent = new Intent();
+                if(mScheduleAddress.getText().toString().length() < 1){
+                    Toast.makeText(NewScheduleActivity.this, "Please fill the address before your commit!", Toast.LENGTH_SHORT).show();
+                }else{
+                    intent.putExtra(NEW_SCHEDULE_ADDRESS, mScheduleAddress.getText().toString());
+                    intent.putExtra(NEW_SCHEDULE_DATE, mScheduleDate.getText().toString());
+                    intent.putExtra(NEW_SCHEDULE_TIME, mScheduleTime.getText().toString());
+                    intent.putExtra(NEW_SCHEDULE_TYPE, mScheduleType.getSelectedItem().toString());
+                    intent.putExtra(NEW_SCHEDULE_COST, mScheduleCost.getText().toString());
+                    intent.putExtra(NEW_SCHEDULE_REMARK, mScheduleRemark.getText().toString());
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
             }
         });
     }

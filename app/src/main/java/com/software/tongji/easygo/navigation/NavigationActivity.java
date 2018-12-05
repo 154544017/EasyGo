@@ -45,13 +45,15 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(Build.VERSION.SDK_INT >= 21){
+
+        if (Build.VERSION.SDK_INT >= 21) {
             View decorView = getWindow().getDecorView();
-            decorView.setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            getWindow().setStatusBarColor(Color.TRANSPARENT);
+            int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+            decorView.setSystemUiVisibility(option);
+            //getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
+
         setContentView(R.layout.activity_navigation);
         LitePal.getDatabase();
 
@@ -72,8 +74,8 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
         navigationController.setupWithViewPager(mNavigationViewPager);
     }
 
-    public void changeFragment(){
-        mNavigationViewPager.setCurrentItem(2);
+    public void changeFragment(int position){
+        mNavigationViewPager.setCurrentItem(position);
     }
     @Override
     public void setupViewPager() {

@@ -25,6 +25,7 @@ import com.software.tongji.easygo.JournalDisplayMvp.JournalDisplayActivity;
 import com.software.tongji.easygo.JournalDisplayMvp.JournalDisplayFragment;
 import com.software.tongji.easygo.MapMvp.MapFragment;
 import com.software.tongji.easygo.MyProvinceDisplayMvp.ProvinceDisplayActivity;
+import com.software.tongji.easygo.MyProvinceDisplayMvp.ProvinceDisplayFragment;
 import com.software.tongji.easygo.R;
 import com.software.tongji.easygo.bean.Province;
 import com.software.tongji.easygo.bean.ProvinceLab;
@@ -142,8 +143,9 @@ public class ProvinceDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 mDialog.dismiss();
-                Intent intent = new Intent(getActivity(),ProvinceDisplayActivity.class);
-                startActivity(intent);
+                NavigationActivity activity = (NavigationActivity)getActivity();
+                activity.changeFragment(3);
+
             }
         });
 
@@ -152,7 +154,7 @@ public class ProvinceDialogFragment extends DialogFragment {
             public void onClick(View v) {
                 mDialog.dismiss();
                 NavigationActivity activity = (NavigationActivity)getActivity();
-                activity.changeFragment();
+                activity.changeFragment(2);
             }
         });
         mDialogBack.setOnClickListener(new View.OnClickListener() {

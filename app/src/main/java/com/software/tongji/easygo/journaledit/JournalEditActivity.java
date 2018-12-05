@@ -1,6 +1,7 @@
 package com.software.tongji.easygo.journaledit;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -9,8 +10,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.Toast;
 
 import com.software.tongji.easygo.R;
+import com.software.tongji.easygo.newschedule.NewScheduleActivity;
 
 import java.util.Calendar;
 
@@ -18,6 +21,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class JournalEditActivity extends AppCompatActivity implements JournalEditView{
+
+    public static final String NEW_JOURNAL_TITLE = "new_journal_title";
+    public static final String NEW_JOURNAL_DATE = "new_journal_date";
+    public static final String NEW_JOURNAL_LOCATION = "new_journal_location";
+    public static final String NEW_JOURNAL_FRIENDS = "new_journal_friends";
+    public static final String NEW_JOURNAL_CONTENT = "new_journal_content";
 
     @BindView(R.id.new_journal_title)
     TextInputEditText mNewJournalTitle;
@@ -58,10 +67,29 @@ public class JournalEditActivity extends AppCompatActivity implements JournalEdi
                 showDatePickDialog();
             }
         });
+
         mSaveJournalButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                Intent intent = new Intent();
+                if(mNewJournalTitle.getText().toString().length() < 1){
+                    Toast.makeText(JournalEditActivity.this, "Please fill the title before your commit!", Toast.LENGTH_SHORT).show();
+                }else{
+                    intent.putExtra(NEW_JOURNAL_TITLE, mNewJournalTitle.getText().toString());
+                    intent.putExtra(NEW_JOURNAL_DATE, mNewJournalDate.getText().toString());
+                    intent.putExtra(NEW_JOURNAL_LOCATION, mNewJournalLocation.getText().toString());
+                    intent.putExtra(NEW_JOURNAL_FRIENDS, mNewJournalFriends.getText().toString());
+                    intent.putExtra(NEW_JOURNAL_CONTENT, mNewJournalContent.getText().toString());
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
+            }
+        });
+
+        mAddPhotoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
             }
         });
     }

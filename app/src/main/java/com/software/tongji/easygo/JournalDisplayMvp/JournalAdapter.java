@@ -40,7 +40,10 @@ public class JournalAdapter extends RecyclerView.Adapter<JournalAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        //Glide.with(mContext).load(R.drawable.guilin).into(holder.cover);
+        Journal journal = mJournalList.get(position);
+        holder.title.setText(journal.getTitle());
+        holder.city.setText(journal.getLocation());
+        holder.date.setText(journal.getDate());
     }
 
     @Override

@@ -3,7 +3,22 @@ package com.software.tongji.easygo.bean;
 public class Journal {
     private String mTitle;
     private String mDate;
-    private String mLoacl;
+    private String mLocation;
+    private String mFriends;
+    private String mContent;
+
+    public Journal(){
+
+    }
+
+    public Journal(String title, String date, String location, String friends, String content){
+        mTitle = title;
+        mDate = date;
+        mLocation = location;
+        mFriends = friends;
+        mContent = content;
+    }
+
 
     public String getTitle() {
         return mTitle;
@@ -21,11 +36,27 @@ public class Journal {
         mDate = date;
     }
 
-    public String getLoacl() {
-        return mLoacl;
+    public String getLocation() {
+        return mLocation;
     }
 
-    public void setLoacl(String loacl) {
-        mLoacl = loacl;
+    public void setLocation(String location) {
+        mLocation = location;
+    }
+
+    public String getFriends() {
+        return mFriends;
+    }
+
+    public void setFriends(String friends) {
+        mFriends = friends;
+    }
+
+    public String getContent() {
+        return mContent;
+    }
+
+    public void setContent(String content) {
+        mContent = content;
     }
 }

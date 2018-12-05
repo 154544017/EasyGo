@@ -8,24 +8,24 @@ import java.util.Map;
 
 public class Schedule {
 
-    public ScheduleType getScheduleType() {
-        return mScheduleType;
-    }
-
-
-    private ScheduleType mScheduleType;
     private String mAddress;
-    private String mBeginTime;
+    private String mDate;
+    private String mTime;
+    private String mType;
+    private String mCost;
+    private String mRemark;
 
-    public Schedule(ScheduleType scheduleType, String address, String beginTime){
-        mScheduleType = scheduleType;
+    public Schedule(String address, String date, String time,
+                    String type, String cost, String remark){
+
         mAddress = address;
-        mBeginTime = beginTime;
+        mDate = date;
+        mTime = time;
+        mType = type;
+        mCost = cost;
+        mRemark = remark;
     }
 
-    public void setScheduleType(ScheduleType scheduleType) {
-        mScheduleType = scheduleType;
-    }
 
     public String getAddress() {
         return mAddress;
@@ -35,16 +35,43 @@ public class Schedule {
         mAddress = address;
     }
 
-    public String getBeginTime() {
-        return mBeginTime;
+    public String getDate() {
+        return mDate;
     }
 
-    public void setBeginTime(String beginTime) {
-        mBeginTime = beginTime;
+    public void setDate(String date) {
+        mDate = date;
     }
 
-    public enum ScheduleType{
-        DINING, HOTEL, TRANSPORT, ATTRACTIONS
+    public String getTime() {
+        return mTime;
     }
 
+    public void setTime(String time) {
+        mTime = time;
+    }
+
+    public String getType() {
+        return mType;
+    }
+
+    public void setType(String type) {
+        mType = type;
+    }
+
+    public String getCost() {
+        return mCost;
+    }
+
+    public void setCost(String cost) {
+        mCost = cost;
+    }
+
+    public String getRemark() {
+        return mRemark;
+    }
+
+    public void setRemark(String remark) {
+        mRemark = remark;
+    }
 }

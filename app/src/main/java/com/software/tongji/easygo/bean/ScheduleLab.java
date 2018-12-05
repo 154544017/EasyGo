@@ -20,14 +20,8 @@ public class ScheduleLab {
     }
 
     private ScheduleLab(Context context){
-        mContext = context.getApplicationContext();
+        mContext = context;
         mScheduleList = new ArrayList<>();
-
-        mScheduleList.add(new Schedule(Schedule.ScheduleType.DINING, "DiningHall", "7:00am"));
-        mScheduleList.add(new Schedule(Schedule.ScheduleType.ATTRACTIONS, "Mountain", "8:30am"));
-        mScheduleList.add(new Schedule(Schedule.ScheduleType.ATTRACTIONS, "River", "1:30pm"));
-        mScheduleList.add(new Schedule(Schedule.ScheduleType.TRANSPORT, "Car", "6:00pm"));
-        mScheduleList.add(new Schedule(Schedule.ScheduleType.HOTEL, "HOTEL", "12:00pm"));
     }
 
     public List<Schedule> getScheduleList() {

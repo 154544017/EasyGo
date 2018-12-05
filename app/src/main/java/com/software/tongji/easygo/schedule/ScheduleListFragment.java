@@ -1,6 +1,7 @@
 package com.software.tongji.easygo.schedule;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -20,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.software.tongji.easygo.R;
 import com.software.tongji.easygo.bean.Schedule;
@@ -30,9 +32,9 @@ import com.software.tongji.easygo.newschedule.NewScheduleActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ScheduleListFragment extends Fragment {
+public class ScheduleListFragment extends Fragment implements ScheduleListView{
 
-    public static final int REQUEST_CODE_NEW_SHCEDULE = 0;
+    public static final int REQUEST_CODE_NEW_SCHEDULE = 0;
 
     @BindView(R.id.schedule_recycler_view)
     RecyclerView mRecyclerView;
@@ -45,9 +47,12 @@ public class ScheduleListFragment extends Fragment {
     DrawerLayout mDrawerLayout;
     @BindView(R.id.drawer_navigation_view)
     NavigationView mNavigationView;
+    @BindView(R.id.no_schedule_alert)
+    TextView mNoScheduleAlert;
 
     private ActionBarDrawerToggle mActionBarDrawerToggle;
 
+    private ScheduleListPresenter mScheduleListPresenter = new ScheduleListPresenter();
     private ScheduleAdapter mScheduleAdapter;
 
     @Override
@@ -56,13 +61,14 @@ public class ScheduleListFragment extends Fragment {
 
     }
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_schedule, container, false);
 
         ButterKnife.bind(this, view);
+        mScheduleListPresenter.bind(this);
+        mScheduleListPresenter.checkScheduleList();
 
         ((AppCompatActivity)getActivity()).setSupportActionBar(mScheduleToolBar);
 
@@ -100,7 +106,7 @@ public class ScheduleListFragment extends Fragment {
         mRecyclerView.setNestedScrollingEnabled(false);
 
         //mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mScheduleAdapter = new ScheduleAdapter(ScheduleLab.get(getContext()).getScheduleList());
+        mScheduleAdapter = new ScheduleAdapter(ScheduleLab.get(getContext()).getScheduleList(), mScheduleListPresenter);
         mRecyclerView.setAdapter(mScheduleAdapter);
         mRecyclerView.addItemDecoration(new SimplePaddingDecoration(getContext()));
 
@@ -112,10 +118,9 @@ public class ScheduleListFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), NewScheduleActivity.class);
-                startActivityForResult(intent, REQUEST_CODE_NEW_SHCEDULE);
+                startActivityForResult(intent, REQUEST_CODE_NEW_SCHEDULE);
             }
         });
-
         return view;
     }
 
@@ -126,20 +131,32 @@ public class ScheduleListFragment extends Fragment {
             return;
         }
 
-        if(requestCode == REQUEST_CODE_NEW_SHCEDULE){
-            String type = data.getStringExtra(NewScheduleActivity.NEW_TYPE);
-            String address = data.getStringExtra(NewScheduleActivity.NEW_ADDRESS);
-            String beginTime = data.getStringExtra(NewScheduleActivity.NEW_BEGIN_TIME);
-            Schedule schedule = new Schedule(Schedule.ScheduleType.DINING, address, beginTime);
-            if(type.equals("HOTEL")){
-                schedule.setScheduleType(Schedule.ScheduleType.HOTEL);
-            }else if(type.equals("TRANSPORT")){
-                schedule.setScheduleType(Schedule.ScheduleType.TRANSPORT);
-            }else if(type.equals("ATTRACTIONS")){
-                schedule.setScheduleType(Schedule.ScheduleType.ATTRACTIONS);
-            }
-            ScheduleLab.get(getContext()).getScheduleList().add(0, schedule);
-            mScheduleAdapter.notifyItemInserted(0);
+        if(requestCode == REQUEST_CODE_NEW_SCHEDULE){
+            String address = data.getStringExtra(NewScheduleActivity.NEW_SCHEDULE_ADDRESS);
+            String date = data.getStringExtra(NewScheduleActivity.NEW_SCHEDULE_DATE);
+            String time = data.getStringExtra(NewScheduleActivity.NEW_SCHEDULE_TIME);
+            String type = data.getStringExtra(NewScheduleActivity.NEW_SCHEDULE_TYPE);
+            String cost = data.getStringExtra(NewScheduleActivity.NEW_SCHEDULE_COST);
+            String remark = data.getStringExtra(NewScheduleActivity.NEW_SCHEDULE_REMARK);
+            Schedule schedule = new Schedule(address, date, time, type, cost, remark);
+            mScheduleListPresenter.addSchedule(schedule);
+            mScheduleListPresenter.checkScheduleList();
+            mScheduleAdapter.notifyItemInserted(mScheduleListPresenter.getNewSchedulePosition());
         }
+    }
+
+    @Override
+    public Context getScheduleListContext() {
+        return getContext();
+    }
+
+    @Override
+    public void showNoScheduleAlert() {
+        mNoScheduleAlert.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideNoScheduleAlert() {
+        mNoScheduleAlert.setVisibility(View.GONE);
     }
 }

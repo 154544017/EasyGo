@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.software.tongji.easygo.R;
 import com.software.tongji.easygo.bean.Schedule;
 
+import org.w3c.dom.Text;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -21,9 +23,11 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
         implements ItemTouchHelperAdapter{
 
     private List<Schedule> mScheduleList;
+    private ScheduleListPresenter mScheduleListPresenter;
 
-    public ScheduleAdapter(List<Schedule> scheduleList){
+    public ScheduleAdapter(List<Schedule> scheduleList, ScheduleListPresenter scheduleListPresenter){
         mScheduleList = scheduleList;
+        mScheduleListPresenter = scheduleListPresenter;
     }
 
     @NonNull
@@ -36,22 +40,26 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
 
     @Override
     public void onBindViewHolder(@NonNull ScheduleHolder holder, int position) {
-        switch (mScheduleList.get(position).getScheduleType()){
-            case HOTEL:
-                holder.mScheduleIcon.setImageResource(R.mipmap.ic_hotel_schedule_round);
+        holder.mDate.setText(mScheduleList.get(position).getDate());
+        holder.mTime.setText(mScheduleList.get(position).getTime());
+        switch (mScheduleList.get(position).getType()){
+            case "ATTRACTIONS":
+                holder.mIcon.setImageResource(R.mipmap.ic_attractions_schedule);
                 break;
-            case DINING:
-                holder.mScheduleIcon.setImageResource(R.mipmap.ic_dining_schedule_round);
+            case "DINING":
+                holder.mIcon.setImageResource(R.mipmap.ic_dining_schedule);
                 break;
-            case TRANSPORT:
-                holder.mScheduleIcon.setImageResource(R.mipmap.ic_transport_schedule_round);
+            case "TRANSPORT":
+                holder.mIcon.setImageResource(R.mipmap.ic_transport_schedule);
                 break;
-            case ATTRACTIONS:
-                holder.mScheduleIcon.setImageResource(R.mipmap.ic_attractions_schedule_round);
+            case "HOTEL":
+                holder.mIcon.setImageResource(R.mipmap.ic_hotel_schedule);
+                break;
+            default:
                 break;
         }
         holder.mAddress.setText(mScheduleList.get(position).getAddress());
-        holder.mBeginTime.setText(mScheduleList.get(position).getBeginTime());
+        holder.mRemark.setText(mScheduleList.get(position).getRemark());
     }
 
     @Override
@@ -68,17 +76,22 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
     @Override
     public void onItemDismiss(int position) {
         mScheduleList.remove(position);
+        mScheduleListPresenter.checkScheduleList();
         notifyItemRemoved(position);
     }
 
     public class ScheduleHolder extends RecyclerView.ViewHolder{
 
+        @BindView(R.id.schedule_date)
+        TextView mDate;
+        @BindView(R.id.schedule_time)
+        TextView mTime;
         @BindView(R.id.schedule_icon)
-        ImageView mScheduleIcon;
+        ImageView mIcon;
         @BindView(R.id.schedule_address)
         TextView mAddress;
-        @BindView(R.id.begin_time)
-        TextView mBeginTime;
+        @BindView(R.id.schedule_remark)
+        TextView mRemark;
 
         public ScheduleHolder(View itemView) {
             super(itemView);

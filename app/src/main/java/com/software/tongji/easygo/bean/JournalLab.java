@@ -2,6 +2,9 @@ package com.software.tongji.easygo.bean;
 
 import android.content.Context;
 
+import org.litepal.LitePal;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +13,6 @@ public class JournalLab {
     public static JournalLab sJournalLab;
 
     private Context mContext;
-    private List<Journal> mJournalList;
 
     public static JournalLab get(Context context){
         if(sJournalLab == null){
@@ -20,17 +22,40 @@ public class JournalLab {
     }
 
     private JournalLab(Context context){
-        mContext = context;
-        mJournalList = new ArrayList<>();
-        Journal journal1 = new Journal("beijing","2018/3/3","tokyo","@louoyu","very sad");
-        mJournalList.add(journal1);
+        mContext = context.getApplicationContext();
     }
 
-    public List<Journal> getJournalList() {
-        return mJournalList;
+    public int size(){
+        int count  = LitePal.count(Journal.class);
+        return count;
     }
 
     public void addJournal(Journal journal){
-        mJournalList.add(journal);
+        journal.save();
     }
+
+    public void updateJournal(Journal journal){
+        journal.updateAll("mId = ?", journal.getId());
+    }
+
+    public void deleteJournal(Journal journal){
+        LitePal.deleteAll(Journal.class, "mId = ?", journal.getId());
+    }
+
+    public Journal getJournal(String uuid){
+        List<Journal> journals = LitePal.where("mId = ?", uuid)
+                .find(Journal.class);
+        return journals.get(0);
+    }
+
+    public List<Journal> getJournalList() {
+        List<Journal> journals = LitePal.findAll(Journal.class);
+        return journals;
+    }
+
+    public File getCoverFIle(Journal journal){
+        File fileDir = mContext.getFilesDir();
+        return new File(fileDir, journal.getCoverFileName());
+    }
+
 }

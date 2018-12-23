@@ -3,10 +3,11 @@
 
     <dbname value="EasyGo" />
 
-    <version value="3" />
+    <version value="4" />
 
     <list>
         <mapping class='com.software.tongji.easygo.bean.Province' />
+        <mapping class='com.software.tongji.easygo.bean.Journal' />
     </list>
 
 </litepal>

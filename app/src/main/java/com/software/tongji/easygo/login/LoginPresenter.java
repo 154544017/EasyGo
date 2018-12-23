@@ -6,6 +6,13 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.google.gson.JsonObject;
+import com.software.tongji.easygo.bean.Schedule;
+import com.software.tongji.easygo.bean.UserData;
+import com.software.tongji.easygo.net.ApiService;
+import com.software.tongji.easygo.net.BaseResponse;
+import com.software.tongji.easygo.net.DefaultObserver;
+import com.software.tongji.easygo.net.RetrofitServiceManager;
+import com.software.tongji.easygo.utils.HttpUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,6 +29,9 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.internal.operators.DeferredScalarSubscriber;
+import rx.schedulers.Schedulers;
 
 public class LoginPresenter {
 
@@ -57,116 +67,61 @@ public class LoginPresenter {
     public void okSignUp(String username, String email,
                          String password, Handler handler) {
         mLoginView.showLoadingDialog();
-        String url = Uri.parse("http://47.110.63.70/api/user/register")
-                .buildUpon()
-                .appendQueryParameter("name",username)
-                .appendQueryParameter("password",password)
-                .build()
-                .toString();
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
-
-        Log.e("signup","url: "+ url);
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                handler.post(new Runnable() {
+        RetrofitServiceManager.getInstance()
+                .getRetrofit()
+                .create(ApiService.class)
+                .signUp(HttpUtils.getFormDataRequest(username),HttpUtils.getFormDataRequest(password))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DefaultObserver<BaseResponse<UserData>>() {
                     @Override
-                    public void run() {
-                        if(mLoginView != null){
-                            mLoginView.showError("连接失败");
-                            Log.e("signup","onFailure");
-                            mLoginView.dismissLoadingDialog();
-                        }
+                    public void onSuccess(Object result) {
+                        mLoginView.openLogin();
+                        mLoginView.setLoginEmail(username);
+                        mLoginView.showMessage("注册成功！请登录");
+                    }
+
+                    @Override
+                    public void onFail(String message) {
+                        mLoginView.showError(message);
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        mLoginView.showError(message);
                     }
                 });
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                final String res = Objects.requireNonNull(response.body().string());
-                handler.post(()->{
-                    try{
-                        JSONObject responseJsonObject = new JSONObject(res);
-                        Log.e("login","response:"+res);
-                        String state = responseJsonObject.getString("desc");
-                        if(state.equals("OK")){
-                            mLoginView.openLogin();
-                            mLoginView.setLoginEmail(email);
-                            mLoginView.showMessage("注册成功！请登录");
-                        }else{
-                            mLoginView.showError(state);
-                        }
-                        mLoginView.dismissLoadingDialog();
-                    }catch (JSONException e){
-                        e.printStackTrace();
-                    }
-                });
-
-            }
-        });
-
-
+        mLoginView.dismissLoadingDialog();
     }
 
     public void okLogin(String email, String password,Handler handler){
         mLoginView.showLoadingDialog();
-        String url = Uri.parse("http://47.110.63.70/api/user/login")
-                .buildUpon()
-                .appendQueryParameter("name",email)
-                .appendQueryParameter("password",password)
-                .build()
-                .toString();
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
-
-        Log.e("login","url: "+ url);
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                handler.post(new Runnable() {
+        RetrofitServiceManager.getInstance()
+                .getRetrofit()
+                .create(ApiService.class)
+                .login(HttpUtils.getFormDataRequest(email),HttpUtils.getFormDataRequest(password))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DefaultObserver<BaseResponse<UserData>>() {
                     @Override
-                    public void run() {
-                        if(mLoginView != null){
-                            mLoginView.showError("连接失败");
-                            Log.e("login","onFailure");
-                            mLoginView.dismissLoadingDialog();
-                        }
+                    public void onSuccess(Object result) {
+                        UserData data = (UserData)result;
+                        mLoginView.rememberUserInfo(data.getToken(),data.getUser());
+                        mLoginView.startMainActivity();
+                    }
+
+                    @Override
+                    public void onFail(String message) {
+                        mLoginView.showError(message);
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        mLoginView.showError(message);
                     }
                 });
-            }
+        mLoginView.dismissLoadingDialog();
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                final String res = Objects.requireNonNull(response.body().string());
-                handler.post(()->{
-                    try{
-                        JSONObject responseJsonObject = new JSONObject(res);
-                        Log.e("login","response:"+res);
-                        String state = responseJsonObject.getString("desc");
-                        if(state.equals("登录成功")){
-                            JSONObject userInfo = responseJsonObject.getJSONObject("data");
-                            String userName = userInfo.getString("user");
-                            String token = userInfo.getString("token");
-                            mLoginView.rememberUserInfo(token,userName);
-                            mLoginView.startMainActivity();
-                        }else{
-                            mLoginView.showError(state);
-                        }
-                        mLoginView.dismissLoadingDialog();
-                    }catch (JSONException e){
-                        e.printStackTrace();
-                    }
-                });
-
-            }
-        });
     }
 
     public void okPasswordResetRequest(String email, Handler handler){

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -20,7 +21,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.software.tongji.easygo.R;
 import com.software.tongji.easygo.bean.Journal;
 import com.software.tongji.easygo.bean.JournalLab;
@@ -44,7 +47,7 @@ public class JournalDisplayFragment extends Fragment implements JournalDisplayVi
     FloatingActionButton mAddJournalButton;
 
     private JournalAdapter mJournalAdapter;
-
+    private MaterialDialog mDialog;
     private JournalDisplayPresenter mJournalDisplayPresenter = new JournalDisplayPresenter();
 
     @Override
@@ -52,20 +55,16 @@ public class JournalDisplayFragment extends Fragment implements JournalDisplayVi
         super.onCreate(savedInstanceState);
     }
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.journal_display_fragment,container,false);
 
         ButterKnife.bind(this, view);
-        mJournalDisplayPresenter.bind(this);
-
+        mJournalDisplayPresenter.bind(getContext(),this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        /*List<Journal> journals = new ArrayList<>();
-        for(int i = 0;i<3;i++){
-        Journal journal = new Journal();
-        journals.add(journal);}*/
-        mJournalAdapter = new JournalAdapter(getContext(), JournalLab.get(getContext()).getJournalList());
+        mJournalAdapter = new JournalAdapter();
         mRecyclerView.setAdapter(mJournalAdapter);
 
         mSearchView.setQueryHint("Search journal");
@@ -84,12 +83,20 @@ public class JournalDisplayFragment extends Fragment implements JournalDisplayVi
         mAddJournalButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), JournalEditActivity.class);
+                Journal journal = new Journal();
+                mJournalDisplayPresenter.addJournal(journal);
+                Intent intent = JournalEditActivity.newIntent(getContext(), journal.getId());
                 startActivityForResult(intent, REQUEST_CODE_NEW_JOURNAL);
             }
         });
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
     }
 
     @Override
@@ -99,19 +106,43 @@ public class JournalDisplayFragment extends Fragment implements JournalDisplayVi
         }
 
         if(requestCode == REQUEST_CODE_NEW_JOURNAL){
-            String title = data.getStringExtra(JournalEditActivity.NEW_JOURNAL_TITLE);
-            String date = data.getStringExtra(JournalEditActivity.NEW_JOURNAL_DATE);
-            String location = data.getStringExtra(JournalEditActivity.NEW_JOURNAL_LOCATION);
-            String friends = data.getStringExtra(JournalEditActivity.NEW_JOURNAL_FRIENDS);
-            String content = data.getStringExtra(JournalEditActivity.NEW_JOURNAL_CONTENT);
-            Journal journal = new Journal(title, date, location, friends, content);
-            mJournalDisplayPresenter.addJournal(journal);
-            mJournalAdapter.notifyItemInserted(0);
+           mJournalDisplayPresenter.getJournals();
         }
     }
 
     @Override
-    public Context getJournalListContetx() {
+    public Context getJournalListContext() {
         return getContext();
+    }
+
+    @Override
+    public void showLoadingDialog() {
+        mDialog = new MaterialDialog.Builder(getContext())
+                .title(R.string.app_name)
+                .content("Please Wait...")
+                .progress(true, 0)
+                .show();
+    }
+
+    @Override
+    public void dismissLoadingDialog() {
+        mDialog.dismiss();
+    }
+
+    @Override
+    public void showError(String message) {
+        Toast.makeText(getContext(),message,Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void updateAdapter(List<Journal> journalList) {
+        mJournalAdapter.updateItemData(journalList);
+        mJournalAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mJournalDisplayPresenter.getJournals();
     }
 }

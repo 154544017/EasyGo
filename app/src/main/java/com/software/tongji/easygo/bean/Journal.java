@@ -1,17 +1,46 @@
 package com.software.tongji.easygo.bean;
 
-public class Journal {
+import com.google.gson.annotations.SerializedName;
+
+import org.litepal.crud.LitePalSupport;
+
+import java.util.UUID;
+
+public class Journal extends LitePalSupport {
+    @SerializedName("id")
+    private String mId;
+    @SerializedName("cover")
+    private String mCoverUrl;
+    @SerializedName("title")
     private String mTitle;
+    @SerializedName("date")
     private String mDate;
+    @SerializedName("location")
     private String mLocation;
+    @SerializedName("friend")
     private String mFriends;
+    @SerializedName("content")
     private String mContent;
-
-    public Journal(){
-
+    public String getCoverUrl() {
+        return mCoverUrl;
     }
 
+    public void setCoverUrl(String coverUrl) {
+        mCoverUrl = coverUrl;
+    }
+
+    public String getId() {
+        return mId;
+    }
+
+    public void setId(String uuid){
+        mId = uuid;
+    }
+    public Journal(){
+        mId = UUID.randomUUID().toString();
+    }
     public Journal(String title, String date, String location, String friends, String content){
+        mId = UUID.randomUUID().toString();
         mTitle = title;
         mDate = date;
         mLocation = location;
@@ -58,5 +87,9 @@ public class Journal {
 
     public void setContent(String content) {
         mContent = content;
+    }
+
+    public String getCoverFileName(){
+        return "IMG_" + getId() + ".jpg";
     }
 }

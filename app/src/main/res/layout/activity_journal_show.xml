@@ -175,14 +175,14 @@
         android:layout_gravity="bottom|end">
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/edit_journal_button"
+            android:id="@+id/delete_journal_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             app:srcCompat="@drawable/ic_delete_forever_white_24dp" />
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/delete_journal_button"
+            android:id="@+id/edit_journal_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"

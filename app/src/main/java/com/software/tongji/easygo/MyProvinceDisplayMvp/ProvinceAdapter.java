@@ -1,10 +1,9 @@
 package com.software.tongji.easygo.MyProvinceDisplayMvp;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +15,14 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.software.tongji.easygo.R;
 import com.software.tongji.easygo.bean.Province;
+import com.software.tongji.easygo.utils.HttpUtils;
 
 import java.util.List;
 
-import jp.wasabeef.glide.transformations.CropTransformation;
 import jp.wasabeef.glide.transformations.GrayscaleTransformation;
 
 import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
+import static com.bumptech.glide.request.RequestOptions.priorityOf;
 
 public class ProvinceAdapter extends RecyclerView.Adapter<ProvinceAdapter.ViewHolder> {
     private Context mContext;
@@ -63,12 +63,12 @@ public class ProvinceAdapter extends RecyclerView.Adapter<ProvinceAdapter.ViewHo
                     .placeholder(R.mipmap.ic_launcher)
                     .centerCrop()
                     .diskCacheStrategy(DiskCacheStrategy.NONE);
-            Glide.with(mContext).load("http://47.110.63.70/api/image/journal/498bf2ee-2c09-456f-98a3-72da28be9467test.png")
+            Glide.with(mContext).load(HttpUtils.getProvinceDisplayImageUrl(province.getPinYin()))
                     .apply(bitmapTransform(new GrayscaleTransformation()))
                     .apply(options)
                     .into(holder.provinceImage);
         }else{
-            Glide.with(mContext).load(R.drawable.guilin_name).into(holder.provinceImage);
+            Glide.with(mContext).load(HttpUtils.getProvinceDisplayImageUrl(province.getPinYin())).into(holder.provinceImage);
         }
     }
 

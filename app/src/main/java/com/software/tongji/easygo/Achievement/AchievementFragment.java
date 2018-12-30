@@ -10,19 +10,15 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TableLayout;
 
 import com.software.tongji.easygo.MapMvp.MapFragment;
 import com.software.tongji.easygo.MapMvp.MapPresenterImpl;
 import com.software.tongji.easygo.MyProvinceDisplayMvp.ProvinceDisplayFragment;
 import com.software.tongji.easygo.R;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class AchievementFragment extends Fragment {
+public class AchievementFragment extends Fragment{
     private Unbinder mUnbinder;
     private FragmentManager mFragmentManager;
 
@@ -93,4 +89,5 @@ public class AchievementFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
     }
+
 }

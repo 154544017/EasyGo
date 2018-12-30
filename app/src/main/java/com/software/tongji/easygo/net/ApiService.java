@@ -1,5 +1,6 @@
 package com.software.tongji.easygo.net;
 
+import com.software.tongji.easygo.bean.Attraction;
 import com.software.tongji.easygo.bean.Journal;
 import com.software.tongji.easygo.bean.UserData;
 
@@ -26,6 +27,9 @@ public interface ApiService {
     @POST("user/register")
     Observable<BaseResponse<UserData>> signUp(@Part("name") RequestBody userName, @Part("password") RequestBody password);
 
+    @GET("user/getInfo/{user}")
+    Observable<BaseResponse<UserData>> getInfo(@Path("user") String userName);
+
     @GET("journal/get/{user}")
     Observable<BaseResponse<List<Journal>>> getJournals(@Path("user") String userName);
 
@@ -34,5 +38,12 @@ public interface ApiService {
     Observable<BaseResponse<Void>> postJournals(@Path("user") String userName,
                                                 @Part("journal") RequestBody journalJson,
                                                 @Part MultipartBody.Part image);
+
+    @GET("attraction/getAll")
+    Observable<BaseResponse<List<Attraction>>> getAllAttractions();
+
+    @GET("attraction/{provinceName}")
+    Observable<BaseResponse<List<Attraction>>> getAttractionsByProvince(@Path("provinceName") String provinceName);
+
 
 }

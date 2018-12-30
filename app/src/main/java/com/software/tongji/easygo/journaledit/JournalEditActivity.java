@@ -1,6 +1,7 @@
 package com.software.tongji.easygo.journaledit;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -15,18 +16,21 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.amap.api.services.help.Tip;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.signature.ObjectKey;
 import com.software.tongji.easygo.R;
 import com.software.tongji.easygo.bean.Journal;
 import com.software.tongji.easygo.bean.JournalLab;
+import com.software.tongji.easygo.inputTips.InputTipsActivity;
 import com.software.tongji.easygo.newschedule.NewScheduleActivity;
 import com.software.tongji.easygo.utils.FileUtil;
 import com.software.tongji.easygo.utils.ImageUtil;
@@ -39,16 +43,11 @@ import butterknife.ButterKnife;
 
 public class JournalEditActivity extends AppCompatActivity implements JournalEditView{
 
-    public static final String NEW_JOURNAL_COVER = "new_journal_cover";
-    public static final String NEW_JOURNAL_TITLE = "new_journal_title";
-    public static final String NEW_JOURNAL_DATE = "new_journal_date";
-    public static final String NEW_JOURNAL_LOCATION = "new_journal_location";
-    public static final String NEW_JOURNAL_FRIENDS = "new_journal_friends";
-    public static final String NEW_JOURNAL_CONTENT = "new_journal_content";
 
     private static final String EXTRA_JOURNAL_ID = "com.software.tongji.easygo.journal_id";
     private static final int REQUEST_ALBUM = 0;
     private static final int REQUEST_ALBUM_PERMISSION = 1;
+    private static final int REQUEST_PLACE = 2;
 
     @BindView(R.id.new_journal_title)
     TextInputEditText mNewJournalTitle;
@@ -80,6 +79,7 @@ public class JournalEditActivity extends AppCompatActivity implements JournalEdi
         return intent;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,6 +100,24 @@ public class JournalEditActivity extends AppCompatActivity implements JournalEdi
         mNewJournalDate.setText(mJournal.getDate());
         mNewJournalFriends.setText(mJournal.getFriends());
         mNewJournalLocation.setText(mJournal.getLocation());
+
+        mNewJournalLocation.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if(hasFocus){
+                    Intent intent = new Intent(JournalEditActivity.this, InputTipsActivity.class);
+                    startActivityForResult(intent, REQUEST_PLACE);
+                }
+            }
+        });
+
+        mNewJournalLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(JournalEditActivity.this, InputTipsActivity.class);
+                startActivityForResult(intent, REQUEST_PLACE);
+            }
+        });
 
         if(mJournal.getCoverUrl() != null){
             Glide.with(this).load(mJournal.getCoverUrl()).into(mCoverImage);
@@ -208,13 +226,20 @@ public class JournalEditActivity extends AppCompatActivity implements JournalEdi
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode != Activity.RESULT_OK){
-            return;
-        }
         if(requestCode == REQUEST_ALBUM){
+            if(resultCode != Activity.RESULT_OK){
+                return;
+            }
             String imagePath = ImageUtil.handleImageOnKitkat(this, data);
             FileUtil.copyFile(imagePath, mCoverFile.getPath());
             updateCoverImage();
+        }else if(requestCode == REQUEST_PLACE){
+            if(resultCode == InputTipsActivity.RESULT_CODE_INPUTTIPS){
+                final Tip tip = data.getParcelableExtra("tip");
+                if (tip.getName() != null) {
+                    mNewJournalLocation.setText(tip.getName());
+                }
+            }
         }
     }
 }

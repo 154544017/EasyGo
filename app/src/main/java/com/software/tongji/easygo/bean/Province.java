@@ -9,13 +9,20 @@ import java.util.List;
 public class Province extends LitePalSupport {
     private boolean mIsLocked = true;
     private List<String> mPathStringList;
-
+    private String mPinYin;
     private String mName;
     private List<Path> mPathList;
     private int mLineColor;
     private List<Lasso> mPathLasso;
     private int mColor;
 
+    public String getPinYin() {
+        return mPinYin;
+    }
+
+    public void setPinYin(String pinYin) {
+        mPinYin = pinYin;
+    }
 
     public boolean isLocked() {
         return mIsLocked;

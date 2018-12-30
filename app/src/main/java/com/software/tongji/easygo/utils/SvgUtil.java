@@ -72,6 +72,7 @@ public class SvgUtil {
                     }
                     //拿到name和path
                     province.setName(name);
+                    province.setPinYin(MapHelper.provincePinYin.get(name));
                     province.setPathList(listpath);
                     province.setPathStringList(pathStringList);
                     province.setColor(Color.parseColor(MapHelper.getRandColorCode()));

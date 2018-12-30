@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -21,15 +20,11 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.software.tongji.easygo.JournalDisplayMvp.JournalDisplayActivity;
-import com.software.tongji.easygo.JournalDisplayMvp.JournalDisplayFragment;
-import com.software.tongji.easygo.MapMvp.MapFragment;
-import com.software.tongji.easygo.MyProvinceDisplayMvp.ProvinceDisplayActivity;
-import com.software.tongji.easygo.MyProvinceDisplayMvp.ProvinceDisplayFragment;
 import com.software.tongji.easygo.R;
 import com.software.tongji.easygo.bean.Province;
 import com.software.tongji.easygo.bean.ProvinceLab;
 import com.software.tongji.easygo.navigation.NavigationActivity;
+import com.software.tongji.easygo.utils.HttpUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -111,14 +106,14 @@ public class ProvinceDialogFragment extends DialogFragment {
 
         Province province = ProvinceLab.getProvinceLab(getActivity()).getProvinceByName(provinceName);
         if(province.isLocked()){
-            Glide.with(this).load(R.drawable.guilin_card)
+            Glide.with(this).load(HttpUtils.getProvinceDisplayImageUrl(province.getPinYin()))
                     .apply(RequestOptions.bitmapTransform(new BlurTransformation(3,15)))
                     .into(mBac);
             mUnlocklayout.setVisibility(View.VISIBLE);
         }else{
             mJournalButton.setVisibility(View.VISIBLE);
             mDialogBack.setVisibility(View.VISIBLE);
-            Glide.with(this).load(R.drawable.guilin_card)
+            Glide.with(this).load(HttpUtils.getProvinceDisplayImageUrl(province.getPinYin()))
                     .into(mBac);
         }
         mLockedBack.setOnClickListener(new View.OnClickListener() {
@@ -132,7 +127,7 @@ public class ProvinceDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 sendRequest(Activity.RESULT_OK, provinceName);
-                Glide.with(ProvinceDialogFragment.this).load(R.drawable.guilin_card)
+                Glide.with(ProvinceDialogFragment.this).load(HttpUtils.getProvinceDisplayImageUrl(province.getPinYin()))
                         .into(mBac);
                 mJournalButton.setVisibility(View.VISIBLE);
                 mDialogBack.setVisibility(View.VISIBLE);

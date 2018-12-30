@@ -15,8 +15,29 @@ public class MapHelper {
             put("新疆区",30);put("西藏区",31);put("云南省",32);put("浙江省",33);
         }
     };
-    public static HashMap<String, String> province_color = new HashMap<>();
+    public static HashMap<String, String> provincePinYin = new HashMap<String, String>(){
+        {
+            put("安徽省","anhui");put("北京市","beijing");put("重庆市","chongqing");put("福建省","fujian");put("广东省","guangdong");
+            put("甘肃省","gansu");put("广西省","guangxi");put("贵州省","guizhou");put("海南省","hainan");put("河北省","hebei");
+            put("河南省","henan");put("香港","xianggang");put("黑龙江","heilongjiang");put("湖南省","hunan");put("湖北省","hubei");
+            put("吉林省","jilin");put("江苏省","jiangsu");put("江西省","jiangxi");put("辽宁省","liaoning");put("澳门","aomen");
+            put("内蒙古","neimenggu");put("宁夏区","ningxia");put("青海省","qinghai");put("陕西省","shaanxi");put("四川省","sichuan");
+            put("山东省","shandong");put("上海市","shanghai");put("山西省","shanxi");put("天津市","tianjin");put("台湾","taiwan");
+            put("新疆区","xinjiang");put("西藏区","xizang");put("云南省","yunnan");put("浙江省","zhejiang");
+        }
+    };
 
+    public static HashMap<String, String> provinceHanzi = new HashMap<String, String>(){
+        {
+            put("anhui","安徽省");put("beijing","北京市");put("chongqing","重庆市");put("fujian","福建省");put("guangdong","广东省");
+            put("gansu","甘肃省");put("guangxi","广西省");put("guizhou","贵州省");put("hainan","海南省");put("hebei","河北省");
+            put("henan","河南省");put("xianggang","香港");put("heilongjiang","黑龙江");put("hunan","湖南省");put("hubei","湖北省");
+            put("jilin","吉林省");put("jiangsu","江苏省");put("jiangxi","江西省");put("liaoning","辽宁省");put("aomen","澳门");
+            put("neimenggu","内蒙古");put("ningxia","宁夏区");put("qinghai","青海省");put("shaanxi","陕西省");put("sichuan","四川省");
+            put("shandong","新疆区");put("shanghai","上海市");put("shanxi","山西省");put("tianjin","天津市");put("taiwan","台湾");
+            put("xinjiang","新疆区");put("xizang","西藏区");put("yunnan","云南省");put("zhejiang","浙江省");
+        }
+    };
     /**  
           * 获取十六进制的颜色代码.例如  "#6E36B4" , For HTML ,  
           * @return String  

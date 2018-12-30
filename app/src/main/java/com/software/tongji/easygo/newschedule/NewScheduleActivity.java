@@ -15,7 +15,9 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.amap.api.services.help.Tip;
 import com.software.tongji.easygo.R;
+import com.software.tongji.easygo.inputTips.InputTipsActivity;
 
 import java.util.Calendar;
 
@@ -32,6 +34,8 @@ public class NewScheduleActivity extends AppCompatActivity implements NewSchedul
     public static final String NEW_SCHEDULE_TIME = "new_schedule_time";
     public static final String NEW_SCHEDULE_COST = "new_schedule_cost";
     public static final String NEW_SCHEDULE_REMARK = "new_schedule_remark";
+
+    private static final int REQUEST_PLACE = 1;
 
     @BindView(R.id.new_schedule_address)
     TextInputEditText mScheduleAddress;
@@ -80,10 +84,20 @@ public class NewScheduleActivity extends AppCompatActivity implements NewSchedul
                 }
             }
         });
+
         mScheduleTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showTimePickDialog();
+            }
+        });
+
+
+        mScheduleAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(NewScheduleActivity.this, InputTipsActivity.class);
+                startActivityForResult(intent, REQUEST_PLACE);
             }
         });
 
@@ -133,5 +147,17 @@ public class NewScheduleActivity extends AppCompatActivity implements NewSchedul
                     }
                 }, calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE), true);
         timePickerDialog.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_PLACE) {
+            if (resultCode == InputTipsActivity.RESULT_CODE_INPUTTIPS) {
+                final Tip tip = data.getParcelableExtra("tip");
+                if (tip.getName() != null) {
+                    mScheduleAddress.setText(tip.getName());
+                }
+            }
+        }
     }
 }

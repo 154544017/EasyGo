@@ -34,7 +34,6 @@ public class JournalAdapter extends RecyclerView.Adapter<JournalAdapter.ViewHold
 
     public void updateItemData(List<Journal> newJournals) {
         mJournalList = newJournals;
-        //notifyDataSetChanged();
     }
 
     @NonNull

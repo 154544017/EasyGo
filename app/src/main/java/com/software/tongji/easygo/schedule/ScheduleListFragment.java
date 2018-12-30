@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -121,6 +122,7 @@ public class ScheduleListFragment extends Fragment implements ScheduleListView{
                 startActivityForResult(intent, REQUEST_CODE_NEW_SCHEDULE);
             }
         });
+
         return view;
     }
 

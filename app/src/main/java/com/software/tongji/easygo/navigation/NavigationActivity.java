@@ -1,25 +1,27 @@
 package com.software.tongji.easygo.navigation;
 
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
 import android.view.View;
-import android.widget.SearchView;
+import android.widget.Toast;
 
-import com.eftimoff.viewpagertransformers.DepthPageTransformer;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.software.tongji.easygo.Achievement.AchievementFragment;
 import com.software.tongji.easygo.JournalDisplayMvp.JournalDisplayFragment;
-import com.software.tongji.easygo.MapMvp.MapFragment;
-import com.software.tongji.easygo.MyProvinceDisplayMvp.ProvinceDisplayFragment;
 import com.software.tongji.easygo.R;
 import com.software.tongji.easygo.attractions.AttractionsListFragment;
+import com.software.tongji.easygo.bean.UserData;
+import com.software.tongji.easygo.bean.UserInfo;
+import com.software.tongji.easygo.net.ApiService;
+import com.software.tongji.easygo.net.BaseResponse;
+import com.software.tongji.easygo.net.DefaultObserver;
+import com.software.tongji.easygo.net.RetrofitServiceManager;
 import com.software.tongji.easygo.schedule.ScheduleListFragment;
 
 import org.litepal.LitePal;
@@ -31,16 +33,19 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.majiajie.pagerbottomtabstrip.NavigationController;
 import me.majiajie.pagerbottomtabstrip.PageNavigationView;
+import me.majiajie.pagerbottomtabstrip.listener.OnTabItemSelectedListener;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class NavigationActivity extends AppCompatActivity implements NavigationView{
 
-    @BindView(R.id.navigation_view_pager)
-    ViewPager mNavigationViewPager;
     @BindView(R.id.bottom_tab_strip)
     PageNavigationView mPageNavigationView;
 
     private NavigationPresenter mNavigationPresenter;
-    private Handler mHandler;
+    private FragmentManager mFragmentManager;
+    private List<Fragment> mFragmentList;
+    private MaterialDialog mDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,8 +65,7 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
         ButterKnife.bind(this);
 
         mNavigationPresenter = new NavigationPresenter();
-
-        mHandler = new Handler(Looper.getMainLooper());
+        mFragmentManager = getSupportFragmentManager();
 
         NavigationController navigationController = mPageNavigationView.material()
                 .addItem(R.drawable.ic_format_list_bulleted_black_24dp, "行程")
@@ -69,24 +73,87 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
                 .addItem(R.drawable.ic_collections_black_24dp, "游记")
                 .addItem(R.drawable.ic_search_black_24dp, "搜索")
                 .build();
-        navigationController.setupWithViewPager(mNavigationViewPager);
-        setupViewPager();
-        navigationController.setupWithViewPager(mNavigationViewPager);
+        mFragmentList = new ArrayList<>();
+        mFragmentList.add(new ScheduleListFragment());
+        mFragmentList.add(new AchievementFragment());
+        mFragmentList.add(new JournalDisplayFragment());
+        mFragmentList.add(new AttractionsListFragment());
+        FragmentTransaction transaction = mFragmentManager.beginTransaction();
+        transaction.add(R.id.fragment_container, mFragmentList.get(0))
+                .add(R.id.fragment_container, mFragmentList.get(1))
+                .add(R.id.fragment_container, mFragmentList.get(2))
+                .add(R.id.fragment_container, mFragmentList.get(3))
+                .hide(mFragmentList.get(1))
+                .hide(mFragmentList.get(2))
+                .hide(mFragmentList.get(3))
+                .show(mFragmentList.get(0))
+                .commit();
+        navigationController.addTabItemSelectedListener(new OnTabItemSelectedListener() {
+            @Override
+            public void onSelected(int index, int old) {
+                FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+                fragmentTransaction.hide(mFragmentList.get(old))
+                        .show(mFragmentList.get(index))
+                        .commit();
+            }
+
+            @Override
+            public void onRepeat(int index) {
+
+            }
+        });
+
+        getInfo();
+    }
+    public void getInfo(){
+        String userName = PreferenceManager.getDefaultSharedPreferences(this).getString("USER_EMAIL","");
+        UserInfo.userName = userName;
+        mDialog = new MaterialDialog.Builder(this)
+                .title(R.string.app_name)
+                .content("Please Wait...")
+                .progress(true, 0)
+                .show();
+        RetrofitServiceManager.getInstance()
+                .getRetrofit()
+                .create(ApiService.class)
+                .getInfo(userName)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DefaultObserver<BaseResponse<UserData>>() {
+                    @Override
+                    public void onSuccess(Object result) {
+                        UserData data = (UserData)result;
+                        UserInfo.journalCount = data.getJournalCount();
+                        UserInfo.tourCount = data.getTourCount();
+                        mDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onFail(String message) {
+                        showError(message);
+                        mDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        showError(message);
+                        mDialog.dismiss();
+                    }
+                });
     }
 
-    public void changeFragment(int position){
-        mNavigationViewPager.setCurrentItem(position);
+    public void changeFragment(int index){
+        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+        fragmentTransaction.hide(mFragmentList.get(0))
+                .hide(mFragmentList.get(1))
+                .hide(mFragmentList.get(2))
+                .hide(mFragmentList.get(3))
+                .show(mFragmentList.get(index))
+                .commit();
+
     }
-    @Override
-    public void setupViewPager() {
-        mHandler.post(()->{
-            List<Fragment> fragmentList = new ArrayList<>();
-            fragmentList.add(new ScheduleListFragment());
-            fragmentList.add(new AchievementFragment());
-            fragmentList.add(new JournalDisplayFragment());
-            fragmentList.add(new AttractionsListFragment());
-            mNavigationViewPager.setAdapter(new NavigationPagerAdapter(NavigationActivity.this.getSupportFragmentManager(), fragmentList));
-            mNavigationViewPager.setPageTransformer(true, new DepthPageTransformer());
-        });
+
+    public void showError(String message){
+        Toast.makeText(this,message,Toast.LENGTH_LONG).show();
     }
 }

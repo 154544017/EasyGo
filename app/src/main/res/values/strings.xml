@@ -62,7 +62,7 @@
     </string-array>
 
     <string name="schedule_title">Travel Schedule</string>
-    
+
     <string name="user_profile">UserProfile</string>
     <string name="user_past_schedule_list">PreviousScheduleList</string>
     <string name="user_system_setting">SystemSetting</string>

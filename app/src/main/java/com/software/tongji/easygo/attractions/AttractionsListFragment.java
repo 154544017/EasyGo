@@ -1,8 +1,10 @@
 package com.software.tongji.easygo.attractions;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +21,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.software.tongji.easygo.R;
 import com.software.tongji.easygo.bean.Attraction;
 import com.software.tongji.easygo.inputProvince.InputProvinceAdapter;
+import com.software.tongji.easygo.shake.ShakeActivity;
 import com.software.tongji.easygo.utils.MapHelper;
 
 import java.util.List;
@@ -36,6 +39,8 @@ public class AttractionsListFragment extends Fragment implements AttractionDispl
     ListView mProvinceTipView;
     @BindView(R.id.attractions_search_view)
     SearchView mSearchView;
+    @BindView(R.id.shake_button)
+    FloatingActionButton mShakeButton;
 
     private MaterialDialog mDialog;
     private AttractionDisplayPresenterImpl mPresenter;
@@ -64,6 +69,15 @@ public class AttractionsListFragment extends Fragment implements AttractionDispl
         mProvinceTipView.setAdapter(mProvinceListAdapter);
         initSearchView();
         mPresenter.getAllAttractions();
+
+        mShakeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), ShakeActivity.class);
+                startActivity(intent);
+            }
+        });
+
         return view;
     }
 

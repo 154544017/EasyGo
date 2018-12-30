@@ -64,8 +64,8 @@
     <string name="schedule_title">Travel Schedule</string>
 
     <string name="user_profile">UserProfile</string>
-    <string name="user_past_schedule_list">PreviousScheduleList</string>
-    <string name="user_system_setting">SystemSetting</string>
+    <string name="user_tour_list">TourList</string>
+    <string name="user_check_list">CheckList</string>
     <string name="about">About</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
@@ -79,4 +79,12 @@
     <string name="new_journal_content">Content:something&#160;happened&#160;in&#160;your&#160;travel</string>
 
     <string name="journal_search_menu">Search</string>
+    <string name="check_list_hint">Please enter item name here!</string>
+
+    <string name="about_version">Version:1.1.1</string>
+    <string name="about_developer">Developer:WeiNan, LuoYu</string>
+
+    <string name="tour_title">Title</string>
+    <string name="tour_remark">TourRemark</string>
+    <string name="tour_list">Tour List</string>
 </resources>

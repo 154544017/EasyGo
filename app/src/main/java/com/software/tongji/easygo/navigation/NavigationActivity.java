@@ -37,11 +37,12 @@ import me.majiajie.pagerbottomtabstrip.listener.OnTabItemSelectedListener;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class NavigationActivity extends AppCompatActivity implements NavigationView{
+public class NavigationActivity extends AppCompatActivity implements NavigationView {
 
     @BindView(R.id.bottom_tab_strip)
     PageNavigationView mPageNavigationView;
 
+    private NavigationController mNavigationController;
     private NavigationPresenter mNavigationPresenter;
     private FragmentManager mFragmentManager;
     private List<Fragment> mFragmentList;
@@ -67,7 +68,7 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
         mNavigationPresenter = new NavigationPresenter();
         mFragmentManager = getSupportFragmentManager();
 
-        NavigationController navigationController = mPageNavigationView.material()
+        mNavigationController = mPageNavigationView.material()
                 .addItem(R.drawable.ic_format_list_bulleted_black_24dp, "行程")
                 .addItem(R.drawable.ic_edit_location_black_24dp, "足迹")
                 .addItem(R.drawable.ic_collections_black_24dp, "游记")
@@ -88,7 +89,7 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
                 .hide(mFragmentList.get(3))
                 .show(mFragmentList.get(0))
                 .commit();
-        navigationController.addTabItemSelectedListener(new OnTabItemSelectedListener() {
+        mNavigationController.addTabItemSelectedListener(new OnTabItemSelectedListener() {
             @Override
             public void onSelected(int index, int old) {
                 FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
@@ -102,9 +103,8 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
 
             }
         });
-
-        getInfo();
     }
+
     public void getInfo(){
         String userName = PreferenceManager.getDefaultSharedPreferences(this).getString("USER_EMAIL","");
         UserInfo.userName = userName;
@@ -150,7 +150,7 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
                 .hide(mFragmentList.get(3))
                 .show(mFragmentList.get(index))
                 .commit();
-
+        mNavigationController.setSelect(index);
     }
 
     public void showError(String message){

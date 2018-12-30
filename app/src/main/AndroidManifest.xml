@@ -15,6 +15,8 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <!-- 允许程序访问CellID或WiFi热点来获取粗略的位置 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- 允许手机震动 -->
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application
         android:name="org.litepal.LitePalApplication"
@@ -40,10 +42,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".navigation.NavigationActivity"
-            android:theme="@style/AppNoBarTheme" />
 
+        <activity android:name=".navigation.NavigationActivity"
+            android:theme="@style/AppNoBarTheme"/>
         <activity
             android:name=".details.DetailsActivity"
             android:theme="@style/AppNoBarTheme" />
@@ -56,6 +57,16 @@
         <activity
             android:name=".journal.JournalShowActivity"
             android:theme="@style/AppNoBarTheme" />
+        <activity android:name=".about.AboutActivity"
+            android:theme="@style/AppNoBarTheme"/>
+        <activity android:name=".checklist.CheckListActivity"
+            android:theme="@style/AppNoBarTheme"/>
+        <activity android:name=".shake.ShakeActivity"
+            android:theme="@style/AppNoBarTheme"/>
+        <activity android:name=".tour.SaveTourActivity"
+            android:theme="@style/AppNoBarTheme"/>
+        <activity android:name=".tour.TourListActivity"
+            android:theme="@style/AppNoBarTheme"/>
         <activity android:name=".inputTips.InputTipsActivity"
             android:theme="@style/AppNoBarTheme">
         </activity>

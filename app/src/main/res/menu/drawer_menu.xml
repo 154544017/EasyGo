@@ -10,13 +10,13 @@
             android:icon="@drawable/ic_person_green_36dp"
             android:title="@string/user_profile" />
         <item
-            android:id="@+id/navigation_item_intimity"
+            android:id="@+id/navigation_tour_list"
             android:icon="@drawable/ic_storage_green_36dp"
-            android:title="@string/user_past_schedule_list" />
+            android:title="@string/user_tour_list" />
         <item
-            android:id="@+id/navigation_item_system"
+            android:id="@+id/navigation_item_check_list"
             android:icon="@drawable/ic_settings_green_36dp"
-            android:title="@string/user_system_setting" />
+            android:title="@string/user_check_list" />
 
         <item
             android:id="@+id/navigation_item_about"

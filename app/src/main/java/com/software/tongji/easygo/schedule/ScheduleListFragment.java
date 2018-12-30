@@ -20,27 +20,37 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.software.tongji.easygo.R;
+import com.software.tongji.easygo.about.AboutActivity;
 import com.software.tongji.easygo.bean.Schedule;
 import com.software.tongji.easygo.bean.ScheduleLab;
+import com.software.tongji.easygo.bean.Tour;
+import com.software.tongji.easygo.bean.TourLab;
+import com.software.tongji.easygo.checklist.CheckListActivity;
 import com.software.tongji.easygo.newschedule.NewScheduleActivity;
+import com.software.tongji.easygo.tour.SaveTourActivity;
+import com.software.tongji.easygo.tour.TourListActivity;
 
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ScheduleListFragment extends Fragment implements ScheduleListView{
+public class ScheduleListFragment extends Fragment implements ScheduleListView {
 
     public static final int REQUEST_CODE_NEW_SCHEDULE = 0;
+    public static final int REQUEST_CODE_SAVE_SHCEDULE = 1;
 
     @BindView(R.id.schedule_recycler_view)
     RecyclerView mRecyclerView;
     @BindView(R.id.schedule_add)
     FloatingActionButton mAddSchedule;
+    @BindView(R.id.schedule_save)
+    FloatingActionButton mSaveSchedule;
+    @BindView(R.id.line_planning)
+    FloatingActionButton mLinePlanning;
     @BindView(R.id.schedule_toolbar)
     Toolbar mScheduleToolBar;
 
@@ -85,7 +95,7 @@ public class ScheduleListFragment extends Fragment implements ScheduleListView{
                 @Override
                 public void onClick(View view) {
                     mDrawerLayout.closeDrawers();
-                    mNavigationView.getMenu().getItem(1).setChecked(true);
+                    mNavigationView.getMenu().getItem(0).setChecked(true);
                 }
             });
         }
@@ -95,7 +105,23 @@ public class ScheduleListFragment extends Fragment implements ScheduleListView{
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         item.setChecked(true);
-                        mDrawerLayout.closeDrawers();
+                        //mDrawerLayout.closeDrawers();
+                        switch (item.getItemId()) {
+                            case R.id.navigation_item_about:
+                                Intent aboutIntent = new Intent(getActivity(), AboutActivity.class);
+                                startActivity(aboutIntent);
+                                break;
+                            case R.id.navigation_tour_list:
+                                Intent tourListIntent = new Intent(getActivity(), TourListActivity.class);
+                                startActivity(tourListIntent);
+                                break;
+                            case R.id.navigation_item_check_list:
+                                Intent checkIntent = new Intent(getActivity(), CheckListActivity.class);
+                                startActivity(checkIntent);
+                                break;
+                            default:
+                                break;
+                        }
                         return true;
                     }
                 }
@@ -123,6 +149,21 @@ public class ScheduleListFragment extends Fragment implements ScheduleListView{
             }
         });
 
+        mSaveSchedule.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), SaveTourActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_SAVE_SHCEDULE);
+            }
+        });
+
+        mLinePlanning.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
         return view;
     }
 
@@ -144,6 +185,10 @@ public class ScheduleListFragment extends Fragment implements ScheduleListView{
             mScheduleListPresenter.addSchedule(schedule);
             mScheduleListPresenter.checkScheduleList();
             mScheduleAdapter.notifyItemInserted(mScheduleListPresenter.getNewSchedulePosition());
+        }else if(requestCode == REQUEST_CODE_SAVE_SHCEDULE){
+            String title = data.getStringExtra(SaveTourActivity.NEW_TOUR_TITLE);
+            String remark = data.getStringExtra(SaveTourActivity.NEW_TOUR_REMARK);
+            TourLab.get(getContext()).getTourList().add(new Tour(title, remark));
         }
     }
 

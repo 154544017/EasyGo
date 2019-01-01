@@ -20,9 +20,15 @@ import butterknife.ButterKnife;
 public class TourListAdapter extends RecyclerView.Adapter<TourListAdapter.TourHolder> {
 
     private List<Tour> mTourList;
+    private OnTourClickListener mOnTourClickListener;
 
-    public TourListAdapter(List<Tour> tourList){
+    public TourListAdapter(List<Tour> tourList,OnTourClickListener listener){
+        mOnTourClickListener = listener;
         mTourList = tourList;
+    }
+
+    public interface OnTourClickListener{
+        void changeToSchedule(String tourId);
     }
 
     @NonNull
@@ -64,8 +70,7 @@ public class TourListAdapter extends RecyclerView.Adapter<TourListAdapter.TourHo
         }
         @Override
         public void onClick(View view) {
-            Intent intent = NavigationActivity.newIntentGotoSchedule(view.getContext(),mTour.getId());
-            view.getContext().startActivity(intent);
+            mOnTourClickListener.changeToSchedule(mTour.getId());
         }
     }
 }

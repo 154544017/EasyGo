@@ -17,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.software.tongji.easygo.R;
@@ -107,14 +106,20 @@ public class ProvinceDialogFragment extends DialogFragment {
 
         Province province = ProvinceLab.getProvinceLab(getActivity()).getProvinceByName(provinceName);
         if(province.isLocked()){
+            RequestOptions options = getRequestOption();
             Glide.with(this).load(HttpUtils.getProvinceDisplayImageUrl(province.getPinYin()))
                     .apply(RequestOptions.bitmapTransform(new BlurTransformation(3,15)))
+                    .apply(options)
                     .into(mBac);
             mUnlocklayout.setVisibility(View.VISIBLE);
         }else{
             mJournalButton.setVisibility(View.VISIBLE);
             mDialogBack.setVisibility(View.VISIBLE);
-            Glide.with(this).load(HttpUtils.getProvinceDisplayImageUrl(province.getPinYin()))
+
+            RequestOptions options = getRequestOption();
+            Glide.with(this)
+                    .load(HttpUtils.getProvinceDisplayImageUrl(province.getPinYin()))
+                    .apply(options)
                     .into(mBac);
         }
         mLockedBack.setOnClickListener(new View.OnClickListener() {
@@ -128,7 +133,9 @@ public class ProvinceDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 sendRequest(Activity.RESULT_OK, provinceName);
+                RequestOptions requestOptions = getRequestOption();
                 Glide.with(ProvinceDialogFragment.this).load(HttpUtils.getProvinceDisplayImageUrl(province.getPinYin()))
+                        .apply(requestOptions)
                         .into(mBac);
                 mJournalButton.setVisibility(View.VISIBLE);
                 mDialogBack.setVisibility(View.VISIBLE);
@@ -173,6 +180,13 @@ public class ProvinceDialogFragment extends DialogFragment {
         Intent intent = new Intent();
         intent.putExtra(EXTRA_NAME, provinceName);
         getTargetFragment().onActivityResult(getTargetRequestCode(), resultCode,intent);
+    }
+
+    private RequestOptions getRequestOption(){
+        RequestOptions options = new RequestOptions()
+                .placeholder(R.drawable.province_place_holder)
+                .centerCrop();
+        return options;
     }
 }
 

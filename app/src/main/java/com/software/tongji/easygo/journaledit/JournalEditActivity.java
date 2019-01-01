@@ -11,12 +11,12 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -31,7 +31,6 @@ import com.software.tongji.easygo.R;
 import com.software.tongji.easygo.bean.Journal;
 import com.software.tongji.easygo.bean.JournalLab;
 import com.software.tongji.easygo.inputTips.InputTipsActivity;
-import com.software.tongji.easygo.newschedule.NewScheduleActivity;
 import com.software.tongji.easygo.utils.FileUtil;
 import com.software.tongji.easygo.utils.ImageUtil;
 import com.software.tongji.easygo.utils.MapHelper;
@@ -42,7 +41,7 @@ import java.util.Calendar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class JournalEditActivity extends AppCompatActivity implements JournalEditView{
+public class JournalEditActivity extends AppCompatActivity implements JournalEditView {
 
 
     private static final String EXTRA_JOURNAL_ID = "com.software.tongji.easygo.journal_id";
@@ -60,6 +59,8 @@ public class JournalEditActivity extends AppCompatActivity implements JournalEdi
     TextInputEditText mNewJournalFriends;
     @BindView(R.id.new_journal_content)
     TextInputEditText mNewJournalContent;
+    @BindView(R.id.new_journal_collapsing_toolbar)
+    CollapsingToolbarLayout mCollapsingToolbar;
 
     @BindView(R.id.new_journal_image)
     ImageView mCoverImage;
@@ -93,6 +94,8 @@ public class JournalEditActivity extends AppCompatActivity implements JournalEdi
         mPresenter.bind(this, this);
 
         mJournalId = getIntent().getStringExtra(EXTRA_JOURNAL_ID);
+        mNewJournalDate.setInputType(InputType.TYPE_NULL);
+
         if(!mJournalId.equals("add")) {
             mJournal = JournalLab.get(this).getJournal(mJournalId);
             mNewJournalTitle.setText(mJournal.getTitle());
@@ -103,8 +106,8 @@ public class JournalEditActivity extends AppCompatActivity implements JournalEdi
         }else{
             mJournal = new Journal();
         }
+
         mCoverFile = JournalLab.get(this).getCoverFIle(mJournal);
-        mNewJournalDate.setInputType(InputType.TYPE_NULL);
 
         mNewJournalLocation.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -116,16 +119,9 @@ public class JournalEditActivity extends AppCompatActivity implements JournalEdi
             }
         });
 
-        mNewJournalLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(JournalEditActivity.this, InputTipsActivity.class);
-                startActivityForResult(intent, REQUEST_PLACE);
-            }
-        });
-
-        if(mJournal.getCoverUrl() != null){
-            Glide.with(this).load(mJournal.getCoverUrl()).into(mCoverImage);
+        if(mCoverFile!= null && mCoverFile.exists()){
+            mCollapsingToolbar.setTitle("");
+            Glide.with(this).load(mCoverFile).into(mCoverImage);
         }
 
         mNewJournalDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -187,7 +183,7 @@ public class JournalEditActivity extends AppCompatActivity implements JournalEdi
     @Override
     public void showLoadingDialog() {
         mDialog = new MaterialDialog.Builder(this)
-                .title(R.string.app_name)
+                .title(R.string.load_journals)
                 .content("Please Wait...")
                 .progress(true, 0)
                 .show();

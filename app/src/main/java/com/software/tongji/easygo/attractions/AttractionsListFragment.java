@@ -2,7 +2,6 @@ package com.software.tongji.easygo.attractions;
 
 
 import android.content.Intent;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -24,7 +23,6 @@ import com.software.tongji.easygo.R;
 import com.software.tongji.easygo.bean.Attraction;
 import com.software.tongji.easygo.inputProvince.InputProvinceAdapter;
 import com.software.tongji.easygo.shake.ShakeActivity;
-import com.software.tongji.easygo.utils.MapHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -142,7 +140,7 @@ public class AttractionsListFragment extends Fragment implements AttractionDispl
     @Override
     public void showLoading() {
         mDialog = new MaterialDialog.Builder(getContext())
-                .title(R.string.app_name)
+                .title(R.string.load_attractions)
                 .content("Please Wait...")
                 .progress(true, 0)
                 .show();

@@ -1,14 +1,11 @@
 package com.software.tongji.easygo.JournalDisplayMvp;
 
 import android.content.Context;
-import android.os.AsyncTask;
 
 import com.software.tongji.easygo.bean.Journal;
 import com.software.tongji.easygo.bean.JournalLab;
 
-
 import java.util.List;
-import java.util.Observable;
 
 import rx.Observer;
 import rx.Subscriber;

@@ -4,7 +4,6 @@ import android.content.Context;
 
 import org.litepal.LitePal;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CheckItemLab {

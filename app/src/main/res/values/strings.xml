@@ -33,10 +33,9 @@
     <string name="attractions_search_menu">Search</string>
     <string name="schedule_add_menu">Add</string>
 
-    <string name="details_address">Address</string>
+    <string name="details_address">Address    </string>
     <string name="details_introduction">Introduction</string>
-    <string name="details_telephone">Telephone</string>
-    <string name="details_transport">Transport</string>
+    <string name="details_time">Time        </string>
 
     <string name="schedule_address">Address</string>
     <string name="begin_time">BeginTime</string>
@@ -90,4 +89,9 @@
 
     <string name="no_attraction">没有找到景点推荐\n请尝试换一个省份！</string>
     <string name="no_journals">该省还没有添加游记\n请尝试换一个省份或添加游记！</string>
+    <string name="sync">同步数据</string>
+    <string name="load_journals">更新游记</string>
+    <string name="load_attractions">获取景点</string>
+    <string name="load_schedules">更新行程</string>
+    <string name="no_value">暂无信息</string>
 </resources>

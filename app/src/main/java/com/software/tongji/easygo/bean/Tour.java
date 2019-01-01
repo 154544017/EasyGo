@@ -2,7 +2,6 @@ package com.software.tongji.easygo.bean;
 
 import org.litepal.crud.LitePalSupport;
 
-import java.util.List;
 import java.util.UUID;
 
 public class Tour extends LitePalSupport {

@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.software.tongji.easygo.MyProvinceDisplayMvp.ProvinceAdapter;
 import com.software.tongji.easygo.R;
 import com.software.tongji.easygo.bean.Province;
 import com.software.tongji.easygo.bean.ProvinceLab;

@@ -2,8 +2,6 @@ package com.software.tongji.easygo.utils;
 
 import android.util.Log;
 
-import java.util.Map;
-
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 

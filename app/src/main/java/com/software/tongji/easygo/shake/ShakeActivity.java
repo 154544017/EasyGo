@@ -21,13 +21,11 @@ import android.widget.Toast;
 
 import com.software.tongji.easygo.R;
 import com.software.tongji.easygo.bean.Attraction;
-import com.software.tongji.easygo.bean.UserData;
 import com.software.tongji.easygo.details.DetailsActivity;
 import com.software.tongji.easygo.net.ApiService;
 import com.software.tongji.easygo.net.BaseResponse;
 import com.software.tongji.easygo.net.DefaultObserver;
 import com.software.tongji.easygo.net.RetrofitServiceManager;
-import com.software.tongji.easygo.utils.HttpUtils;
 
 import java.lang.ref.WeakReference;
 

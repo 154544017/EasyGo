@@ -1,7 +1,5 @@
 package com.software.tongji.easygo.JournalDisplayMvp;
 
-import android.content.Context;
-
 import com.software.tongji.easygo.bean.Journal;
 
 import java.util.List;

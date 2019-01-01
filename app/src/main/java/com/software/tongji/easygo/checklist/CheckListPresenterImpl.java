@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.software.tongji.easygo.bean.CheckItem;
 import com.software.tongji.easygo.bean.CheckItemLab;
-import com.software.tongji.easygo.net.RetrofitServiceManager;
 
 import java.util.List;
 

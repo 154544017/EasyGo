@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.software.tongji.easygo.net.ApiService;
 import com.software.tongji.easygo.net.BaseResponse;
 import com.software.tongji.easygo.net.DefaultObserver;
@@ -15,15 +14,12 @@ import com.software.tongji.easygo.utils.MyLitepalGson;
 import org.litepal.LitePal;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import okio.BufferedSink;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 

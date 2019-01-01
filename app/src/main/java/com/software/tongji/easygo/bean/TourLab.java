@@ -29,6 +29,10 @@ public class TourLab {
         return LitePal.findAll(Tour.class);
     }
 
+    public String getTourTitle(String tourId){
+        List<Tour> tours = LitePal.where("mId = ?", tourId).find(Tour.class);
+        return tours.get(0).getTitle();
+    }
     public void addNewTour(Tour tour){
         tour.save();
     }
@@ -38,7 +42,7 @@ public class TourLab {
     }
 
     public String latestTourId(){
-        List<Tour> tours = LitePal.findAll(Tour.class);
-        return tours.get(tours.size()-1).getId();
+        Tour tour = LitePal.findLast(Tour.class);
+        return tour.getId();
     }
 }

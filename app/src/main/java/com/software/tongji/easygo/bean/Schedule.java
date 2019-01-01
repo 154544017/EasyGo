@@ -2,7 +2,9 @@ package com.software.tongji.easygo.bean;
 
 import org.litepal.crud.LitePalSupport;
 
-public class Schedule extends LitePalSupport {
+import java.io.Serializable;
+
+public class Schedule extends LitePalSupport implements Serializable {
 
     private String mTourId;
     private String mAddress;

@@ -77,7 +77,7 @@ public class AttractionsAdapter extends RecyclerView.Adapter<AttractionsAdapter.
             attractionName.setText(mAttraction.getName());
             cityName.setText(attraction.getCity());
             RequestOptions options = new RequestOptions()
-                    .placeholder(R.mipmap.ic_launcher)
+                    .placeholder(R.drawable.attractions_place_holder)
                     .centerCrop();
             Glide.with(context).load(mAttraction.getImages().get(1)).apply(options).into(attractionImage);
         }

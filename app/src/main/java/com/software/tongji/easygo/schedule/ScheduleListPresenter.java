@@ -1,7 +1,5 @@
 package com.software.tongji.easygo.schedule;
 
-import android.content.Context;
-
 import com.software.tongji.easygo.bean.Schedule;
 import com.software.tongji.easygo.bean.ScheduleLab;
 
@@ -73,7 +71,7 @@ public class ScheduleListPresenter {
         getSchedules(schedule.getTourId());
     }
 
-    public void swapSchedule(Schedule schedule1,Schedule schedule2){
+    public void swapSchedule(Schedule schedule1, Schedule schedule2){
         mScheduleLab.changePosition(schedule1.getPosition(),schedule2.getPosition());
         getSchedules(schedule1.getTourId());
     }

@@ -24,7 +24,7 @@ import java.util.Calendar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class NewScheduleActivity extends AppCompatActivity implements NewScheduleView{
+public class NewScheduleActivity extends AppCompatActivity implements NewScheduleView {
 
     private NewSchedulePresenter mNewSchedulePresenter;
 

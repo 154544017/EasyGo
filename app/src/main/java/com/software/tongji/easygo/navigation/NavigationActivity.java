@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -18,7 +19,6 @@ import com.software.tongji.easygo.Achievement.AchievementFragment;
 import com.software.tongji.easygo.JournalDisplayMvp.JournalDisplayFragment;
 import com.software.tongji.easygo.R;
 import com.software.tongji.easygo.attractions.AttractionsListFragment;
-import com.software.tongji.easygo.bean.Attraction;
 import com.software.tongji.easygo.bean.Journal;
 import com.software.tongji.easygo.bean.JournalLab;
 import com.software.tongji.easygo.bean.UserData;
@@ -28,6 +28,7 @@ import com.software.tongji.easygo.net.BaseResponse;
 import com.software.tongji.easygo.net.DefaultObserver;
 import com.software.tongji.easygo.net.RetrofitServiceManager;
 import com.software.tongji.easygo.schedule.ScheduleListFragment;
+import com.software.tongji.easygo.tour.TourListActivity;
 import com.software.tongji.easygo.utils.FileUtil;
 
 import org.litepal.LitePal;
@@ -55,11 +56,6 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
     private List<Fragment> mFragmentList;
     private MaterialDialog mDialog;
 
-    public static Intent newIntentGotoSchedule(Context packageContext, String tourId){
-        Intent intent = new Intent(packageContext,NavigationActivity.class);
-        intent.putExtra(EXTRA_TOUR_ID, tourId);
-        return intent;
-    }
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,6 +93,10 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
                 .add(R.id.fragment_container, mFragmentList.get(1))
                 .add(R.id.fragment_container, mFragmentList.get(2))
                 .add(R.id.fragment_container, mFragmentList.get(3))
+                .hide(mFragmentList.get(1))
+                .hide(mFragmentList.get(2))
+                .hide(mFragmentList.get(3))
+                .show(mFragmentList.get(0))
                 .commit();
 
         mNavigationController.addTabItemSelectedListener(new OnTabItemSelectedListener() {
@@ -114,32 +114,12 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
             }
         });
 
-        initFragment();
-
-
         getInfo();
-    }
-
-    private void initFragment() {
-
-        if(getIntent() != null){
-            String tourId = getIntent().getStringExtra(EXTRA_TOUR_ID);
-            if (tourId != null) {
-                ScheduleListFragment fragment = (ScheduleListFragment) mFragmentList.get(0);
-                fragment.setTourId(tourId);
-            }
-        }
-        FragmentTransaction transaction = mFragmentManager.beginTransaction();
-        transaction.hide(mFragmentList.get(1))
-                .hide(mFragmentList.get(2))
-                .hide(mFragmentList.get(3))
-                .show(mFragmentList.get(0))
-                .commit();
     }
 
     public void showLoadDialog(){
         mDialog = new MaterialDialog.Builder(this)
-                .title(R.string.app_name)
+                .title(R.string.sync)
                 .content("Please Wait...")
                 .progress(true, 0)
                 .show();
@@ -182,16 +162,6 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
                 });
     }
 
-    public void changeFragment(int index){
-        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-        fragmentTransaction.hide(mFragmentList.get(0))
-                .hide(mFragmentList.get(1))
-                .hide(mFragmentList.get(2))
-                .hide(mFragmentList.get(3))
-                .show(mFragmentList.get(index))
-                .commit();
-        mNavigationController.setSelect(index);
-    }
 
     public void changeSearchFragmentWithArgs(String args){
         AttractionsListFragment fragment = (AttractionsListFragment)mFragmentList.get(3);

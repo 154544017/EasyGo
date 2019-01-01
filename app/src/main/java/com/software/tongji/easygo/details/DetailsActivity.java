@@ -44,8 +44,6 @@ public class DetailsActivity extends AppCompatActivity{
     TextView mIntroduction;
     @BindView(R.id.details_best_time)
     TextView mBestTime;
-    @BindView(R.id.details_transport)
-    TextView mTransport;
     @BindView(R.id.floating_add_button)
     FloatingActionButton mAddToScheduleButton;
 

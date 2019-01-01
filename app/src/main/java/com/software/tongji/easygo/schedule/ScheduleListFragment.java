@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -16,7 +17,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,10 +31,10 @@ import com.software.tongji.easygo.bean.Schedule;
 import com.software.tongji.easygo.bean.Tour;
 import com.software.tongji.easygo.bean.TourLab;
 import com.software.tongji.easygo.checklist.CheckListActivity;
+import com.software.tongji.easygo.lineplanning.LinePlanningActivity;
 import com.software.tongji.easygo.newschedule.NewScheduleActivity;
 import com.software.tongji.easygo.tour.SaveTourActivity;
 import com.software.tongji.easygo.tour.TourListActivity;
-
 
 import java.util.List;
 
@@ -44,7 +44,9 @@ import butterknife.ButterKnife;
 public class ScheduleListFragment extends Fragment implements ScheduleListView {
 
     public static final int REQUEST_CODE_NEW_SCHEDULE = 0;
-    public static final int REQUEST_CODE_SAVE_SHCEDULE = 1;
+    public static final int REQUEST_CODE_SAVE_SCHEDULE = 1;
+    public static final int REQUEST_OPEN_TOUR_LIST = 2;
+
     private static final String DEFAULT_TOUR_ID = "00000000";
 
     @BindView(R.id.schedule_recycler_view)
@@ -55,6 +57,8 @@ public class ScheduleListFragment extends Fragment implements ScheduleListView {
     FloatingActionButton mSaveSchedule;
     @BindView(R.id.line_planning)
     FloatingActionButton mLinePlanning;
+    @BindView(R.id.schedule_collapsing_toolbar)
+    CollapsingToolbarLayout mCollapsingToolbar;
     @BindView(R.id.schedule_toolbar)
     Toolbar mScheduleToolBar;
 
@@ -118,7 +122,7 @@ public class ScheduleListFragment extends Fragment implements ScheduleListView {
                                 break;
                             case R.id.navigation_tour_list:
                                 Intent tourListIntent = new Intent(getActivity(), TourListActivity.class);
-                                startActivity(tourListIntent);
+                                startActivityForResult(tourListIntent,REQUEST_OPEN_TOUR_LIST);
                                 break;
                             case R.id.navigation_item_check_list:
                                 Intent checkIntent = new Intent(getActivity(), CheckListActivity.class);
@@ -157,17 +161,17 @@ public class ScheduleListFragment extends Fragment implements ScheduleListView {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), SaveTourActivity.class);
-                startActivityForResult(intent, REQUEST_CODE_SAVE_SHCEDULE);
+                startActivityForResult(intent, REQUEST_CODE_SAVE_SCHEDULE);
             }
         });
 
         mLinePlanning.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = LinePlanningActivity.newIntent(getContext(), mTourId);
+                startActivity(intent);
             }
         });
-
         return view;
     }
 
@@ -191,14 +195,17 @@ public class ScheduleListFragment extends Fragment implements ScheduleListView {
             Schedule schedule = new Schedule(mTourId,address,latitude,longitude,date,time,type,cost,remark,position);
             mScheduleListPresenter.addSchedule(schedule);
 
-        }else if(requestCode == REQUEST_CODE_SAVE_SHCEDULE){
+        }else if(requestCode == REQUEST_CODE_SAVE_SCHEDULE){
             String title = data.getStringExtra(SaveTourActivity.NEW_TOUR_TITLE);
             String remark = data.getStringExtra(SaveTourActivity.NEW_TOUR_REMARK);
             Tour tour = new Tour(title,remark);
             mScheduleListPresenter.updateSchedules(mTourId, tour.getId());
             TourLab.get(getContext()).addNewTour(tour);
-            mTourId = DEFAULT_TOUR_ID;
-
+            mTourId = tour.getId();
+            resetToolBar();
+        }else if(requestCode == REQUEST_OPEN_TOUR_LIST){
+            String id = data.getStringExtra(TourListActivity.EXTRA_TOUR_ID);
+            mTourId = id;
         }
     }
 
@@ -211,7 +218,15 @@ public class ScheduleListFragment extends Fragment implements ScheduleListView {
                 mTourId = tourLab.latestTourId();
             }
         }
+        resetToolBar();
         mScheduleListPresenter.getSchedules(mTourId);
+    }
+
+    public void resetToolBar(){
+        if(mTourId != null && !mTourId.equals(DEFAULT_TOUR_ID)){
+            String title = TourLab.get(getContext()).getTourTitle(mTourId);
+            mCollapsingToolbar.setTitle(title);
+        }
     }
 
     public void setTourId(String tourId){
@@ -237,13 +252,14 @@ public class ScheduleListFragment extends Fragment implements ScheduleListView {
     public void showDialog() {
         if (mDialog == null || mDialog.isCancelled()) {
             mDialog = new MaterialDialog.Builder(getContext())
-                    .title(R.string.app_name)
+                    .title(R.string.load_schedules)
                     .content("Please Wait...")
                     .progress(true, 0)
                     .show();
         }
 
     }
+
 
     @Override
     public void onResume() {

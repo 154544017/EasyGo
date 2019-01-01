@@ -1,7 +1,6 @@
 package com.software.tongji.easygo.JournalDisplayMvp;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,7 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.software.tongji.easygo.MyProvinceDisplayMvp.ProvinceAdapter;
 import com.software.tongji.easygo.R;
 import com.software.tongji.easygo.bean.Journal;
 import com.software.tongji.easygo.inputProvince.InputProvinceAdapter;
@@ -154,7 +152,7 @@ public class JournalDisplayFragment extends Fragment implements JournalDisplayVi
     public void showLoadingDialog() {
         if (mDialog == null || mDialog.isCancelled()) {
             mDialog = new MaterialDialog.Builder(getContext())
-                    .title(R.string.app_name)
+                    .title(R.string.load_journals)
                     .content("Please Wait...")
                     .progress(true, 0)
                     .show();
@@ -202,18 +200,17 @@ public class JournalDisplayFragment extends Fragment implements JournalDisplayVi
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         Log.e("fragment", "onHidden: " + String.valueOf(hidden));
-        if(isFirstShown){
-            if(!hidden){
-                if(mProvinceArg.equals(NO_DEFAULT)){
-                    return;
-                }else{
-                    mSearchView.setQueryHint(mProvinceArg);
-                    mJournalDisplayPresenter.getJournalsByProvince(mProvinceArg);
-                    mProvinceArg = NO_DEFAULT;
-                }
+        if(!hidden){
+            if(mProvinceArg.equals(NO_DEFAULT)){
+                mJournalDisplayPresenter.getJournals();
+            }else{
+                mSearchView.setQueryHint(mProvinceArg);
+                mJournalDisplayPresenter.getJournalsByProvince(mProvinceArg);
+                mProvinceArg = NO_DEFAULT;
             }
         }
     }
+
     public void setDefaultProvince(String province){
         mProvinceArg = province;
     }

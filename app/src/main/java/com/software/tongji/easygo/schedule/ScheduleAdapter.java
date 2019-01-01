@@ -1,5 +1,6 @@
 package com.software.tongji.easygo.schedule;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,18 +10,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.software.tongji.easygo.R;
+import com.software.tongji.easygo.ScheduleShow.ScheduleShow;
 import com.software.tongji.easygo.bean.Schedule;
 
-import org.w3c.dom.Text;
-
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ScheduleHolder>
-        implements ItemTouchHelperAdapter{
+        implements ItemTouchHelperAdapter {
 
     private List<Schedule> mScheduleList;
     private ScheduleListPresenter mScheduleListPresenter;
@@ -43,26 +42,8 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
 
     @Override
     public void onBindViewHolder(@NonNull ScheduleHolder holder, int position) {
-        holder.mDate.setText(mScheduleList.get(position).getDate());
-        holder.mTime.setText(mScheduleList.get(position).getTime());
-        switch (mScheduleList.get(position).getType()){
-            case "ATTRACTIONS":
-                holder.mIcon.setImageResource(R.mipmap.ic_attractions_schedule);
-                break;
-            case "DINING":
-                holder.mIcon.setImageResource(R.mipmap.ic_dining_schedule);
-                break;
-            case "TRANSPORT":
-                holder.mIcon.setImageResource(R.mipmap.ic_transport_schedule);
-                break;
-            case "HOTEL":
-                holder.mIcon.setImageResource(R.mipmap.ic_hotel_schedule);
-                break;
-            default:
-                break;
-        }
-        holder.mAddress.setText(mScheduleList.get(position).getAddress());
-        holder.mRemark.setText(mScheduleList.get(position).getRemark());
+        Schedule schedule = mScheduleList.get(position);
+        holder.bind(schedule);
     }
 
     @Override
@@ -92,11 +73,42 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
         TextView mAddress;
         @BindView(R.id.schedule_remark)
         TextView mRemark;
+        Schedule mSchedule;
 
         public ScheduleHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
-            //itemView.setOnClickListener(this);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = ScheduleShow.newIntent(itemView.getContext(), mSchedule);
+                    itemView.getContext().startActivity(intent);
+                }
+            });
+        }
+
+        public void bind(Schedule schedule){
+            mSchedule = schedule;
+            mDate.setText(schedule.getDate());
+            mTime.setText(schedule.getTime());
+            switch (schedule.getType()){
+                case "ATTRACTIONS":
+                    mIcon.setImageResource(R.mipmap.ic_attractions_schedule);
+                    break;
+                case "DINING":
+                    mIcon.setImageResource(R.mipmap.ic_dining_schedule);
+                    break;
+                case "TRANSPORT":
+                    mIcon.setImageResource(R.mipmap.ic_transport_schedule);
+                    break;
+                case "HOTEL":
+                    mIcon.setImageResource(R.mipmap.ic_hotel_schedule);
+                    break;
+                default:
+                    break;
+            }
+            mAddress.setText(schedule.getAddress());
+            mRemark.setText(schedule.getRemark());
         }
     }
 }

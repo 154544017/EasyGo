@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.software.tongji.easygo.R;
 import com.software.tongji.easygo.bean.CheckItem;
@@ -25,7 +24,7 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.Chec
     private ChangeItemStateListener mChangeItemStateListener;
 
     public interface ChangeItemStateListener{
-        void changeItemState(String itemName,Boolean state);
+        void changeItemState(String itemName, Boolean state);
     }
     public CheckListAdapter(Context context,ChangeItemStateListener listener){
         mChangeItemStateListener = listener;

@@ -13,14 +13,13 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.software.tongji.easygo.R;
 import com.software.tongji.easygo.bean.CheckItem;
-import com.software.tongji.easygo.bean.CheckItemLab;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class CheckListActivity extends AppCompatActivity implements CheckListView{
+public class CheckListActivity extends AppCompatActivity implements CheckListView {
     @BindView(R.id.edit_text_check)
     EditText mEditText;
     @BindView(R.id.check_list_recycler_view)

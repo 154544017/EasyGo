@@ -8,7 +8,6 @@ public class JournalDisplayActivity extends SingleFragmentActivity {
 
     @Override
     protected Fragment createFragment() {
-        JournalDisplayFragment fragment = new JournalDisplayFragment();
-        return fragment;
+        return new JournalDisplayFragment();
     }
 }

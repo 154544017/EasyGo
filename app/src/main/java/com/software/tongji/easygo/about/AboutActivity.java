@@ -12,13 +12,6 @@ import butterknife.BindView;
 
 public class AboutActivity extends AppCompatActivity{
 
-    @BindView(R.id.app_icon)
-    ImageView mAppIcon;
-    @BindView(R.id.about_version)
-    TextView mAppVersion;
-    @BindView(R.id.about_author)
-    TextView mAppAuthor;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

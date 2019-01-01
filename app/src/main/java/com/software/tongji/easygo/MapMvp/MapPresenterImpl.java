@@ -24,14 +24,10 @@ public class MapPresenterImpl implements MapContract.MapPresenter {
 
 
     @Override
-    public void changeProvinceState(MyMap myMap, String provinceName, boolean isLocked) {
+    public void changeProvinceState(MyMap myMap, String provinceName) {
         ProvinceLab.getProvinceLab(mContext).updateProvinceState(myMap, provinceName, false);
         mMapView.refreshUI();
     }
 
-    @Override
-    public void start() {
-
-    }
 }
 

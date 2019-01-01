@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
-import android.text.InputType;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -69,21 +68,15 @@ public class JournalShowActivity extends AppCompatActivity {
             Glide.with(this).load(mJournal.getCoverUrl()).into(mImageView);
         }
 
-        mEditJournalButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = JournalEditActivity.newIntent(getApplicationContext(),mJournal.getId());
-                startActivity(intent);
-                finish();
-            }
+        mEditJournalButton.setOnClickListener(view -> {
+            Intent intent = JournalEditActivity.newIntent(getApplicationContext(),mJournal.getId());
+            startActivity(intent);
+            finish();
         });
 
-        mDeleteJournalButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                JournalLab.get(getApplicationContext()).deleteJournal(mJournal);
-                finish();
-            }
+        mDeleteJournalButton.setOnClickListener(view -> {
+            JournalLab.get(getApplicationContext()).deleteJournal(mJournal);
+            finish();
         });
 
     }

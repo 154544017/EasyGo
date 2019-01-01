@@ -13,7 +13,6 @@ public class ScheduleLab {
     private List<Schedule> mSchedules;
     private String mCurrentTourId;
     private int mPosition;//新加入的schedule的位置
-    private Context mContext;
 
     public static ScheduleLab get(Context context){
         if(sScheduleLab == null){
@@ -23,7 +22,7 @@ public class ScheduleLab {
     }
 
     private ScheduleLab(Context context){
-        mContext = context;
+        Context context1 = context;
     }
 
     public List<Schedule> getScheduleList(String tourId) {

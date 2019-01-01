@@ -21,7 +21,7 @@ public class InputProvinceAdapter extends BaseAdapter implements Filterable {
 
     public InputProvinceAdapter(Context context) {
         mContext = context;
-        ArrayList<String> provinces = new ArrayList<String>(Arrays.asList(
+        ArrayList<String> provinces = new ArrayList<>(Arrays.asList(
                 "显示全部","北京市","重庆市","福建省","广东省",
                 "甘肃省","广西省","贵州省","海南省","河北省",
                 "河南省","香港","黑龙江","湖南省","湖北省",
@@ -83,10 +83,10 @@ public class InputProvinceAdapter extends BaseAdapter implements Filterable {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
 
-            List<String> newProvince = new ArrayList();
+            List<String> newProvince = new ArrayList<>();
             if (constraint != null && constraint.toString().trim().length() > 0) {
                 for (int i = 0; i < mListProvinces.size(); i++) {
-                    String content = (String) mListProvinces.get(i);
+                    String content = mListProvinces.get(i);
                     if (content.contains(constraint)) {
                         newProvince.add(content);
                     }
@@ -104,7 +104,7 @@ public class InputProvinceAdapter extends BaseAdapter implements Filterable {
         protected void publishResults(CharSequence constraint, FilterResults results) {
             //这里对ProvinceList进行过滤后重新赋值
             mTempProvinces = (List) results.values;
-            //如果过滤后的返回的值的个数大于等于0的话,对Adpater的界面进行刷新
+            //如果过滤后的返回的值的个数大于等于0的话,对Adapter的界面进行刷新
             if (results.count > 0) {
                 notifyDataSetChanged();
             } else {

@@ -26,7 +26,6 @@ import butterknife.ButterKnife;
 
 public class NewScheduleActivity extends AppCompatActivity implements NewScheduleView {
 
-    private NewSchedulePresenter mNewSchedulePresenter;
 
     public static final String NEW_SCHEDULE_TYPE = "new_schedule_type";
     public static final String NEW_SCHEDULE_ADDRESS = "new_schedule_address";
@@ -64,65 +63,49 @@ public class NewScheduleActivity extends AppCompatActivity implements NewSchedul
         ButterKnife.bind(this);
 
         mScheduleDate.setInputType(InputType.TYPE_NULL);
-        mScheduleDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if(hasFocus){
-                    showDatePickDialog();
-                }
-            }
-        });
-        mScheduleDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        mScheduleDate.setOnFocusChangeListener((view, hasFocus) -> {
+            if(hasFocus){
                 showDatePickDialog();
             }
         });
+        mScheduleDate.setOnClickListener(view -> showDatePickDialog());
 
         mScheduleTime.setInputType(InputType.TYPE_NULL);
-        mScheduleTime.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if(hasFocus){
-                    showTimePickDialog();
-                }
-            }
-        });
-
-        mScheduleTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        mScheduleTime.setOnFocusChangeListener((view, hasFocus) -> {
+            if(hasFocus){
                 showTimePickDialog();
             }
         });
 
+        mScheduleTime.setOnClickListener(view -> showTimePickDialog());
 
-        mScheduleAddress.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        mScheduleAddress.setOnFocusChangeListener((view, hasFocus) -> {
+            if(hasFocus){
                 Intent intent = new Intent(NewScheduleActivity.this, InputTipsActivity.class);
                 startActivityForResult(intent, REQUEST_PLACE);
             }
         });
 
-        mNewScheduleOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent();
-                if(mScheduleAddress.getText().toString().length() < 1){
-                    Toast.makeText(NewScheduleActivity.this, "Please fill the address before your commit!", Toast.LENGTH_SHORT).show();
-                }else{
-                    intent.putExtra(NEW_SCHEDULE_ADDRESS,mScheduleAddress.getText().toString());
-                    intent.putExtra(NEW_SCHEDULE_DATE, mScheduleDate.getText().toString());
-                    intent.putExtra(NEW_SCHEDULE_TIME, mScheduleTime.getText().toString());
-                    intent.putExtra(NEW_SCHEDULE_TYPE, mScheduleType.getSelectedItem().toString());
-                    intent.putExtra(NEW_SCHEDULE_COST, mScheduleCost.getText().toString());
-                    intent.putExtra(NEW_SCHEDULE_REMARK, mScheduleRemark.getText().toString());
-                    intent.putExtra(NEW_SCHEDULE_LAT, mLatitude);
-                    intent.putExtra(NEW_SCHEDULE_LON, mLongitude);
-                    setResult(RESULT_OK, intent);
-                    finish();
-                }
+        mScheduleAddress.setOnClickListener(view -> {
+            Intent intent = new Intent(NewScheduleActivity.this, InputTipsActivity.class);
+            startActivityForResult(intent, REQUEST_PLACE);
+        });
+
+        mNewScheduleOk.setOnClickListener(view -> {
+            Intent intent = new Intent();
+            if(mScheduleAddress.getText().toString().length() < 1){
+                Toast.makeText(NewScheduleActivity.this, "Please fill the address before your commit!", Toast.LENGTH_SHORT).show();
+            }else{
+                intent.putExtra(NEW_SCHEDULE_ADDRESS,mScheduleAddress.getText().toString());
+                intent.putExtra(NEW_SCHEDULE_DATE, mScheduleDate.getText().toString());
+                intent.putExtra(NEW_SCHEDULE_TIME, mScheduleTime.getText().toString());
+                intent.putExtra(NEW_SCHEDULE_TYPE, mScheduleType.getSelectedItem().toString());
+                intent.putExtra(NEW_SCHEDULE_COST, mScheduleCost.getText().toString());
+                intent.putExtra(NEW_SCHEDULE_REMARK, mScheduleRemark.getText().toString());
+                intent.putExtra(NEW_SCHEDULE_LAT, mLatitude);
+                intent.putExtra(NEW_SCHEDULE_LON, mLongitude);
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
     }
@@ -132,12 +115,7 @@ public class NewScheduleActivity extends AppCompatActivity implements NewSchedul
         Calendar calendar = Calendar.getInstance();
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                        mScheduleDate.setText(year + "/" + (month + 1) + "/" + day);
-                    }
-                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+                (datePicker, year, month, day) -> mScheduleDate.setText(year + "/" + (month + 1) + "/" + day), calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.show();
     }
 
@@ -146,12 +124,7 @@ public class NewScheduleActivity extends AppCompatActivity implements NewSchedul
         Calendar calendar = Calendar.getInstance();
 
         TimePickerDialog timePickerDialog = new TimePickerDialog(this,
-                new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-                        mScheduleTime.setText(hour + ":" + minute);
-                    }
-                }, calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE), true);
+                (timePicker, hour, minute) -> mScheduleTime.setText(hour + ":" + minute), calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE), true);
         timePickerDialog.show();
     }
 
@@ -160,10 +133,14 @@ public class NewScheduleActivity extends AppCompatActivity implements NewSchedul
         if (requestCode == REQUEST_PLACE) {
             if (resultCode == InputTipsActivity.RESULT_CODE_INPUTTIPS) {
                 final Tip tip = data.getParcelableExtra("tip");
-                if (tip.getName() != null) {
+                if (tip.getName() != null && tip.getPoint() != null) {
                     mScheduleAddress.setText(tip.getName());
                     mLatitude = tip.getPoint().getLatitude();
                     mLongitude = tip.getPoint().getLongitude();
+                }else{
+                    Toast.makeText(this,"请选择一个具体位置!",Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(NewScheduleActivity.this, InputTipsActivity.class);
+                    startActivityForResult(intent, REQUEST_PLACE);
                 }
             }
         }

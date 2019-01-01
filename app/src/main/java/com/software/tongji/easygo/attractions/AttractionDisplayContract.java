@@ -4,7 +4,7 @@ import com.software.tongji.easygo.bean.Attraction;
 
 import java.util.List;
 
-public class AttractionDisplayContract {
+class AttractionDisplayContract {
     interface AttractionDisplayPresenter {
         void getAllAttractions();
         void getAttractionsByProvince(String query);

@@ -1,13 +1,11 @@
 package com.software.tongji.easygo.details;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -32,9 +30,6 @@ public class DetailsActivity extends AppCompatActivity{
     @BindView(R.id.details_toolbar)
     Toolbar mToolbar;
 
-    @BindView(R.id.details_collapsing_toolbar)
-    CollapsingToolbarLayout mCollapsingToolbar;
-
     @BindView(R.id.details_banner)
     Banner mBanner;
 
@@ -47,7 +42,6 @@ public class DetailsActivity extends AppCompatActivity{
     @BindView(R.id.floating_add_button)
     FloatingActionButton mAddToScheduleButton;
 
-    private Attraction mAttraction;
     private List<String> images = new ArrayList<>();
 
     public static Intent newIntent(Context packageContext, Attraction attraction){
@@ -59,7 +53,7 @@ public class DetailsActivity extends AppCompatActivity{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mAttraction = (Attraction) getIntent().getSerializableExtra(EXTRA_ATTRACTION);
+        Attraction attraction = (Attraction) getIntent().getSerializableExtra(EXTRA_ATTRACTION);
 
         if(Build.VERSION.SDK_INT >= 21){
             View decorView = getWindow().getDecorView();
@@ -70,29 +64,22 @@ public class DetailsActivity extends AppCompatActivity{
         }
         setContentView(R.layout.activity_details);
 
-        for(String url:mAttraction.getImages()){
-            images.add(url);
-        }
+        images.addAll(attraction.getImages());
 
         ButterKnife.bind(this);
 
-        mToolbar.setTitle(mAttraction.getName());
+        mToolbar.setTitle(attraction.getName());
         setSupportActionBar(mToolbar);
         mBanner.setImageLoader(new GlideImageLoader());
         mBanner.setImages(images);
         mBanner.start();
 
-        StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append(MapHelper.provinceHanzi.get(mAttraction.getProvince())).append(mAttraction.getCity());
-        mAddress.setText(stringBuffer.toString());
-        mIntroduction.setText(mAttraction.getIntroduction());
-        mBestTime.setText(mAttraction.getBestTime());
-        mAddToScheduleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(DetailsActivity.this, NewScheduleActivity.class);
-                startActivity(intent);
-            }
+        mAddress.setText(MapHelper.provinceHanzi.get(attraction.getProvince()) + attraction.getCity());
+        mIntroduction.setText(attraction.getIntroduction());
+        mBestTime.setText(attraction.getBestTime());
+        mAddToScheduleButton.setOnClickListener(view -> {
+            Intent intent = new Intent(DetailsActivity.this, NewScheduleActivity.class);
+            startActivity(intent);
         });
 
     }

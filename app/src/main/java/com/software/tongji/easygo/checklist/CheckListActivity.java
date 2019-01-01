@@ -40,29 +40,18 @@ public class CheckListActivity extends AppCompatActivity implements CheckListVie
         ButterKnife.bind(this);
 
         mListPresenter = new CheckListPresenterImpl(this,this);
-        mCheckListAdapter = new CheckListAdapter(this, new CheckListAdapter.ChangeItemStateListener() {
-            @Override
-            public void changeItemState(String itemName, Boolean state) {
-                mListPresenter.changeItemState(itemName, state);
-            }
-        });
+        mCheckListAdapter = new CheckListAdapter(this, (itemName, state) -> mListPresenter.changeItemState(itemName, state));
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mCheckListAdapter);
 
-        mAddButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String itemName = mEditText.getText().toString();
-                mListPresenter.addCheckItem(itemName);
-            }
+        mAddButton.setOnClickListener(view -> {
+            String itemName = mEditText.getText().toString();
+            mListPresenter.addCheckItem(itemName);
         });
 
-        mDeleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String itemName = mEditText.getText().toString();
-                mListPresenter.deleteCheckItem(itemName);
-            }
+        mDeleteButton.setOnClickListener(view -> {
+            String itemName = mEditText.getText().toString();
+            mListPresenter.deleteCheckItem(itemName);
         });
 
         mListPresenter.getCheckLists();

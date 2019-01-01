@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.software.tongji.easygo.R;
@@ -69,22 +70,15 @@ public class ScheduleListFragment extends Fragment implements ScheduleListView {
     @BindView(R.id.no_schedule_alert)
     TextView mNoScheduleAlert;
 
-    private ActionBarDrawerToggle mActionBarDrawerToggle;
     private ScheduleListPresenter mScheduleListPresenter = new ScheduleListPresenter();
     private ScheduleAdapter mScheduleAdapter;
     private MaterialDialog mDialog;
     private String mTourId;
 
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_schedule, container, false);
 
         ButterKnife.bind(this, view);
@@ -92,47 +86,41 @@ public class ScheduleListFragment extends Fragment implements ScheduleListView {
 
         ((AppCompatActivity)getActivity()).setSupportActionBar(mScheduleToolBar);
 
-        mActionBarDrawerToggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout, mScheduleToolBar,
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout, mScheduleToolBar,
                 R.string.drawer_open, R.string.drawer_close);
-        mActionBarDrawerToggle.syncState();
-        mDrawerLayout.addDrawerListener(mActionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+        mDrawerLayout.addDrawerListener(actionBarDrawerToggle);
 
         View headerView = mNavigationView.getHeaderView(0);
-        ImageView profileImage = (ImageView)headerView.findViewById(R.id.profile_image);
+        ImageView profileImage = headerView.findViewById(R.id.profile_image);
         if(profileImage != null){
-            profileImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mDrawerLayout.closeDrawers();
-                    mNavigationView.getMenu().getItem(0).setChecked(true);
-                }
+            profileImage.setOnClickListener(view1 -> {
+                mDrawerLayout.closeDrawers();
+                mNavigationView.getMenu().getItem(0).setChecked(true);
             });
         }
 
         mNavigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        item.setChecked(true);
-                        //mDrawerLayout.closeDrawers();
-                        switch (item.getItemId()) {
-                            case R.id.navigation_item_about:
-                                Intent aboutIntent = new Intent(getActivity(), AboutActivity.class);
-                                startActivity(aboutIntent);
-                                break;
-                            case R.id.navigation_tour_list:
-                                Intent tourListIntent = new Intent(getActivity(), TourListActivity.class);
-                                startActivityForResult(tourListIntent,REQUEST_OPEN_TOUR_LIST);
-                                break;
-                            case R.id.navigation_item_check_list:
-                                Intent checkIntent = new Intent(getActivity(), CheckListActivity.class);
-                                startActivity(checkIntent);
-                                break;
-                            default:
-                                break;
-                        }
-                        return true;
+                item -> {
+                    item.setChecked(true);
+                    //mDrawerLayout.closeDrawers();
+                    switch (item.getItemId()) {
+                        case R.id.navigation_item_about:
+                            Intent aboutIntent = new Intent(getActivity(), AboutActivity.class);
+                            startActivity(aboutIntent);
+                            break;
+                        case R.id.navigation_tour_list:
+                            Intent tourListIntent = new Intent(getActivity(), TourListActivity.class);
+                            startActivityForResult(tourListIntent,REQUEST_OPEN_TOUR_LIST);
+                            break;
+                        case R.id.navigation_item_check_list:
+                            Intent checkIntent = new Intent(getActivity(), CheckListActivity.class);
+                            startActivity(checkIntent);
+                            break;
+                        default:
+                            break;
                     }
+                    return true;
                 }
         );
 
@@ -149,27 +137,21 @@ public class ScheduleListFragment extends Fragment implements ScheduleListView {
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(mRecyclerView);
 
-        mAddSchedule.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), NewScheduleActivity.class);
-                startActivityForResult(intent, REQUEST_CODE_NEW_SCHEDULE);
-            }
+        mAddSchedule.setOnClickListener(view12 -> {
+            Intent intent = new Intent(getActivity(), NewScheduleActivity.class);
+            startActivityForResult(intent, REQUEST_CODE_NEW_SCHEDULE);
         });
 
-        mSaveSchedule.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), SaveTourActivity.class);
-                startActivityForResult(intent, REQUEST_CODE_SAVE_SCHEDULE);
-            }
+        mSaveSchedule.setOnClickListener(view13 -> {
+            Intent intent = new Intent(getActivity(), SaveTourActivity.class);
+            startActivityForResult(intent, REQUEST_CODE_SAVE_SCHEDULE);
         });
 
-        mLinePlanning.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = LinePlanningActivity.newIntent(getContext(), mTourId);
-                startActivity(intent);
+        mLinePlanning.setOnClickListener(view14 -> {
+            if(mScheduleAdapter.getItemCount() >= 2){
+            Intent intent = LinePlanningActivity.newIntent(getContext(), mTourId);
+            startActivity(intent);}else{
+                Toast.makeText(getContext(),"规划路径至少需要两个行程！",Toast.LENGTH_LONG).show();
             }
         });
         return view;
@@ -204,8 +186,7 @@ public class ScheduleListFragment extends Fragment implements ScheduleListView {
             mTourId = tour.getId();
             resetToolBar();
         }else if(requestCode == REQUEST_OPEN_TOUR_LIST){
-            String id = data.getStringExtra(TourListActivity.EXTRA_TOUR_ID);
-            mTourId = id;
+            mTourId = data.getStringExtra(TourListActivity.EXTRA_TOUR_ID);
         }
     }
 
@@ -229,9 +210,6 @@ public class ScheduleListFragment extends Fragment implements ScheduleListView {
         }
     }
 
-    public void setTourId(String tourId){
-        mTourId = tourId;
-    }
 
     @Override
     public Context getScheduleListContext() {

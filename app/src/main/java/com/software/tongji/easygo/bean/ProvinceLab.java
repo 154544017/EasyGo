@@ -40,6 +40,12 @@ public class ProvinceLab {
 
     }
 
+    public int getUnlockedSize(){
+        List<Province> provinces = LitePal.where("mIsLocked = ?", "0")
+                .find(Province.class);
+        return provinces.size();
+    }
+
     public List<Province> getProvinces(){
         if(mProvinceList == null){
             mProvinceList = LitePal.findAll(Province.class);

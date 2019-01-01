@@ -32,14 +32,14 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
 
     private final LoginPresenter mLoginPresenter = new LoginPresenter();
 
-    @BindView(R.id.signup)
+    @BindView(R.id.sign_up)
     TextView mSignUp;
     @BindView(R.id.login)
     TextView mLogin;
     @BindView(R.id.back_to_login)
     TextView mBackToLogin;
 
-    @BindView(R.id.signup_layout)
+    @BindView(R.id.sign_up_layout)
     LinearLayout mSignUpLayout;
     @BindView(R.id.login_layout)
     LinearLayout mLoginLayout;
@@ -54,11 +54,11 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
     EditText mEmailLogin;
     @BindView(R.id.input_pass_login)
     EditText mPassLogin;
-    @BindView(R.id.input_email_signup)
+    @BindView(R.id.input_email_sign_up)
     EditText mEmailSignUp;
-    @BindView(R.id.input_pass_signup)
+    @BindView(R.id.input_pass_sign_up)
     EditText mPassSignUp;
-    @BindView(R.id.input_confirm_pass_signup)
+    @BindView(R.id.input_confirm_pass_sign_up)
     EditText mConfirmPassSignUp;
     @BindView(R.id.input_username)
     EditText mUserName;
@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
 
     @BindView(R.id.ok_login)
     FlatButton mOkLogin;
-    @BindView(R.id.ok_signup)
+    @BindView(R.id.ok_sign_up)
     FlatButton mOkSignUp;
     @BindView(R.id.ok_submit_pass_reset)
     FlatButton mOkSubmitReset;
@@ -92,7 +92,6 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
     private MaterialDialog mDialog;
     private SharedPreferences mSharedPreferences;
     private Handler mHandler;
-    private String mOptCode;
 
     public static final String USER_EMAIL = "user_email";
     public static final String USER_TOKEN = "user_token";
@@ -111,113 +110,86 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
         //Check for Showing Daily Quote
         checkUserSession();
         //Open SignUp
-        mSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mSignUp.setVisibility(View.GONE);
-                mForgotPasswordText.setVisibility(View.GONE);
-                mBackToLogin.setVisibility(View.GONE);
-                mLogin.setVisibility(View.VISIBLE);
-                mLoginPresenter.signUp();
-            }
+        mSignUp.setOnClickListener(view -> {
+            mSignUp.setVisibility(View.GONE);
+            mForgotPasswordText.setVisibility(View.GONE);
+            mBackToLogin.setVisibility(View.GONE);
+            mLogin.setVisibility(View.VISIBLE);
+            mLoginPresenter.signUp();
         });
 
         // Open login
-        mLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mSignUp.setVisibility(View.VISIBLE);
-                mForgotPasswordText.setVisibility(View.VISIBLE);
-                mBackToLogin.setVisibility(View.GONE);
-                mLogin.setVisibility(View.GONE);
-                mLoginPresenter.login();
-            }
+        mLogin.setOnClickListener(view -> {
+            mSignUp.setVisibility(View.VISIBLE);
+            mForgotPasswordText.setVisibility(View.VISIBLE);
+            mBackToLogin.setVisibility(View.GONE);
+            mLogin.setVisibility(View.GONE);
+            mLoginPresenter.login();
         });
 
         // Call login
-        mOkLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String email = mEmailLogin.getText().toString();
-                String password = mPassLogin.getText().toString();
-                mLoginPresenter.okLogin(email, password, mHandler);
-            }
+        mOkLogin.setOnClickListener(view -> {
+            String email = mEmailLogin.getText().toString();
+            String password = mPassLogin.getText().toString();
+            mLoginPresenter.okLogin(email, password, mHandler);
         });
 
         //Call signup
-        mOkSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String email = mEmailSignUp.getText().toString();
-                String password = mPassSignUp.getText().toString();
-                String confirmPassword = mConfirmPassSignUp.getText().toString();
-                String username = mUserName.getText().toString();
-                if (validateEmail(email)) {
-                    if (validatePassword(password)) {
-                        if (password.equals(confirmPassword)) {
-                            mLoginPresenter.okSignUp(username, email, password, mHandler);
-                        } else {
-                            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
-                                            R.string.passwords_check, Snackbar.LENGTH_LONG);
-                            snackbar.show();
-                        }
+        mOkSignUp.setOnClickListener(view -> {
+            String email = mEmailSignUp.getText().toString();
+            String password = mPassSignUp.getText().toString();
+            String confirmPassword = mConfirmPassSignUp.getText().toString();
+            String username = mUserName.getText().toString();
+            if (validateEmail(email)) {
+                if (validatePassword(password)) {
+                    if (password.equals(confirmPassword)) {
+                        mLoginPresenter.okSignUp(username, email, password, mHandler);
+                    } else {
+                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
+                                        R.string.passwords_check, Snackbar.LENGTH_LONG);
+                        snackbar.show();
                     }
                 }
             }
         });
 
         //open forgot password
-        mForgotPasswordText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mLogin.setVisibility(View.GONE);
-                mSignUp.setVisibility(View.GONE);
-                mForgotPasswordText.setVisibility(View.GONE);
-                mBackToLogin.setVisibility(View.VISIBLE);
-                mLoginPresenter.forgotPassword();
-            }
+        mForgotPasswordText.setOnClickListener(view -> {
+            mLogin.setVisibility(View.GONE);
+            mSignUp.setVisibility(View.GONE);
+            mForgotPasswordText.setVisibility(View.GONE);
+            mBackToLogin.setVisibility(View.VISIBLE);
+            mLoginPresenter.forgotPassword();
         });
 
         //call submit password reset request
-        mOkSubmitReset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String email = mEmailForgotPassword.getText().toString();
-                if(validateEmail(email)){
-                    mBackToLogin.setVisibility(View.GONE);
-                    mLoginPresenter.okPasswordResetRequest(email, mHandler);
-                }
+        mOkSubmitReset.setOnClickListener(view -> {
+            String email = mEmailForgotPassword.getText().toString();
+            if(validateEmail(email)){
+                mBackToLogin.setVisibility(View.GONE);
+                mLoginPresenter.okPasswordResetRequest(email, mHandler);
             }
         });
 
         //back to login
-        mBackToLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mSignUp.setVisibility(View.VISIBLE);
-                mForgotPasswordText.setVisibility(View.VISIBLE);
-                mBackToLogin.setVisibility(View.GONE);
-                mLogin.setVisibility(View.GONE);
-                mLoginPresenter.login();
-            }
+        mBackToLogin.setOnClickListener(view -> {
+            mSignUp.setVisibility(View.VISIBLE);
+            mForgotPasswordText.setVisibility(View.VISIBLE);
+            mBackToLogin.setVisibility(View.GONE);
+            mLogin.setVisibility(View.GONE);
+            mLoginPresenter.login();
         });
 
         //call resend reset code request
-        mResendCodeText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String email = mEmailForgotPassword.getText().toString();
-                mLoginPresenter.resendResetCode(email, mHandler);
-            }
+        mResendCodeText.setOnClickListener(view -> {
+            String email = mEmailForgotPassword.getText().toString();
+            mLoginPresenter.resendResetCode(email, mHandler);
         });
 
         //call confirm reset request
-        mOkConfirmReset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String email = mEmailForgotPassword.getText().toString();
-                mLoginPresenter.okPasswordResetConfirm(email);
-            }
+        mOkConfirmReset.setOnClickListener(view -> {
+            String email = mEmailForgotPassword.getText().toString();
+            mLoginPresenter.okPasswordResetConfirm(email);
         });
 
     }
@@ -239,6 +211,11 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
         mEmailForgotPassword.setText("");
     }
 
+    @Override
+    public void setUserName(String userName) {
+        mEmailLogin.setText(userName);
+    }
+
 
     @Override
     public void forgotPassword() {
@@ -247,13 +224,6 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
         mForgotPasswordLayout.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void openResetPin(String email) {
-        mForgotPasswordLayout.setVisibility(View.GONE);
-        mResetCodeLayout.setVisibility(View.VISIBLE);
-        mCodeSentAlert.setText(String.format(getString(R.string.text_code_sent_alert), email));
-        mResendCodeText.setVisibility(View.VISIBLE);
-    }
 
     @Override
     public void resendResetCode() {
@@ -279,12 +249,6 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
                 .make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG);
         snackbar.show();
     }
-
-    @Override
-    public void setLoginEmail(String email) {
-
-    }
-
 
     public boolean validateEmail(String email) {
         Matcher matcher = Patterns.EMAIL_ADDRESS.matcher(email);

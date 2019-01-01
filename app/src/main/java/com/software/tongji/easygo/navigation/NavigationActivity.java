@@ -1,7 +1,5 @@
 package com.software.tongji.easygo.navigation;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -10,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -28,7 +25,6 @@ import com.software.tongji.easygo.net.BaseResponse;
 import com.software.tongji.easygo.net.DefaultObserver;
 import com.software.tongji.easygo.net.RetrofitServiceManager;
 import com.software.tongji.easygo.schedule.ScheduleListFragment;
-import com.software.tongji.easygo.tour.TourListActivity;
 import com.software.tongji.easygo.utils.FileUtil;
 
 import org.litepal.LitePal;
@@ -46,7 +42,6 @@ import rx.schedulers.Schedulers;
 
 public class NavigationActivity extends AppCompatActivity implements NavigationView {
 
-    private static final String EXTRA_TOUR_ID = "com.software.tongji.easygo.tour_id";
     @BindView(R.id.bottom_tab_strip)
     PageNavigationView mPageNavigationView;
 
@@ -144,8 +139,11 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
                     public void onSuccess(Object result) {
                         UserData data = (UserData)result;
                         UserInfo.journalCount = data.getJournalCount();
-                        UserInfo.tourCount = data.getTourCount();
-                        syncJournals();
+                        if (JournalLab.get(NavigationActivity.this).size() != data.getJournalCount()) {
+                            syncJournals();
+                        } else {
+                            dismissDialog();
+                        }
                     }
 
                     @Override
@@ -192,9 +190,7 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
     }
 
     public void syncJournals(){
-        if (UserInfo.journalCount == JournalLab.get(this).size()) {
-            syncTours();
-        } else {
+        if (UserInfo.journalCount != JournalLab.get(this).size()) {
             RetrofitServiceManager.getInstance()
                     .getRetrofit()
                     .create(ApiService.class)
@@ -213,7 +209,7 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
                             }
                             LitePal.deleteAll(Journal.class);
                             LitePal.saveAll(data);
-                            syncTours();
+                            dismissDialog();
                         }
 
                         @Override
@@ -231,7 +227,4 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
         }
     }
 
-    public void syncTours(){
-        dismissDialog();
-    }
 }

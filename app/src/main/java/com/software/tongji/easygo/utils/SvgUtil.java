@@ -29,13 +29,8 @@ import javax.xml.parsers.ParserConfigurationException;
  * 并构建出一个MyMap的实例
  */
 public class SvgUtil {
-    private String path;
     private Context context;
     private float Max_X,Min_x,Max_y,Min_y;
-    public SvgUtil(String path, Context context){
-        this.context=context;
-        this.path=path;
-    }
 
     public SvgUtil(Context context){
         this.context=context;
@@ -101,14 +96,7 @@ public class SvgUtil {
                 map.setMin_x(Min_x);
                 map.setMin_y(Min_y);
             }
-        }catch (IOException e) {
-            e.printStackTrace();
-        }catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        }catch (SAXException e) {
-            e.printStackTrace();
-
-        }catch (ParseException e) {
+        }catch (IOException | ParserConfigurationException | ParseException | SAXException e) {
             e.printStackTrace();
         }
         return map;

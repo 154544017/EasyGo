@@ -41,7 +41,7 @@ public class Schedule extends LitePalSupport implements Serializable {
         mLonPoint = lonPoint;
     }
 
-    public Schedule(){};
+    public Schedule(){}
 
     public Schedule(String tourId, String address, double latPoint, double lonPoint, String date, String time, String type, String cost, String remark, int position) {
         mTourId = tourId;

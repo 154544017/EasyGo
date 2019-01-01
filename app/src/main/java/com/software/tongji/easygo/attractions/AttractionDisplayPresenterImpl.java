@@ -16,7 +16,7 @@ import rx.schedulers.Schedulers;
 
 public class AttractionDisplayPresenterImpl implements AttractionDisplayPresenter {
 
-    private AttractionDisplayView mAttractionDisplayView;
+    private final AttractionDisplayView mAttractionDisplayView;
 
     public AttractionDisplayPresenterImpl(AttractionDisplayView attractionDisplayView){
         mAttractionDisplayView = attractionDisplayView;
@@ -37,6 +37,7 @@ public class AttractionDisplayPresenterImpl implements AttractionDisplayPresente
                     public void onSuccess(Object result) {
                         mAttractionDisplayView.dismissLoading();
                         List<Attraction> attractions = (List<Attraction>) result;
+
                         if(attractions.size() > 0){
                             mAttractionDisplayView.refreshUI(attractions);
                         }

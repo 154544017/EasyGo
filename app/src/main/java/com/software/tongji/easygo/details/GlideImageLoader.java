@@ -14,8 +14,4 @@ public class GlideImageLoader extends ImageLoader {
 
     }
 
-    @Override
-    public ImageView createImageView(Context context) {
-        return super.createImageView(context);
-    }
 }

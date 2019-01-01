@@ -27,10 +27,9 @@ public class MyMapView extends View {
     private static final int MOVE = 1;
     private static final int ZOOM = 2;
     private int mode = NONE;// 默认模式
-    private float beforeLength = 0,afterLength = 0;	// 两触点距离
+    private float beforeLength = 0;
     private float downX = 0;	//单触点x坐标
     private float downY = 0;	//单触点y坐标
-    private float scale_temp=1; //缩放比例
     private float downMidX=0,downMidY=0;  //缩放的中心位置坐标
     private static float scale_max = 3;	//scale的最大值
     private  static float scale_min = 1;	//scale的最小值
@@ -41,7 +40,6 @@ public class MyMapView extends View {
     private Paint paint,linepaint;
     private Matrix myMatrix;                    //用来完成缩放
     private boolean isFirst;               //只在第一次传数据绘图时加载
-    private String provincename="";
     private boolean criticalflag;          //拖拽的临界值标志位
     /**
      * 用于存放矩阵的9个值
@@ -205,9 +203,12 @@ public class MyMapView extends View {
     private void onTouchMove(MotionEvent event) {
         //双指缩放操作
         if (mode == ZOOM) {
-            afterLength = getDistance(event);// 获取两点的距离
+            // 两触点距离
+            float afterLength = getDistance(event);
             float gapLength = afterLength - beforeLength;// 变化的长度
             if (Math.abs(gapLength) > 10 && beforeLength != 0) {
+                //缩放比例
+                float scale_temp = 1;
                 if (gapLength > 0) {
                     if (getScale() < scale_max) {
                         scale_temp = afterLength / beforeLength;
@@ -378,7 +379,7 @@ public class MyMapView extends View {
                 PointF pf=new PointF(event.getX() / getScale() - rectF.left / getScale()-OnMoveX
                         ,event.getY() / getScale() - rectF.top/getScale()-OnMoveY);
                 if (lasso.contains(pf.x,pf.y)){
-                    provincename=p.getName();
+                    String provincename = p.getName();
                     p.setLineColor(Color.parseColor(Const.SELECTED_PROVINCE_LINE_COLOR));
                     invalidate();
                     //暴露到Activity中的接口，把省的名字传过去
@@ -399,7 +400,7 @@ public class MyMapView extends View {
         return rect;
     }
     public interface OnProvinceClickListener {
-        public void onChose(String provinceName);
+        void onChose(String provinceName);
     }
 }
 

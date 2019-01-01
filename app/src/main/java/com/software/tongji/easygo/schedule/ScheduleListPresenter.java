@@ -6,6 +6,7 @@ import com.software.tongji.easygo.bean.ScheduleLab;
 import java.util.ArrayList;
 import java.util.List;
 
+import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -22,13 +23,10 @@ public class ScheduleListPresenter {
 
     public void getSchedules(String tourId){
         mScheduleListView.showDialog();
-        rx.Observable.create(new rx.Observable.OnSubscribe<List<Schedule>>() {
-            @Override
-            public void call(Subscriber<? super List<Schedule>> subscriber) {
-                List<Schedule> schedules = mScheduleLab.getScheduleList(tourId);
-                subscriber.onNext(schedules);
-                subscriber.onCompleted();
-            }
+        rx.Observable.create((Observable.OnSubscribe<List<Schedule>>) subscriber -> {
+            List<Schedule> schedules = mScheduleLab.getScheduleList(tourId);
+            subscriber.onNext(schedules);
+            subscriber.onCompleted();
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<Schedule>>() {

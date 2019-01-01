@@ -130,7 +130,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginTop="8dp"
-                    app:srcCompat="@drawable/ic_group_add_grenn_36dp"/>
+                    app:srcCompat="@drawable/ic_group_add_green_36dp"/>
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/journal_friends"

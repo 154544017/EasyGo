@@ -6,7 +6,7 @@
     <string name="password">Password</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="login">Login</string>
-    <string name="signup">Signup</string>
+    <string name="sign_up">Signup</string>
     <string name="username">Username</string>
     <string name="toast_invalid_username_or_password">Invalid username or password</string>
 
@@ -22,7 +22,7 @@
     <string name="text_password_updated_alert">Your password has been reset. Login with the new password.</string>
 
     <string name="new_password">New Password</string>
-    <string name="text_signup_or"><u>Not registered yet? Create new account</u></string>
+    <string name="text_sign_up_or"><u>Not registered yet? Create new account</u></string>
     <string name="text_login"><u>Already a member? Login</u></string>
 
     <string name="invalid_email">Invalid Email</string>
@@ -88,10 +88,15 @@
     <string name="tour_list">Tour List</string>
 
     <string name="no_attraction">没有找到景点推荐\n请尝试换一个省份！</string>
-    <string name="no_journals">该省还没有添加游记\n请尝试换一个省份或添加游记！</string>
+    <string name="no_journals">没有找到游记，请添加！</string>
     <string name="sync">同步数据</string>
     <string name="load_journals">更新游记</string>
     <string name="load_attractions">获取景点</string>
     <string name="load_schedules">更新行程</string>
     <string name="no_value">暂无信息</string>
+    <string name="no_province_achievement">您还没有解锁任意一个省份</string>
+    <string name="no_journal_achievement">您还没有编写旅行日志</string>
+    <string name="unlock">解锁</string>
+    <string name="is_locked">您还未解锁该省</string>
+    <string name="look_for_attraction">查看该省景点介绍</string>
 </resources>

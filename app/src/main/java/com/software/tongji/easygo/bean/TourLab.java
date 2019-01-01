@@ -10,9 +10,6 @@ import java.util.List;
 public class TourLab {
     public static TourLab sTourLab;
 
-    private Context mContext;
-    private List<Tour> mTourList;
-
     public static TourLab get(Context context){
         if(sTourLab == null){
             sTourLab = new TourLab(context);
@@ -21,8 +18,8 @@ public class TourLab {
     }
 
     private TourLab(Context context){
-        mContext = context;
-        mTourList = new ArrayList<>();
+        Context context1 = context;
+        List<Tour> tourList = new ArrayList<>();
     }
 
     public List<Tour> getTourList() {

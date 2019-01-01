@@ -1,13 +1,8 @@
 package com.software.tongji.easygo.schedule;
 
-import android.graphics.Canvas;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
-import com.software.tongji.easygo.R;
 
 public class ItemTouchHelperCallback extends ItemTouchHelper.Callback{
 

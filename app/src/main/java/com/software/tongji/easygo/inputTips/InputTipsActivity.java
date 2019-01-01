@@ -45,17 +45,14 @@ public class InputTipsActivity extends AppCompatActivity{
                 if (!TextUtils.isEmpty(newText)) {
                     InputtipsQuery inputQuery = new InputtipsQuery(newText, DEFAULT_CITY);
                     Inputtips inputTips = new Inputtips(InputTipsActivity.this, inputQuery);
-                    inputTips.setInputtipsListener(new Inputtips.InputtipsListener() {
-                        @Override
-                        public void onGetInputtips(List<Tip> list, int i) {
-                            if (i == REQUEST_SUC) {
-                                mCurrentTipList = list;
-                                mInputTipsAdapter = new InputTipsAdapter(getApplicationContext(), mCurrentTipList);
-                                mInputListView.setAdapter(mInputTipsAdapter);
-                                mInputTipsAdapter.notifyDataSetChanged();
-                            } else {
-                                Toast.makeText(InputTipsActivity.this, "错误码 :" + i, Toast.LENGTH_SHORT).show();
-                            }
+                    inputTips.setInputtipsListener((list, i) -> {
+                        if (i == REQUEST_SUC) {
+                            mCurrentTipList = list;
+                            mInputTipsAdapter = new InputTipsAdapter(getApplicationContext(), mCurrentTipList);
+                            mInputListView.setAdapter(mInputTipsAdapter);
+                            mInputTipsAdapter.notifyDataSetChanged();
+                        } else {
+                            Toast.makeText(InputTipsActivity.this, "错误码 :" + i, Toast.LENGTH_SHORT).show();
                         }
                     });
                     inputTips.requestInputtipsAsyn();
@@ -76,17 +73,14 @@ public class InputTipsActivity extends AppCompatActivity{
         searchView.setSubmitButtonEnabled(false);
 
         //初始化listView
-        mInputListView = findViewById(R.id.inputtip_list);
-        mInputListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (mCurrentTipList != null) {
-                    Tip tip = (Tip) parent.getItemAtPosition(position);
-                    Intent intent = new Intent();
-                    intent.putExtra("tip", tip);
-                    setResult(RESULT_CODE_INPUTTIPS, intent);
-                    InputTipsActivity.this.finish();
-                }
+        mInputListView = findViewById(R.id.input_tip_list);
+        mInputListView.setOnItemClickListener((parent, view, position, id) -> {
+            if (mCurrentTipList != null) {
+                Tip tip = (Tip) parent.getItemAtPosition(position);
+                Intent intent = new Intent();
+                intent.putExtra("tip", tip);
+                setResult(RESULT_CODE_INPUTTIPS, intent);
+                InputTipsActivity.this.finish();
             }
         });
     }

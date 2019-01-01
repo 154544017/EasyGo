@@ -4,18 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.KeyEvent;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.LatLng;
-import com.amap.api.maps.model.Marker;
-import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.navi.AMapNavi;
 import com.amap.api.navi.AMapNaviListener;
 import com.amap.api.navi.enums.PathPlanningStrategy;
@@ -51,9 +45,8 @@ public class LinePlanningActivity extends AppCompatActivity implements AMapNaviL
 
     private static final String EXTRA_TOUR_ID = "com.software.tongji.easygo.extra_id";
 
-    @BindView(R.id.mapview)
+    @BindView(R.id.map_view)
     MapView mMapView;
-    private AMap mAMap;
 
     private ArrayList<NaviLatLng> mStartPoints = new ArrayList<>();
     private ArrayList<NaviLatLng> mWayPoints = new ArrayList<>();
@@ -89,10 +82,10 @@ public class LinePlanningActivity extends AppCompatActivity implements AMapNaviL
 
         ButterKnife.bind(this);
         mMapView.onCreate(savedInstanceState);
-        mAMap = mMapView.getMap();
-        mAMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mStartPoints.get(0).getLatitude(),
+        AMap AMap = mMapView.getMap();
+        AMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mStartPoints.get(0).getLatitude(),
                 mStartPoints.get(0).getLongitude()),16));
-        mRouteOverLay = new RouteOverLay(mAMap, null, getApplicationContext());
+        mRouteOverLay = new RouteOverLay(AMap, null, getApplicationContext());
     }
 
     private void setPoints(){

@@ -3,6 +3,7 @@ package com.software.tongji.easygo.attractions;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -34,8 +35,6 @@ public class AttractionsListFragment extends Fragment implements AttractionDispl
 
     @BindView(R.id.no_attractions)
     TextView mNoAttractionView;
-    @BindView(R.id.search_linear_layout)
-    LinearLayout mLinearLayout;
     @BindView(R.id.attractions_recycler_view)
     RecyclerView mRecyclerView;
     @BindView(R.id.provinces_list)
@@ -63,7 +62,7 @@ public class AttractionsListFragment extends Fragment implements AttractionDispl
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
         ButterKnife.bind(this, view);
@@ -75,27 +74,21 @@ public class AttractionsListFragment extends Fragment implements AttractionDispl
         initSearchView();
         mPresenter.getAllAttractions();
 
-        mShakeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), ShakeActivity.class);
-                startActivity(intent);
-            }
+        mShakeButton.setOnClickListener(view1 -> {
+            Intent intent = new Intent(getActivity(), ShakeActivity.class);
+            startActivity(intent);
         });
 
         return view;
     }
 
-    void initSearchView(){
-        mSearchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
-                    mProvinceTipView.setVisibility(View.VISIBLE);
-                    mProvinceTipView.bringToFront();
-                }else {
-                    mProvinceTipView.setVisibility(View.GONE);
-                }
+    private void initSearchView(){
+        mSearchView.setOnQueryTextFocusChangeListener((v, hasFocus) -> {
+            if(hasFocus){
+                mProvinceTipView.setVisibility(View.VISIBLE);
+                mProvinceTipView.bringToFront();
+            }else {
+                mProvinceTipView.setVisibility(View.GONE);
             }
         });
 
@@ -118,20 +111,17 @@ public class AttractionsListFragment extends Fragment implements AttractionDispl
         mSearchView.setSubmitButtonEnabled(false);
 
         //初始化listView
-        mProvinceTipView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String province = (String)parent.getItemAtPosition(position);
-                if(mNoAttractionView.getVisibility() == View.VISIBLE){
-                    mNoAttractionView.setVisibility(View.GONE);
-                }
-                mSearchView.setQueryHint(province);
-                mSearchView.clearFocus();
-                if(province.equals("显示全部")){
-                    mPresenter.getAllAttractions();
-                } else {
-                    mPresenter.getAttractionsByProvince(province);
-                }
+        mProvinceTipView.setOnItemClickListener((parent, view, position, id) -> {
+            String province = (String)parent.getItemAtPosition(position);
+            if(mNoAttractionView.getVisibility() == View.VISIBLE){
+                mNoAttractionView.setVisibility(View.GONE);
+            }
+            mSearchView.setQueryHint(province);
+            mSearchView.clearFocus();
+            if(province.equals("显示全部")){
+                mPresenter.getAllAttractions();
+            } else {
+                mPresenter.getAttractionsByProvince(province);
             }
         });
     }
@@ -175,9 +165,7 @@ public class AttractionsListFragment extends Fragment implements AttractionDispl
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if(!hidden){
-            if(mProvinceArg.equals(NO_DEFAULT)){
-                return;
-            }else{
+            if(!mProvinceArg.equals(NO_DEFAULT)){
                 mSearchView.setQueryHint(mProvinceArg);
                 mPresenter.getAttractionsByProvince(mProvinceArg);
                 mProvinceArg = NO_DEFAULT;

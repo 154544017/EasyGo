@@ -7,6 +7,7 @@ import com.software.tongji.easygo.bean.CheckItemLab;
 
 import java.util.List;
 
+import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -14,25 +15,21 @@ import rx.schedulers.Schedulers;
 
 public class CheckListPresenterImpl implements CheckListPresenter {
     private CheckListView mCheckListView;
-    private Context mContext;
     private CheckItemLab mCheckItemLab;
 
     public CheckListPresenterImpl(Context context,CheckListView view){
         mCheckListView = view;
-        mContext = context;
-        mCheckItemLab = CheckItemLab.get(mContext);
+        Context context1 = context;
+        mCheckItemLab = CheckItemLab.get(context1);
     }
 
     @Override
     public void getCheckLists() {
         mCheckListView.showLoadingDialog();
-        rx.Observable.create(new rx.Observable.OnSubscribe<List<CheckItem>>() {
-            @Override
-            public void call(Subscriber<? super List<CheckItem>> subscriber) {
-                List<CheckItem> items = mCheckItemLab.getCheckItemList();
-                subscriber.onNext(items);
-                subscriber.onCompleted();
-            }
+        rx.Observable.create((Observable.OnSubscribe<List<CheckItem>>) subscriber -> {
+            List<CheckItem> items = mCheckItemLab.getCheckItemList();
+            subscriber.onNext(items);
+            subscriber.onCompleted();
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<CheckItem>>() {

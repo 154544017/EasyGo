@@ -78,12 +78,9 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
         public ScheduleHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = ScheduleShow.newIntent(itemView.getContext(), mSchedule);
-                    itemView.getContext().startActivity(intent);
-                }
+            itemView.setOnClickListener(v -> {
+                Intent intent = ScheduleShow.newIntent(itemView.getContext(), mSchedule);
+                itemView.getContext().startActivity(intent);
             });
         }
 

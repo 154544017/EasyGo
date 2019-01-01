@@ -41,7 +41,6 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
     private static final int END_SHAKE = 0x3;
 
     private SensorManager mSensorManager;
-    private Sensor mAccelerometerSensor;
     private Vibrator mVibrator;
     private MyHandler mHandler;
 
@@ -75,9 +74,9 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
         super.onStart();
         mSensorManager = ((SensorManager) getSystemService(SENSOR_SERVICE));
         if (mSensorManager != null) {
-            mAccelerometerSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-            if (mAccelerometerSensor != null) {
-                mSensorManager.registerListener(this, mAccelerometerSensor, SensorManager.SENSOR_DELAY_UI);
+            Sensor accelerometerSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            if (accelerometerSensor != null) {
+                mSensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_UI);
             }
         }
     }
@@ -135,9 +134,7 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
 
         public MyHandler(ShakeActivity shakeActivity){
             mReference = new WeakReference<>(shakeActivity);
-            if (mReference != null) {
-                mShakeActivity = mReference.get();
-            }
+            mShakeActivity = mReference.get();
         }
 
         @Override

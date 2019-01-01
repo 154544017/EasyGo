@@ -40,14 +40,11 @@ public class ProvinceAdapter extends RecyclerView.Adapter<ProvinceAdapter.ViewHo
             mContext = itemView.getContext();
             provinceImage = itemView.findViewById(R.id.province_display_image);
             provinceName = itemView.findViewById(R.id.province_display_name);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(mProvince.isLocked()){
-                        mProvinceClickListener.onClick(0, mProvince.getName());
-                    }else{
-                        mProvinceClickListener.onClick(1, mProvince.getName());
-                    }
+            itemView.setOnClickListener(v -> {
+                if(mProvince.isLocked()){
+                    mProvinceClickListener.onClick(0, mProvince.getName());
+                }else{
+                    mProvinceClickListener.onClick(1, mProvince.getName());
                 }
             });
         }

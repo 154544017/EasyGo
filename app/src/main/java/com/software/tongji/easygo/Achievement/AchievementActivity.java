@@ -1,7 +1,6 @@
 package com.software.tongji.easygo.Achievement;
 
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.software.tongji.easygo.basic.SingleFragmentActivity;
@@ -18,7 +17,6 @@ public class AchievementActivity extends SingleFragmentActivity {
 
     @Override
     protected Fragment createFragment() {
-        AchievementFragment fragment = new AchievementFragment();
-        return fragment;
+        return new AchievementFragment();
     }
 }

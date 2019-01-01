@@ -18,29 +18,24 @@ import com.software.tongji.easygo.navigation.NavigationActivity;
 import java.util.List;
 
 public class ProvinceDisplayFragment extends Fragment {
-    private RecyclerView mRecyclerView;
-    private ProvinceAdapter mAdapter;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.province_display_fragment,container,false);
-        mRecyclerView = view.findViewById(R.id.recycler_view);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
         List<Province> provinces = ProvinceLab.getProvinceLab(getActivity()).getProvinces();
-        mAdapter = new ProvinceAdapter(provinces, new ProvinceAdapter.ProvinceClickListener() {
-            @Override
-            public void onClick(int mode, String province) {
-                NavigationActivity activity = (NavigationActivity) getActivity();
-                if (activity != null) {
-                    if (mode == 0) {
-                        activity.changeSearchFragmentWithArgs(province);
-                    } else {
-                        activity.changeJournalFragmentWithArgs(province);
-                    }
+        ProvinceAdapter adapter = new ProvinceAdapter(provinces, (mode, province) -> {
+            NavigationActivity activity = (NavigationActivity) getActivity();
+            if (activity != null) {
+                if (mode == 0) {
+                    activity.changeSearchFragmentWithArgs(province);
+                } else {
+                    activity.changeJournalFragmentWithArgs(province);
                 }
             }
         });
-        mRecyclerView.setAdapter(mAdapter);
+        recyclerView.setAdapter(adapter);
 
         return view;
     }

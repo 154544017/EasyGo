@@ -41,8 +41,7 @@ public class JournalLab {
     }
 
     public int size(){
-        int count  = LitePal.count(Journal.class);
-        return count;
+        return LitePal.count(Journal.class);
     }
 
     public void addJournal(Journal journal){
@@ -68,8 +67,7 @@ public class JournalLab {
     }
 
     public List<Journal> getJournalList() {
-        List<Journal> journals = LitePal.findAll(Journal.class);
-        return journals;
+        return LitePal.findAll(Journal.class);
     }
 
     public List<Journal> getJournalListByProvince(String province){

@@ -34,16 +34,14 @@ public class ProvinceDialogFragment extends DialogFragment {
     public static final String EXTRA_NAME = "com.software.tongji.easygo.provincedialog.name";
     private static final String ARG_NAME = "province_name";
 
-    private Unbinder mUnbinder;
+    private Unbinder mUnBinder;
     private AlertDialog mDialog;
     private String mProvinceName;
 
-    @BindView(R.id.dialog_state)
-    TextView mDialogState;
     @BindView(R.id.card_bac)
     ImageView mBac;
     @BindView(R.id.unlock_layout)
-    LinearLayout mUnlocklayout;
+    LinearLayout mUnlockLayout;
     @BindView(R.id.locked_go_back)
     ImageButton mLockedBack;
     @BindView(R.id.dialog_back)
@@ -51,8 +49,12 @@ public class ProvinceDialogFragment extends DialogFragment {
 
     @BindView(R.id.dialog_journal)
     ImageButton mJournalButton;
-    @BindView(R.id.unlock)
+    @BindView(R.id.unlock_text)
+    TextView mUnlockText;
+    @BindView(R.id.unlock_image)
     ImageButton mUnlockButton;
+    @BindView(R.id.attraction_text)
+    TextView mAttractionText;
     @BindView(R.id.local_attractions)
     ImageButton mLocalAttractions;
 
@@ -86,7 +88,7 @@ public class ProvinceDialogFragment extends DialogFragment {
         mProvinceName = getArguments().getString(ARG_NAME);
 
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.province_dialog_fragment,null);
-        mUnbinder = ButterKnife.bind(this,view);
+        mUnBinder = ButterKnife.bind(this,view);
 
 
         initByProvince(mProvinceName);
@@ -99,7 +101,7 @@ public class ProvinceDialogFragment extends DialogFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mUnbinder.unbind();
+        mUnBinder.unbind();
     }
 
     private void initByProvince(final String provinceName) {
@@ -111,7 +113,7 @@ public class ProvinceDialogFragment extends DialogFragment {
                     .apply(RequestOptions.bitmapTransform(new BlurTransformation(3,15)))
                     .apply(options)
                     .into(mBac);
-            mUnlocklayout.setVisibility(View.VISIBLE);
+            mUnlockLayout.setVisibility(View.VISIBLE);
         }else{
             mJournalButton.setVisibility(View.VISIBLE);
             mDialogBack.setVisibility(View.VISIBLE);
@@ -122,71 +124,72 @@ public class ProvinceDialogFragment extends DialogFragment {
                     .apply(options)
                     .into(mBac);
         }
-        mLockedBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ProvinceDialogFragment.this.dismiss();
-            }
+        mLockedBack.setOnClickListener(v -> ProvinceDialogFragment.this.dismiss());
+
+        mUnlockText.setOnClickListener(v -> {
+            sendRequest(provinceName);
+            RequestOptions requestOptions = getRequestOption();
+            Glide.with(ProvinceDialogFragment.this).load(HttpUtils.getProvinceDisplayImageUrl(province.getPinYin()))
+                    .apply(requestOptions)
+                    .into(mBac);
+            mJournalButton.setVisibility(View.VISIBLE);
+            mDialogBack.setVisibility(View.VISIBLE);
+            mUnlockLayout.setVisibility(View.GONE);
         });
 
-        mUnlockButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendRequest(Activity.RESULT_OK, provinceName);
-                RequestOptions requestOptions = getRequestOption();
-                Glide.with(ProvinceDialogFragment.this).load(HttpUtils.getProvinceDisplayImageUrl(province.getPinYin()))
-                        .apply(requestOptions)
-                        .into(mBac);
-                mJournalButton.setVisibility(View.VISIBLE);
-                mDialogBack.setVisibility(View.VISIBLE);
-                mUnlocklayout.setVisibility(View.GONE);
-            }
-        });
-        mLocalAttractions.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDialog.dismiss();
-                NavigationActivity activity = (NavigationActivity)getActivity();
-                if (activity != null) {
-                    activity.changeSearchFragmentWithArgs(mProvinceName);
-                }
-
-            }
+        mUnlockButton.setOnClickListener(v -> {
+            sendRequest(provinceName);
+            RequestOptions requestOptions = getRequestOption();
+            Glide.with(ProvinceDialogFragment.this).load(HttpUtils.getProvinceDisplayImageUrl(province.getPinYin()))
+                    .apply(requestOptions)
+                    .into(mBac);
+            mJournalButton.setVisibility(View.VISIBLE);
+            mDialogBack.setVisibility(View.VISIBLE);
+            mUnlockLayout.setVisibility(View.GONE);
         });
 
-        mJournalButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDialog.dismiss();
-                NavigationActivity activity = (NavigationActivity)getActivity();
-                if (activity != null) {
-                    activity.changeJournalFragmentWithArgs(mProvinceName);
-                }
+        mAttractionText.setOnClickListener(v -> {
+            mDialog.dismiss();
+            NavigationActivity activity = (NavigationActivity)getActivity();
+            if (activity != null) {
+                activity.changeSearchFragmentWithArgs(mProvinceName);
+            }
+
+        });
+
+        mLocalAttractions.setOnClickListener(v -> {
+            mDialog.dismiss();
+            NavigationActivity activity = (NavigationActivity)getActivity();
+            if (activity != null) {
+                activity.changeSearchFragmentWithArgs(mProvinceName);
+            }
+
+        });
+
+        mJournalButton.setOnClickListener(v -> {
+            mDialog.dismiss();
+            NavigationActivity activity = (NavigationActivity)getActivity();
+            if (activity != null) {
+                activity.changeJournalFragmentWithArgs(mProvinceName);
             }
         });
-        mDialogBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+        mDialogBack.setOnClickListener(v -> dismiss());
     }
 
-    private void sendRequest(int resultCode,String provinceName){
+    private void sendRequest(String provinceName){
         if(getTargetFragment() == null){
             return;
         }
 
         Intent intent = new Intent();
         intent.putExtra(EXTRA_NAME, provinceName);
-        getTargetFragment().onActivityResult(getTargetRequestCode(), resultCode,intent);
+        getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK,intent);
     }
 
     private RequestOptions getRequestOption(){
-        RequestOptions options = new RequestOptions()
+        return new RequestOptions()
                 .placeholder(R.drawable.province_place_holder)
                 .centerCrop();
-        return options;
     }
 }
 

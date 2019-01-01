@@ -7,8 +7,7 @@ import org.litepal.LitePal;
 import java.util.List;
 
 public class CheckItemLab {
-    public static CheckItemLab sCheckItemLab;
-    private Context mContext;
+    private static CheckItemLab sCheckItemLab;
 
 
     public static CheckItemLab get(Context context){
@@ -19,12 +18,11 @@ public class CheckItemLab {
     }
 
     private CheckItemLab(Context context){
-        mContext = context.getApplicationContext();
+        Context context1 = context.getApplicationContext();
     }
 
     public List<CheckItem> getCheckItemList() {
-        List<CheckItem> items = LitePal.findAll(CheckItem.class);
-        return items;
+        return LitePal.findAll(CheckItem.class);
     }
 
     public void addCheckItem(String checkItemName){

@@ -28,16 +28,13 @@ public class RetrofitServiceManager {
 //        builder.addInterceptor(commonInterceptor);
 
         //日志拦截器
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
-            @Override
-            public void log(String message) {
-                try {
-                    String text = URLDecoder.decode(message, "utf-8");
-                    Log.e("HttpLoggingInterceptor",text);
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                    Log.e("HttpLoggingInterceptor",message);
-                }
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(message -> {
+            try {
+                String text = URLDecoder.decode(message, "utf-8");
+                Log.e("HttpLoggingInterceptor",text);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+                Log.e("HttpLoggingInterceptor",message);
             }
         });
 

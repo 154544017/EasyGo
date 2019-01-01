@@ -1,5 +1,6 @@
 package com.software.tongji.easygo.net;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.io.IOException;
@@ -10,8 +11,9 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 public class LoggingInterceptor implements Interceptor {
+    @NonNull
     @Override
-    public Response intercept(Chain chain) throws IOException {
+    public Response intercept(@NonNull Chain chain) throws IOException {
         //这个chain里面包含了request和response，所以你要什么都可以从这里拿
         Request request = chain.request();
 

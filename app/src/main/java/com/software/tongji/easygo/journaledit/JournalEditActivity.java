@@ -109,13 +109,10 @@ public class JournalEditActivity extends AppCompatActivity implements JournalEdi
 
         mCoverFile = JournalLab.get(this).getCoverFIle(mJournal);
 
-        mNewJournalLocation.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if(hasFocus){
-                    Intent intent = new Intent(JournalEditActivity.this, InputTipsActivity.class);
-                    startActivityForResult(intent, REQUEST_PLACE);
-                }
+        mNewJournalLocation.setOnFocusChangeListener((view, hasFocus) -> {
+            if(hasFocus){
+                Intent intent = new Intent(JournalEditActivity.this, InputTipsActivity.class);
+                startActivityForResult(intent, REQUEST_PLACE);
             }
         });
 
@@ -124,58 +121,44 @@ public class JournalEditActivity extends AppCompatActivity implements JournalEdi
             Glide.with(this).load(mCoverFile).into(mCoverImage);
         }
 
-        mNewJournalDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if(hasFocus){
-                    showDatePickDialog();
-                }
-            }
-        });
-        mNewJournalDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        mNewJournalDate.setOnFocusChangeListener((view, hasFocus) -> {
+            if(hasFocus){
                 showDatePickDialog();
             }
         });
+        mNewJournalDate.setOnClickListener(view -> showDatePickDialog());
 
-        mSaveJournalButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent();
-                if(mNewJournalTitle.getText().toString().length() < 1){
-                    Toast.makeText(JournalEditActivity.this, "请为游记添加题目", Toast.LENGTH_SHORT).show();
-                }else if(!mCoverFile.exists()){
-                    Toast.makeText(JournalEditActivity.this, "请为游记选一张合适的照片", Toast.LENGTH_SHORT).show();
-                }else{
-                    mJournal.setCoverUrl(mCoverFile.getPath());
-                    mJournal.setTitle( mNewJournalTitle.getText().toString());
-                    mJournal.setDate( mNewJournalDate.getText().toString());
-                    mJournal.setContent(mNewJournalContent.getText().toString());
-                    mJournal.setFriends(mNewJournalFriends.getText().toString());
-                    mJournal.setLocation(mNewJournalLocation.getText().toString());
-                    if(mJournalId.equals("add")){
-                        mPresenter.addJournal(mJournal);
-                    }else {
-                        mPresenter.saveJournal(mJournal);
-                    }
-                    setResult(RESULT_OK, intent);
-                    finish();
+        mSaveJournalButton.setOnClickListener(view -> {
+            Intent intent = new Intent();
+            if(mNewJournalTitle.getText().toString().length() < 1){
+                Toast.makeText(JournalEditActivity.this, "请为游记添加题目", Toast.LENGTH_SHORT).show();
+            }else if(!mCoverFile.exists()){
+                Toast.makeText(JournalEditActivity.this, "请为游记选一张合适的照片", Toast.LENGTH_SHORT).show();
+            }else{
+                mJournal.setCoverUrl(mCoverFile.getPath());
+                mJournal.setTitle( mNewJournalTitle.getText().toString());
+                mJournal.setDate( mNewJournalDate.getText().toString());
+                mJournal.setContent(mNewJournalContent.getText().toString());
+                mJournal.setFriends(mNewJournalFriends.getText().toString());
+                mJournal.setLocation(mNewJournalLocation.getText().toString());
+                if(mJournalId.equals("add")){
+                    mPresenter.addJournal(mJournal);
+                }else {
+                    mPresenter.saveJournal(mJournal);
                 }
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
 
         final Intent chooseFromAlbum = new Intent("android.intent.action.GET_CONTENT");
         chooseFromAlbum.setType("image/*");
-        mAddPhotoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(ContextCompat.checkSelfPermission(JournalEditActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED){
-                    //requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},REQUEST_ALBUM_PERMISSION);
-                }else{
-                    startActivityForResult(chooseFromAlbum, REQUEST_ALBUM);
-                }
+        mAddPhotoButton.setOnClickListener(view -> {
+            if(ContextCompat.checkSelfPermission(JournalEditActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED){
+                //requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},REQUEST_ALBUM_PERMISSION);
+            }else{
+                startActivityForResult(chooseFromAlbum, REQUEST_ALBUM);
             }
         });
     }
@@ -199,12 +182,7 @@ public class JournalEditActivity extends AppCompatActivity implements JournalEdi
         Calendar calendar = Calendar.getInstance();
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                        mNewJournalDate.setText(year + "/" + (month + 1) + "/" + day);
-                    }
-                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+                (datePicker, year, month, day) -> mNewJournalDate.setText(year + "/" + (month + 1) + "/" + day), calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.show();
     }
 

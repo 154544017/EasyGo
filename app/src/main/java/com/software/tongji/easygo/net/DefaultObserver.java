@@ -1,10 +1,8 @@
 package com.software.tongji.easygo.net;
 
-import android.content.Context;
 import android.net.ParseException;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.gson.JsonParseException;
 

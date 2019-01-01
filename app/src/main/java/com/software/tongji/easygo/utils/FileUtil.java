@@ -16,7 +16,7 @@ import java.util.concurrent.ExecutionException;
 public class FileUtil {
     public static void copyFile(String oldPath, String newPath) {
         try {
-            int byteRead = 0;
+            int byteRead;
             File oldFile = new File(oldPath);
             if (oldFile.exists()) {//文件存在时
                 InputStream inStream = new FileInputStream(oldPath);//读入原文件
@@ -45,9 +45,7 @@ public class FileUtil {
             final File imageFile = target.get();
             copyFile(imageFile.getPath(), savePath);
 
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
 

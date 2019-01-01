@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -31,7 +30,8 @@
             android:id="@+id/dialog_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="您还未解锁该省份"
+            android:text="@string/is_locked"
+            android:textColor="@color/white"
             android:textSize="25sp"
             android:textStyle="bold" />
 
@@ -41,14 +41,16 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/unlock_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="解锁"
+                android:text="@string/unlock"
+                android:textColor="@color/white"
                 android:textSize="20sp"
                 android:padding="10dp"/>
 
             <ImageButton
-                android:id="@+id/unlock"
+                android:id="@+id/unlock_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@mipmap/lock" />
@@ -61,10 +63,12 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/attraction_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:text="查看介绍"
+                android:text="@string/look_for_attraction"
+                android:textColor="@color/white"
                 android:textSize="20sp"
                />
 

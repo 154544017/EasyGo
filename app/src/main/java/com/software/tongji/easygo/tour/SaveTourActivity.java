@@ -32,20 +32,16 @@ public class SaveTourActivity extends AppCompatActivity {
         setContentView(R.layout.activity_save_tour);
         ButterKnife.bind(this);
 
-        mSaveTourButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent();
-                if(mTourTitle.getText().toString().equals("")){
-                    Toast.makeText(SaveTourActivity.this, "Please fill in the title at least", Toast.LENGTH_SHORT).show();
-                }else{
-                    intent.putExtra(NEW_TOUR_TITLE, mTourTitle.getText().toString());
-                    intent.putExtra(NEW_TOUR_REMARK, mTourRemark.getText().toString());
-                    setResult(RESULT_OK, intent);
-                    finish();
-                }
+        mSaveTourButton.setOnClickListener(view -> {
+            Intent intent = new Intent();
+            if(mTourTitle.getText().toString().equals("")){
+                Toast.makeText(SaveTourActivity.this, "Please fill in the title at least", Toast.LENGTH_SHORT).show();
+            }else{
+                intent.putExtra(NEW_TOUR_TITLE, mTourTitle.getText().toString());
+                intent.putExtra(NEW_TOUR_REMARK, mTourRemark.getText().toString());
+                setResult(RESULT_OK, intent);
+                finish();
             }
-
         });
     }
 }

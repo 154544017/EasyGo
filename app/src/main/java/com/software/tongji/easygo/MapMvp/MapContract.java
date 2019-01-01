@@ -8,11 +8,10 @@ public interface MapContract {
 
     interface MapPresenter extends BasePresenter {
         MyMap getMap();
-        void changeProvinceState(MyMap myMap, String provinceName, boolean isLocked);
+        void changeProvinceState(MyMap myMap, String provinceName);
     }
 
     interface MapView extends BaseView<MapPresenter> {
-        void showLoading();
         void refreshUI();
         void showError();
     }

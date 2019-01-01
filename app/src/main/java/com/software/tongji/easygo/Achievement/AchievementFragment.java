@@ -19,23 +19,18 @@ import com.software.tongji.easygo.R;
 import butterknife.Unbinder;
 
 public class AchievementFragment extends Fragment{
-    private Unbinder mUnbinder;
+    private Unbinder mUnBinder;
     private FragmentManager mFragmentManager;
 
-    private TabLayout mTabLayout;
     private TabItem mMapButton;
-    private TabItem mDisplayButton;
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.achievement_fragment,container,false);
-        mTabLayout = view.findViewById(R.id.tab_layout);
-        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        TabLayout tabLayout = view.findViewById(R.id.tab_layout);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if(tab.getPosition() == 0){
@@ -58,8 +53,6 @@ public class AchievementFragment extends Fragment{
 
             }
         });
-        mDisplayButton = view.findViewById(R.id.display);
-        mTabLayout = view.findViewById(R.id.tab_layout);
 
         mFragmentManager = getActivity().getSupportFragmentManager();
 
@@ -84,10 +77,6 @@ public class AchievementFragment extends Fragment{
                     .add(R.id.achievement_fragment_container, fragment)
                     .commit();
         }
-    }
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
     }
 
 }

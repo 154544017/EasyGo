@@ -18,13 +18,11 @@ public interface LoginView {
 
     void openLogin();
 
-    void setLoginEmail(String email);
+    void setUserName(String userName);
 
     void showMessage(String message);
 
     void forgotPassword();
-
-    void openResetPin(String email);
 
     void resendResetCode();
 

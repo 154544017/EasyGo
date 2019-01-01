@@ -11,7 +11,6 @@ import android.view.View;
 
 import com.software.tongji.easygo.R;
 import com.software.tongji.easygo.bean.TourLab;
-import com.software.tongji.easygo.navigation.NavigationActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,8 +23,6 @@ public class TourListActivity extends AppCompatActivity {
     @BindView(R.id.tour_add)
     FloatingActionButton mTourAddButton;
 
-    private TourListAdapter mTourListAdapter;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,26 +30,20 @@ public class TourListActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         mTourRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mTourListAdapter = new TourListAdapter(TourLab.get(this).getTourList(), new TourListAdapter.OnTourClickListener() {
-            @Override
-            public void changeToSchedule(String tourId) {
-                Intent intent = new Intent();
-                intent.putExtra(EXTRA_TOUR_ID, tourId);
-                setResult(RESULT_OK, intent);
-                finish();
+        TourListAdapter tourListAdapter = new TourListAdapter(TourLab.get(this).getTourList(), tourId -> {
+            Intent intent = new Intent();
+            intent.putExtra(EXTRA_TOUR_ID, tourId);
+            setResult(RESULT_OK, intent);
+            finish();
 
-            }
         });
-        mTourRecyclerView.setAdapter(mTourListAdapter);
+        mTourRecyclerView.setAdapter(tourListAdapter);
 
-        mTourAddButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.putExtra(EXTRA_TOUR_ID, "00000000");
-                setResult(RESULT_OK, intent);
-                finish();
-            }
+        mTourAddButton.setOnClickListener(v -> {
+            Intent intent = new Intent();
+            intent.putExtra(EXTRA_TOUR_ID, "00000000");
+            setResult(RESULT_OK, intent);
+            finish();
         });
     }
 

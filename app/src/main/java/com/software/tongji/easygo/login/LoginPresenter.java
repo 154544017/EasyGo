@@ -1,36 +1,14 @@
 package com.software.tongji.easygo.login;
 
 
-import android.net.Uri;
 import android.os.Handler;
-import android.util.Log;
-
-import com.google.gson.JsonObject;
-import com.software.tongji.easygo.bean.Schedule;
 import com.software.tongji.easygo.bean.UserData;
 import com.software.tongji.easygo.net.ApiService;
 import com.software.tongji.easygo.net.BaseResponse;
 import com.software.tongji.easygo.net.DefaultObserver;
 import com.software.tongji.easygo.net.RetrofitServiceManager;
 import com.software.tongji.easygo.utils.HttpUtils;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.text.Normalizer;
-import java.util.Objects;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.internal.operators.DeferredScalarSubscriber;
 import rx.schedulers.Schedulers;
 
 public class LoginPresenter {
@@ -77,7 +55,7 @@ public class LoginPresenter {
                     @Override
                     public void onSuccess(Object result) {
                         mLoginView.openLogin();
-                        mLoginView.setLoginEmail(username);
+                        mLoginView.setUserName(username);
                         mLoginView.showMessage("注册成功！请登录");
                     }
 

@@ -19,7 +19,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.CheckItemHolder> {
-    private Context mContext;
     private List<CheckItem> mCheckItemList;
     private ChangeItemStateListener mChangeItemStateListener;
 
@@ -28,7 +27,7 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.Chec
     }
     public CheckListAdapter(Context context,ChangeItemStateListener listener){
         mChangeItemStateListener = listener;
-        mContext = context;
+        Context context1 = context;
     }
 
 
@@ -47,13 +46,10 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.Chec
     @Override
     public void onBindViewHolder(@NonNull CheckItemHolder holder, int position) {
         holder.mItemName.setText(mCheckItemList.get(position).getName());
-        holder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                CheckItem item = mCheckItemList.get(position);
-                item.setCheck(b);
-                mChangeItemStateListener.changeItemState(item.getName(),b);
-            }
+        holder.mCheckBox.setOnCheckedChangeListener((compoundButton, b) -> {
+            CheckItem item = mCheckItemList.get(position);
+            item.setCheck(b);
+            mChangeItemStateListener.changeItemState(item.getName(),b);
         });
         holder.mCheckBox.setChecked(mCheckItemList.get(position).isCheck());
     }

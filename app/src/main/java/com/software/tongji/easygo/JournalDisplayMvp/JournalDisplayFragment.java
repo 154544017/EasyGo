@@ -49,7 +49,6 @@ public class JournalDisplayFragment extends Fragment implements JournalDisplayVi
     private static final String NO_DEFAULT = "is_not_jump_from_map";
     private JournalAdapter mJournalAdapter;
     private boolean isFirstResume = true;
-    private boolean isFirstShown = true;
     private MaterialDialog mDialog;
     private String mProvinceArg = NO_DEFAULT;
     private InputProvinceAdapter mProvinceListAdapter;
@@ -76,27 +75,21 @@ public class JournalDisplayFragment extends Fragment implements JournalDisplayVi
         mProvinceTipView.setAdapter(mProvinceListAdapter);
         initSearchView();
 
-        mAddJournalButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = JournalEditActivity.newIntent(getContext(), "add");
-                startActivityForResult(intent, REQUEST_CODE_NEW_JOURNAL);
-            }
+        mAddJournalButton.setOnClickListener(view1 -> {
+            Intent intent = JournalEditActivity.newIntent(getContext(), "add");
+            startActivityForResult(intent, REQUEST_CODE_NEW_JOURNAL);
         });
         mJournalDisplayPresenter.getJournals();
         return view;
     }
 
     void initSearchView(){
-        mSearchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
-                    mProvinceTipView.setVisibility(View.VISIBLE);
-                    mProvinceTipView.bringToFront();
-                }else {
-                    mProvinceTipView.setVisibility(View.GONE);
-                }
+        mSearchView.setOnQueryTextFocusChangeListener((v, hasFocus) -> {
+            if(hasFocus){
+                mProvinceTipView.setVisibility(View.VISIBLE);
+                mProvinceTipView.bringToFront();
+            }else {
+                mProvinceTipView.setVisibility(View.GONE);
             }
         });
 
@@ -119,20 +112,17 @@ public class JournalDisplayFragment extends Fragment implements JournalDisplayVi
         mSearchView.setSubmitButtonEnabled(false);
 
         //初始化listView
-        mProvinceTipView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String province = (String)parent.getItemAtPosition(position);
-                if(mNoJournalsView.getVisibility() == View.VISIBLE){
-                    mNoJournalsView.setVisibility(View.GONE);
-                }
-                mSearchView.setQueryHint(province);
-                mSearchView.clearFocus();
-                if(province.equals("显示全部")){
-                   mJournalDisplayPresenter.getJournals();
-                } else {
-                    mJournalDisplayPresenter.getJournalsByProvince(province);
-                }
+        mProvinceTipView.setOnItemClickListener((parent, view, position, id) -> {
+            String province = (String)parent.getItemAtPosition(position);
+            if(mNoJournalsView.getVisibility() == View.VISIBLE){
+                mNoJournalsView.setVisibility(View.GONE);
+            }
+            mSearchView.setQueryHint(province);
+            mSearchView.clearFocus();
+            if(province.equals("显示全部")){
+               mJournalDisplayPresenter.getJournals();
+            } else {
+                mJournalDisplayPresenter.getJournalsByProvince(province);
             }
         });
     }

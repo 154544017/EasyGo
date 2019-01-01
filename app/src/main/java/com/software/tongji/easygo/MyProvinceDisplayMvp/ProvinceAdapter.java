@@ -15,7 +15,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.software.tongji.easygo.R;
 import com.software.tongji.easygo.bean.Province;
+import com.software.tongji.easygo.navigation.NavigationActivity;
 import com.software.tongji.easygo.utils.HttpUtils;
+import com.software.tongji.easygo.view.MyMapView;
 
 import java.util.List;
 
@@ -27,20 +29,53 @@ import static com.bumptech.glide.request.RequestOptions.priorityOf;
 public class ProvinceAdapter extends RecyclerView.Adapter<ProvinceAdapter.ViewHolder> {
     private Context mContext;
     private List<Province> mProvinceList;
+    private ProvinceClickListener mProvinceClickListener;
 
-    static class ViewHolder extends RecyclerView.ViewHolder{
+    interface ProvinceClickListener{
+        void onClick(int mode,String provinceName);
+    }
+    class ViewHolder extends RecyclerView.ViewHolder{
         ImageView provinceImage;
         TextView provinceName;
+        Province mProvince;
+        Context mContext;
 
         public ViewHolder(View itemView){
             super(itemView);
+            mContext = itemView.getContext();
             provinceImage = itemView.findViewById(R.id.province_display_image);
             provinceName = itemView.findViewById(R.id.province_display_name);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(mProvince.isLocked()){
+                        mProvinceClickListener.onClick(0, mProvince.getName());
+                    }else{
+                        mProvinceClickListener.onClick(1, mProvince.getName());
+                    }
+                }
+            });
         }
 
+        public void bind(Province province){
+            mProvince = province;
+            provinceName.setText(province.getName());
+            if(province.isLocked()) {
+                RequestOptions options = new RequestOptions()
+                        .placeholder(R.mipmap.ic_launcher)
+                        .centerCrop();
+                Glide.with(mContext).load(HttpUtils.getProvinceDisplayImageUrl(province.getPinYin()))
+                        .apply(options)
+                        .apply(bitmapTransform(new GrayscaleTransformation()))
+                        .into(provinceImage);
+            }else{
+                Glide.with(mContext).load(HttpUtils.getProvinceDisplayImageUrl(province.getPinYin())).into(provinceImage);
+            }
+        }
     }
 
-    public ProvinceAdapter(List<Province> provinces) {
+    public ProvinceAdapter(List<Province> provinces,ProvinceClickListener provinceClickListener) {
+        mProvinceClickListener = provinceClickListener;
         mProvinceList = provinces;
     }
 
@@ -57,19 +92,7 @@ public class ProvinceAdapter extends RecyclerView.Adapter<ProvinceAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Province province = mProvinceList.get(position);
-        holder.provinceName.setText(province.getName());
-        if(province.isLocked()) {
-            RequestOptions options = new RequestOptions()
-                    .placeholder(R.mipmap.ic_launcher)
-                    .centerCrop()
-                    .diskCacheStrategy(DiskCacheStrategy.NONE);
-            Glide.with(mContext).load(HttpUtils.getProvinceDisplayImageUrl(province.getPinYin()))
-                    .apply(bitmapTransform(new GrayscaleTransformation()))
-                    .apply(options)
-                    .into(holder.provinceImage);
-        }else{
-            Glide.with(mContext).load(HttpUtils.getProvinceDisplayImageUrl(province.getPinYin())).into(holder.provinceImage);
-        }
+        holder.bind(province);
     }
 
     @Override

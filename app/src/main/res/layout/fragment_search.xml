@@ -21,24 +21,34 @@
             android:layout_margin="4dp"
             android:background="@drawable/search_selector" />
 
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+            <TextView
+                android:background="@color/white"
+                android:id="@+id/no_attractions"
+                android:text="@string/no_attraction"
+                android:textSize="20dp"
+                android:visibility="gone"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
             <ListView
                 android:id="@+id/provinces_list"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:layout_marginTop="5dp"
-                android:background="@color/dark_grey"
-                android:visibility="gone"></ListView>
+                android:background="@color/white"
+                android:visibility="gone"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/attractions_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="8dp"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"></android.support.v7.widget.RecyclerView>
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
         </FrameLayout>
     </LinearLayout>
 

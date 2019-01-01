@@ -37,6 +37,7 @@ public class ProvinceDialogFragment extends DialogFragment {
 
     private Unbinder mUnbinder;
     private AlertDialog mDialog;
+    private String mProvinceName;
 
     @BindView(R.id.dialog_state)
     TextView mDialogState;
@@ -83,13 +84,13 @@ public class ProvinceDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        String provinceName = getArguments().getString(ARG_NAME);
+        mProvinceName = getArguments().getString(ARG_NAME);
 
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.province_dialog_fragment,null);
         mUnbinder = ButterKnife.bind(this,view);
 
 
-        initByProvince(provinceName);
+        initByProvince(mProvinceName);
 
         mDialog =  new AlertDialog.Builder(getActivity())
                 .setView(view).create();
@@ -139,7 +140,9 @@ public class ProvinceDialogFragment extends DialogFragment {
             public void onClick(View v) {
                 mDialog.dismiss();
                 NavigationActivity activity = (NavigationActivity)getActivity();
-                activity.changeFragment(3);
+                if (activity != null) {
+                    activity.changeSearchFragmentWithArgs(mProvinceName);
+                }
 
             }
         });
@@ -149,7 +152,9 @@ public class ProvinceDialogFragment extends DialogFragment {
             public void onClick(View v) {
                 mDialog.dismiss();
                 NavigationActivity activity = (NavigationActivity)getActivity();
-                activity.changeFragment(2);
+                if (activity != null) {
+                    activity.changeJournalFragmentWithArgs(mProvinceName);
+                }
             }
         });
         mDialogBack.setOnClickListener(new View.OnClickListener() {

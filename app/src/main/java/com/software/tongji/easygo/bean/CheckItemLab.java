@@ -2,14 +2,15 @@ package com.software.tongji.easygo.bean;
 
 import android.content.Context;
 
+import org.litepal.LitePal;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class CheckItemLab {
     public static CheckItemLab sCheckItemLab;
-
     private Context mContext;
-    private List<CheckItem> mCheckItemList;
+
 
     public static CheckItemLab get(Context context){
         if(sCheckItemLab == null){
@@ -19,15 +20,25 @@ public class CheckItemLab {
     }
 
     private CheckItemLab(Context context){
-        mContext = context;
-        mCheckItemList = new ArrayList<>();
+        mContext = context.getApplicationContext();
     }
 
     public List<CheckItem> getCheckItemList() {
-        return mCheckItemList;
+        List<CheckItem> items = LitePal.findAll(CheckItem.class);
+        return items;
     }
 
-    public void addCheckItem(CheckItem checkItem){
-        mCheckItemList.add(checkItem);
+    public void addCheckItem(String checkItemName){
+        CheckItem item = new CheckItem(checkItemName,false);
+        item.save();
+    }
+
+    public void deleteCheckItem(String checkItemName){
+        LitePal.deleteAll(CheckItem.class,"mName = ?", checkItemName);
+    }
+
+    public void changeItemState(String name, Boolean state){
+        CheckItem checkItem = new CheckItem(name, state);
+        checkItem.updateAll("mName = ?", name);
     }
 }

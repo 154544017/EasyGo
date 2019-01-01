@@ -11,16 +11,23 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.software.tongji.easygo.MyProvinceDisplayMvp.ProvinceAdapter;
 import com.software.tongji.easygo.R;
 import com.software.tongji.easygo.bean.Journal;
+import com.software.tongji.easygo.inputProvince.InputProvinceAdapter;
 import com.software.tongji.easygo.journaledit.JournalEditActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -30,6 +37,10 @@ public class JournalDisplayFragment extends Fragment implements JournalDisplayVi
 
     public static final int REQUEST_CODE_NEW_JOURNAL = 1;
 
+    @BindView(R.id.no_journals)
+    TextView mNoJournalsView;
+    @BindView(R.id.provinces_list)
+    ListView mProvinceTipView;
     @BindView(R.id.journal_recycler_view)
     RecyclerView mRecyclerView;
     @BindView(R.id.journal_search_view)
@@ -37,13 +48,19 @@ public class JournalDisplayFragment extends Fragment implements JournalDisplayVi
     @BindView(R.id.journal_add_button)
     FloatingActionButton mAddJournalButton;
 
+    private static final String NO_DEFAULT = "is_not_jump_from_map";
     private JournalAdapter mJournalAdapter;
+    private boolean isFirstResume = true;
+    private boolean isFirstShown = true;
     private MaterialDialog mDialog;
+    private String mProvinceArg = NO_DEFAULT;
+    private InputProvinceAdapter mProvinceListAdapter;
     private JournalDisplayPresenter mJournalDisplayPresenter = new JournalDisplayPresenter();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mProvinceListAdapter = new InputProvinceAdapter(getContext());
     }
 
 
@@ -58,7 +75,33 @@ public class JournalDisplayFragment extends Fragment implements JournalDisplayVi
         mJournalAdapter = new JournalAdapter();
         mRecyclerView.setAdapter(mJournalAdapter);
 
-        mSearchView.setQueryHint("Search journal");
+        mProvinceTipView.setAdapter(mProvinceListAdapter);
+        initSearchView();
+
+        mAddJournalButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = JournalEditActivity.newIntent(getContext(), "add");
+                startActivityForResult(intent, REQUEST_CODE_NEW_JOURNAL);
+            }
+        });
+        mJournalDisplayPresenter.getJournals();
+        return view;
+    }
+
+    void initSearchView(){
+        mSearchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    mProvinceTipView.setVisibility(View.VISIBLE);
+                    mProvinceTipView.bringToFront();
+                }else {
+                    mProvinceTipView.setVisibility(View.GONE);
+                }
+            }
+        });
+
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -67,27 +110,33 @@ public class JournalDisplayFragment extends Fragment implements JournalDisplayVi
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                return false;
+                mProvinceListAdapter.getFilter().filter(newText);
+                return true;
             }
         });
+        //设置SearchView默认为展开显示
+        mSearchView.setIconified(false);
+        mSearchView.onActionViewExpanded();
+        mSearchView.setIconifiedByDefault(true);
+        mSearchView.setSubmitButtonEnabled(false);
 
-        mAddJournalButton.setOnClickListener(new View.OnClickListener() {
+        //初始化listView
+        mProvinceTipView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View view) {
-                Journal journal = new Journal();
-                mJournalDisplayPresenter.addJournal(journal);
-                Intent intent = JournalEditActivity.newIntent(getContext(), journal.getId());
-                startActivityForResult(intent, REQUEST_CODE_NEW_JOURNAL);
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String province = (String)parent.getItemAtPosition(position);
+                if(mNoJournalsView.getVisibility() == View.VISIBLE){
+                    mNoJournalsView.setVisibility(View.GONE);
+                }
+                mSearchView.setQueryHint(province);
+                mSearchView.clearFocus();
+                if(province.equals("显示全部")){
+                   mJournalDisplayPresenter.getJournals();
+                } else {
+                    mJournalDisplayPresenter.getJournalsByProvince(province);
+                }
             }
         });
-
-        return view;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
     }
 
     @Override
@@ -102,22 +151,21 @@ public class JournalDisplayFragment extends Fragment implements JournalDisplayVi
     }
 
     @Override
-    public Context getJournalListContext() {
-        return getContext();
-    }
-
-    @Override
     public void showLoadingDialog() {
-        mDialog = new MaterialDialog.Builder(getContext())
-                .title(R.string.app_name)
-                .content("Please Wait...")
-                .progress(true, 0)
-                .show();
+        if (mDialog == null || mDialog.isCancelled()) {
+            mDialog = new MaterialDialog.Builder(getContext())
+                    .title(R.string.app_name)
+                    .content("Please Wait...")
+                    .progress(true, 0)
+                    .show();
+        }
     }
 
     @Override
     public void dismissLoadingDialog() {
-        mDialog.dismiss();
+        if (!mDialog.isCancelled()) {
+            mDialog.dismiss();
+        }
     }
 
     @Override
@@ -132,9 +180,41 @@ public class JournalDisplayFragment extends Fragment implements JournalDisplayVi
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        mJournalDisplayPresenter.getJournals();
+    public void noJournals() {
+        List<Journal> journals = new ArrayList<>();
+        updateAdapter(journals);
+        mNoJournalsView.setVisibility(View.VISIBLE);
+        mNoJournalsView.bringToFront();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(isFirstResume){
+            isFirstResume = false;
+            return;
+        }
+        mJournalDisplayPresenter.getJournals();
+        Log.e("fragment", "onResume ");
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        Log.e("fragment", "onHidden: " + String.valueOf(hidden));
+        if(isFirstShown){
+            if(!hidden){
+                if(mProvinceArg.equals(NO_DEFAULT)){
+                    return;
+                }else{
+                    mSearchView.setQueryHint(mProvinceArg);
+                    mJournalDisplayPresenter.getJournalsByProvince(mProvinceArg);
+                    mProvinceArg = NO_DEFAULT;
+                }
+            }
+        }
+    }
+    public void setDefaultProvince(String province){
+        mProvinceArg = province;
+    }
 }

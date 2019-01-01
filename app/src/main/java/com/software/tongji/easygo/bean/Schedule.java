@@ -1,31 +1,19 @@
 package com.software.tongji.easygo.bean;
 
-import android.util.ArrayMap;
+import org.litepal.crud.LitePalSupport;
 
-import com.software.tongji.easygo.R;
+public class Schedule extends LitePalSupport {
 
-import java.util.Map;
-
-public class Schedule {
-
+    private String mTourId;
     private String mAddress;
+    private double mLatPoint;
+    private double mLonPoint;
     private String mDate;
     private String mTime;
     private String mType;
     private String mCost;
     private String mRemark;
-
-    public Schedule(String address, String date, String time,
-                    String type, String cost, String remark){
-
-        mAddress = address;
-        mDate = date;
-        mTime = time;
-        mType = type;
-        mCost = cost;
-        mRemark = remark;
-    }
-
+    private int mPosition;
 
     public String getAddress() {
         return mAddress;
@@ -33,6 +21,53 @@ public class Schedule {
 
     public void setAddress(String address) {
         mAddress = address;
+    }
+
+    public double getLatPoint() {
+        return mLatPoint;
+    }
+
+    public void setLatPoint(double latPoint) {
+        mLatPoint = latPoint;
+    }
+
+    public double getLonPoint() {
+        return mLonPoint;
+    }
+
+    public void setLonPoint(double lonPoint) {
+        mLonPoint = lonPoint;
+    }
+
+    public Schedule(){};
+
+    public Schedule(String tourId, String address, double latPoint, double lonPoint, String date, String time, String type, String cost, String remark, int position) {
+        mTourId = tourId;
+        mAddress = address;
+        mLatPoint = latPoint;
+        mLonPoint = lonPoint;
+        mDate = date;
+        mTime = time;
+        mType = type;
+        mCost = cost;
+        mRemark = remark;
+        mPosition = position;
+    }
+
+    public int getPosition() {
+        return mPosition;
+    }
+
+    public void setPosition(int position) {
+        mPosition = position;
+    }
+
+    public String getTourId() {
+        return mTourId;
+    }
+
+    public void setTourId(String tourId) {
+        mTourId = tourId;
     }
 
     public String getDate() {

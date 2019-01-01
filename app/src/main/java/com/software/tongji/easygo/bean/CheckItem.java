@@ -1,9 +1,12 @@
 package com.software.tongji.easygo.bean;
 
-public class CheckItem {
+import org.litepal.crud.LitePalSupport;
+
+public class CheckItem extends LitePalSupport {
     private String mName;
     private boolean mCheck;
 
+    public CheckItem(){}
     public CheckItem(String name, boolean checked){
         mName = name;
         mCheck = checked;

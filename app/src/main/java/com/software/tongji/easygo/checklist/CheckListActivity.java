@@ -8,14 +8,19 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.software.tongji.easygo.R;
+import com.software.tongji.easygo.bean.CheckItem;
 import com.software.tongji.easygo.bean.CheckItemLab;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class CheckListActivity extends AppCompatActivity {
+public class CheckListActivity extends AppCompatActivity implements CheckListView{
     @BindView(R.id.edit_text_check)
     EditText mEditText;
     @BindView(R.id.check_list_recycler_view)
@@ -26,6 +31,8 @@ public class CheckListActivity extends AppCompatActivity {
     FloatingActionButton mDeleteButton;
 
     private CheckListAdapter mCheckListAdapter;
+    private MaterialDialog mDialog;
+    private CheckListPresenterImpl mListPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,7 +40,13 @@ public class CheckListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_check_list);
         ButterKnife.bind(this);
 
-        mCheckListAdapter = new CheckListAdapter(this, CheckItemLab.get(this).getCheckItemList());
+        mListPresenter = new CheckListPresenterImpl(this,this);
+        mCheckListAdapter = new CheckListAdapter(this, new CheckListAdapter.ChangeItemStateListener() {
+            @Override
+            public void changeItemState(String itemName, Boolean state) {
+                mListPresenter.changeItemState(itemName, state);
+            }
+        });
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mCheckListAdapter);
 
@@ -41,7 +54,7 @@ public class CheckListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String itemName = mEditText.getText().toString();
-                mCheckListAdapter.addItem(itemName);
+                mListPresenter.addCheckItem(itemName);
             }
         });
 
@@ -49,8 +62,37 @@ public class CheckListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String itemName = mEditText.getText().toString();
-                mCheckListAdapter.deleteItem(itemName);
+                mListPresenter.deleteCheckItem(itemName);
             }
         });
+
+        mListPresenter.getCheckLists();
+    }
+
+    @Override
+    public void showLoadingDialog() {
+        if (mDialog == null || mDialog.isCancelled()) {
+            mDialog = new MaterialDialog.Builder(this)
+                    .title(R.string.app_name)
+                    .content("Please Wait...")
+                    .progress(true, 0)
+                    .show();
+        }
+    }
+
+    @Override
+    public void dismissLoadingDialog() {
+        mDialog.dismiss();
+    }
+
+    @Override
+    public void showError(String message) {
+        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void refreshView(List<CheckItem> checkItemList) {
+        mCheckListAdapter.updateCheckList(checkItemList);
+        mCheckListAdapter.notifyDataSetChanged();
     }
 }

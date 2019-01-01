@@ -14,6 +14,7 @@ import com.software.tongji.easygo.MyProvinceDisplayMvp.ProvinceAdapter;
 import com.software.tongji.easygo.R;
 import com.software.tongji.easygo.bean.Province;
 import com.software.tongji.easygo.bean.ProvinceLab;
+import com.software.tongji.easygo.navigation.NavigationActivity;
 
 import java.util.List;
 
@@ -27,7 +28,19 @@ public class ProvinceDisplayFragment extends Fragment {
         mRecyclerView = view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
         List<Province> provinces = ProvinceLab.getProvinceLab(getActivity()).getProvinces();
-        mAdapter = new ProvinceAdapter(provinces);
+        mAdapter = new ProvinceAdapter(provinces, new ProvinceAdapter.ProvinceClickListener() {
+            @Override
+            public void onClick(int mode, String province) {
+                NavigationActivity activity = (NavigationActivity) getActivity();
+                if (activity != null) {
+                    if (mode == 0) {
+                        activity.changeSearchFragmentWithArgs(province);
+                    } else {
+                        activity.changeJournalFragmentWithArgs(province);
+                    }
+                }
+            }
+        });
         mRecyclerView.setAdapter(mAdapter);
 
         return view;

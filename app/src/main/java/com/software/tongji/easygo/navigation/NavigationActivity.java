@@ -1,5 +1,7 @@
 package com.software.tongji.easygo.navigation;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -16,6 +18,9 @@ import com.software.tongji.easygo.Achievement.AchievementFragment;
 import com.software.tongji.easygo.JournalDisplayMvp.JournalDisplayFragment;
 import com.software.tongji.easygo.R;
 import com.software.tongji.easygo.attractions.AttractionsListFragment;
+import com.software.tongji.easygo.bean.Attraction;
+import com.software.tongji.easygo.bean.Journal;
+import com.software.tongji.easygo.bean.JournalLab;
 import com.software.tongji.easygo.bean.UserData;
 import com.software.tongji.easygo.bean.UserInfo;
 import com.software.tongji.easygo.net.ApiService;
@@ -23,6 +28,7 @@ import com.software.tongji.easygo.net.BaseResponse;
 import com.software.tongji.easygo.net.DefaultObserver;
 import com.software.tongji.easygo.net.RetrofitServiceManager;
 import com.software.tongji.easygo.schedule.ScheduleListFragment;
+import com.software.tongji.easygo.utils.FileUtil;
 
 import org.litepal.LitePal;
 
@@ -39,6 +45,7 @@ import rx.schedulers.Schedulers;
 
 public class NavigationActivity extends AppCompatActivity implements NavigationView {
 
+    private static final String EXTRA_TOUR_ID = "com.software.tongji.easygo.tour_id";
     @BindView(R.id.bottom_tab_strip)
     PageNavigationView mPageNavigationView;
 
@@ -48,6 +55,11 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
     private List<Fragment> mFragmentList;
     private MaterialDialog mDialog;
 
+    public static Intent newIntentGotoSchedule(Context packageContext, String tourId){
+        Intent intent = new Intent(packageContext,NavigationActivity.class);
+        intent.putExtra(EXTRA_TOUR_ID, tourId);
+        return intent;
+    }
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,16 +91,14 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
         mFragmentList.add(new AchievementFragment());
         mFragmentList.add(new JournalDisplayFragment());
         mFragmentList.add(new AttractionsListFragment());
+
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
         transaction.add(R.id.fragment_container, mFragmentList.get(0))
                 .add(R.id.fragment_container, mFragmentList.get(1))
                 .add(R.id.fragment_container, mFragmentList.get(2))
                 .add(R.id.fragment_container, mFragmentList.get(3))
-                .hide(mFragmentList.get(1))
-                .hide(mFragmentList.get(2))
-                .hide(mFragmentList.get(3))
-                .show(mFragmentList.get(0))
                 .commit();
+
         mNavigationController.addTabItemSelectedListener(new OnTabItemSelectedListener() {
             @Override
             public void onSelected(int index, int old) {
@@ -103,16 +113,46 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
 
             }
         });
+
+        initFragment();
+
+
+        getInfo();
     }
 
-    public void getInfo(){
-        String userName = PreferenceManager.getDefaultSharedPreferences(this).getString("USER_EMAIL","");
-        UserInfo.userName = userName;
+    private void initFragment() {
+
+        if(getIntent() != null){
+            String tourId = getIntent().getStringExtra(EXTRA_TOUR_ID);
+            if (tourId != null) {
+                ScheduleListFragment fragment = (ScheduleListFragment) mFragmentList.get(0);
+                fragment.setTourId(tourId);
+            }
+        }
+        FragmentTransaction transaction = mFragmentManager.beginTransaction();
+        transaction.hide(mFragmentList.get(1))
+                .hide(mFragmentList.get(2))
+                .hide(mFragmentList.get(3))
+                .show(mFragmentList.get(0))
+                .commit();
+    }
+
+    public void showLoadDialog(){
         mDialog = new MaterialDialog.Builder(this)
                 .title(R.string.app_name)
                 .content("Please Wait...")
                 .progress(true, 0)
                 .show();
+    }
+
+    public void dismissDialog(){
+        mDialog.dismiss();
+    }
+
+    public void getInfo(){
+        String userName = PreferenceManager.getDefaultSharedPreferences(this).getString("user_email","");
+        UserInfo.userName = userName;
+        showLoadDialog();
         RetrofitServiceManager.getInstance()
                 .getRetrofit()
                 .create(ApiService.class)
@@ -125,19 +165,19 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
                         UserData data = (UserData)result;
                         UserInfo.journalCount = data.getJournalCount();
                         UserInfo.tourCount = data.getTourCount();
-                        mDialog.dismiss();
+                        syncJournals();
                     }
 
                     @Override
                     public void onFail(String message) {
                         showError(message);
-                        mDialog.dismiss();
+                        dismissDialog();
                     }
 
                     @Override
                     public void onError(String message) {
                         showError(message);
-                        mDialog.dismiss();
+                        dismissDialog();
                     }
                 });
     }
@@ -153,7 +193,75 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
         mNavigationController.setSelect(index);
     }
 
+    public void changeSearchFragmentWithArgs(String args){
+        AttractionsListFragment fragment = (AttractionsListFragment)mFragmentList.get(3);
+        fragment.setDefaultProvince(args);
+        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+        fragmentTransaction.hide(mFragmentList.get(0))
+                .hide(mFragmentList.get(1))
+                .hide(mFragmentList.get(2))
+                .show(mFragmentList.get(3))
+                .commit();
+        mNavigationController.setSelect(3);
+    }
+
+    public void changeJournalFragmentWithArgs(String args){
+        JournalDisplayFragment fragment = (JournalDisplayFragment) mFragmentList.get(2);
+        fragment.setDefaultProvince(args);
+        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+        fragmentTransaction.hide(mFragmentList.get(0))
+                .hide(mFragmentList.get(1))
+                .hide(mFragmentList.get(3))
+                .show(mFragmentList.get(2))
+                .commit();
+        mNavigationController.setSelect(2);
+    }
+
     public void showError(String message){
         Toast.makeText(this,message,Toast.LENGTH_LONG).show();
+    }
+
+    public void syncJournals(){
+        if (UserInfo.journalCount == JournalLab.get(this).size()) {
+            syncTours();
+        } else {
+            RetrofitServiceManager.getInstance()
+                    .getRetrofit()
+                    .create(ApiService.class)
+                    .getJournals(UserInfo.userName)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io())
+                    .subscribe(new DefaultObserver<BaseResponse<List<Journal>>>() {
+                        @Override
+                        public void onSuccess(Object result) {
+                            List<Journal> data = (List<Journal>) result;
+                            JournalLab journalLab = JournalLab.get(NavigationActivity.this);
+                            for(Journal journal:data){
+                                String fileName = journalLab.getCoverFIle(journal).toString();
+                                FileUtil.saveImage(NavigationActivity.this, journal.getCoverUrl(),fileName);
+                                journal.setCoverUrl(fileName);
+                            }
+                            LitePal.deleteAll(Journal.class);
+                            LitePal.saveAll(data);
+                            syncTours();
+                        }
+
+                        @Override
+                        public void onFail(String message) {
+                            showError(message);
+                            dismissDialog();
+                        }
+
+                        @Override
+                        public void onError(String message) {
+                            showError(message);
+                            dismissDialog();
+                        }
+                    });
+        }
+    }
+
+    public void syncTours(){
+        dismissDialog();
     }
 }

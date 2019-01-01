@@ -1,10 +1,21 @@
 package com.software.tongji.easygo.bean;
 
-public class Tour {
+import org.litepal.crud.LitePalSupport;
+
+import java.util.List;
+import java.util.UUID;
+
+public class Tour extends LitePalSupport {
     private String mTitle;
     private String mRemark;
+    private String mId;
+
+    public String getId() {
+        return mId;
+    }
 
     public Tour(String title, String remark){
+        mId = UUID.randomUUID().toString();
         mTitle = title;
         mRemark = remark;
     }

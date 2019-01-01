@@ -22,49 +22,19 @@ import butterknife.ButterKnife;
 public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.CheckItemHolder> {
     private Context mContext;
     private List<CheckItem> mCheckItemList;
+    private ChangeItemStateListener mChangeItemStateListener;
 
-    public CheckListAdapter(Context context, List<CheckItem> checkItemList){
+    public interface ChangeItemStateListener{
+        void changeItemState(String itemName,Boolean state);
+    }
+    public CheckListAdapter(Context context,ChangeItemStateListener listener){
+        mChangeItemStateListener = listener;
         mContext = context;
-        mCheckItemList = checkItemList;
     }
 
-    public void addItem(String itemName){
-        if(itemName.equals("")){
-            Toast.makeText(mContext, "Item Name can't be empty!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        int exitFlag = 0;
-        for(int i = 0; i < mCheckItemList.size(); i++){
-            if(mCheckItemList.get(i).getName().equals(itemName)){
-                exitFlag = 1;
-                break;
-            }
-        }
-        if(exitFlag == 1){
-            Toast.makeText(mContext, "Item exited in the list!", Toast.LENGTH_SHORT).show();
-        }else{
-            mCheckItemList.add(new CheckItem(itemName, false));
-            notifyDataSetChanged();
-        }
-    }
 
-    public void deleteItem(String itemName){
-        if(itemName.equals("")){
-            Toast.makeText(mContext, "Item Name can't be empty!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        int deleteFlag = 0;
-        for(int i = 0; i < mCheckItemList.size(); i++){
-            if(mCheckItemList.get(i).getName().equals(itemName)){
-                mCheckItemList.remove(i);
-                notifyDataSetChanged();
-                deleteFlag = 1;
-                break;
-            }
-        }
-        if(deleteFlag == 0){
-            Toast.makeText(mContext, "No such item in the list!", Toast.LENGTH_SHORT).show();
-        }
+    public void updateCheckList(List<CheckItem> items){
+        mCheckItemList = items;
     }
 
     @NonNull
@@ -81,7 +51,9 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.Chec
         holder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                mCheckItemList.get(position).setCheck(b);
+                CheckItem item = mCheckItemList.get(position);
+                item.setCheck(b);
+                mChangeItemStateListener.changeItemState(item.getName(),b);
             }
         });
         holder.mCheckBox.setChecked(mCheckItemList.get(position).isCheck());
@@ -89,7 +61,7 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.Chec
 
     @Override
     public int getItemCount() {
-        return mCheckItemList.size();
+        return mCheckItemList == null? 0 : mCheckItemList.size();
     }
 
 

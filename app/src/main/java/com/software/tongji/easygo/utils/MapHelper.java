@@ -34,8 +34,20 @@ public class MapHelper {
             put("henan","河南省");put("xianggang","香港");put("heilongjiang","黑龙江");put("hunan","湖南省");put("hubei","湖北省");
             put("jilin","吉林省");put("jiangsu","江苏省");put("jiangxi","江西省");put("liaoning","辽宁省");put("aomen","澳门");
             put("neimenggu","内蒙古");put("ningxia","宁夏区");put("qinghai","青海省");put("shaanxi","陕西省");put("sichuan","四川省");
-            put("shandong","新疆区");put("shanghai","上海市");put("shanxi","山西省");put("tianjin","天津市");put("taiwan","台湾");
+            put("shandong","山东省");put("shanghai","上海市");put("shanxi","山西省");put("tianjin","天津市");put("taiwan","台湾");
             put("xinjiang","新疆区");put("xizang","西藏区");put("yunnan","云南省");put("zhejiang","浙江省");
+        }
+    };
+
+    public static HashMap<String,String> provinceBrief = new HashMap<String, String>(){
+        {
+            put("安徽","安徽省");put("北京","北京市");put("重庆","重庆市");put("福建","福建省");put("广东","广东省");
+            put("甘肃","甘肃省");put("广西","广西省");put("贵州","贵州省");put("海南","海南省");put("河北","河北省");
+            put("河南","河南省");put("香港","香港");put("黑龙","黑龙江");put("湖南","湖南省");put("湖北","湖北省");
+            put("吉林","吉林省");put("江苏","江苏省");put("江西","江西省");put("辽宁","辽宁省");put("澳门","澳门");
+            put("内蒙","内蒙古");put("宁夏","宁夏区");put("青海","青海省");put("陕西","陕西省");put("四川","四川省");
+            put("山东","山东省");put("上海","上海市");put("山西","山西省");put("天津","天津市");put("台湾","台湾");
+            put("新疆","新疆区");put("西藏","西藏区");put("云南","云南省");put("浙江","浙江省");
         }
     };
     /**  

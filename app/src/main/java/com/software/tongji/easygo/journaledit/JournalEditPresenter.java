@@ -19,4 +19,10 @@ public class JournalEditPresenter {
         JournalLab.get(mContext).updateJournal(journal);
         mJournalEditView.dismissLoadingDialog();
     }
+
+    public void addJournal(Journal journal){
+        mJournalEditView.showLoadingDialog();
+        JournalLab.get(mContext).addJournal(journal);
+        mJournalEditView.dismissLoadingDialog();
+    }
 }

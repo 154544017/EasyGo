@@ -6,8 +6,11 @@ import com.software.tongji.easygo.bean.UserData;
 
 import java.util.List;
 
+import okhttp3.FormBody;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import retrofit2.http.Body;
+import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
@@ -37,7 +40,11 @@ public interface ApiService {
     @POST("journal/post/{user}")
     Observable<BaseResponse<Void>> postJournals(@Path("user") String userName,
                                                 @Part("journal") RequestBody journalJson,
-                                                @Part MultipartBody.Part image);
+                                                @Part MultipartBody.Part part);
+
+    @POST("journal/delete/{user}")
+    Observable<BaseResponse<Void>> deleteJournal(@Path("user") String userName,
+                                                 @Body FormBody body);
 
     @GET("attraction/getAll")
     Observable<BaseResponse<List<Attraction>>> getAllAttractions();
@@ -45,5 +52,7 @@ public interface ApiService {
     @GET("attraction/{provinceName}")
     Observable<BaseResponse<List<Attraction>>> getAttractionsByProvince(@Path("provinceName") String provinceName);
 
+    @GET("attraction/getRandom")
+    Observable<BaseResponse<Attraction>> getRandomAttraction();
 
 }

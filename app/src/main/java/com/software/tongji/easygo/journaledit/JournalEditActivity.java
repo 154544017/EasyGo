@@ -34,6 +34,7 @@ import com.software.tongji.easygo.inputTips.InputTipsActivity;
 import com.software.tongji.easygo.newschedule.NewScheduleActivity;
 import com.software.tongji.easygo.utils.FileUtil;
 import com.software.tongji.easygo.utils.ImageUtil;
+import com.software.tongji.easygo.utils.MapHelper;
 
 import java.io.File;
 import java.util.Calendar;
@@ -72,6 +73,7 @@ public class JournalEditActivity extends AppCompatActivity implements JournalEdi
     private Journal mJournal;
     private Dialog mDialog;
     private JournalEditPresenter mPresenter;
+    private String mJournalId;
 
     public static Intent newIntent(Context packageContext, String uuid){
         Intent intent = new Intent(packageContext, JournalEditActivity.class);
@@ -90,16 +92,19 @@ public class JournalEditActivity extends AppCompatActivity implements JournalEdi
         mPresenter = new JournalEditPresenter();
         mPresenter.bind(this, this);
 
-        String journalId = getIntent().getStringExtra(EXTRA_JOURNAL_ID);
-        mJournal = JournalLab.get(this).getJournal(journalId);
+        mJournalId = getIntent().getStringExtra(EXTRA_JOURNAL_ID);
+        if(!mJournalId.equals("add")) {
+            mJournal = JournalLab.get(this).getJournal(mJournalId);
+            mNewJournalTitle.setText(mJournal.getTitle());
+            mNewJournalContent.setText(mJournal.getContent());
+            mNewJournalDate.setText(mJournal.getDate());
+            mNewJournalFriends.setText(mJournal.getFriends());
+            mNewJournalLocation.setText(mJournal.getLocation());
+        }else{
+            mJournal = new Journal();
+        }
         mCoverFile = JournalLab.get(this).getCoverFIle(mJournal);
         mNewJournalDate.setInputType(InputType.TYPE_NULL);
-
-        mNewJournalTitle.setText(mJournal.getTitle());
-        mNewJournalContent.setText(mJournal.getContent());
-        mNewJournalDate.setText(mJournal.getDate());
-        mNewJournalFriends.setText(mJournal.getFriends());
-        mNewJournalLocation.setText(mJournal.getLocation());
 
         mNewJournalLocation.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -143,7 +148,9 @@ public class JournalEditActivity extends AppCompatActivity implements JournalEdi
             public void onClick(View view) {
                 Intent intent = new Intent();
                 if(mNewJournalTitle.getText().toString().length() < 1){
-                    Toast.makeText(JournalEditActivity.this, "Please fill the title before your commit!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(JournalEditActivity.this, "请为游记添加题目", Toast.LENGTH_SHORT).show();
+                }else if(!mCoverFile.exists()){
+                    Toast.makeText(JournalEditActivity.this, "请为游记选一张合适的照片", Toast.LENGTH_SHORT).show();
                 }else{
                     mJournal.setCoverUrl(mCoverFile.getPath());
                     mJournal.setTitle( mNewJournalTitle.getText().toString());
@@ -151,8 +158,11 @@ public class JournalEditActivity extends AppCompatActivity implements JournalEdi
                     mJournal.setContent(mNewJournalContent.getText().toString());
                     mJournal.setFriends(mNewJournalFriends.getText().toString());
                     mJournal.setLocation(mNewJournalLocation.getText().toString());
-                    mPresenter.saveJournal(mJournal);
-
+                    if(mJournalId.equals("add")){
+                        mPresenter.addJournal(mJournal);
+                    }else {
+                        mPresenter.saveJournal(mJournal);
+                    }
                     setResult(RESULT_OK, intent);
                     finish();
                 }
@@ -238,6 +248,8 @@ public class JournalEditActivity extends AppCompatActivity implements JournalEdi
                 final Tip tip = data.getParcelableExtra("tip");
                 if (tip.getName() != null) {
                     mNewJournalLocation.setText(tip.getName());
+                    String province = tip.getDistrict().substring(0,2);
+                    mJournal.setProvince(MapHelper.provinceBrief.get(province));
                 }
             }
         }

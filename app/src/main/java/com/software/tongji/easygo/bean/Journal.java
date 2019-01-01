@@ -4,9 +4,10 @@ import com.google.gson.annotations.SerializedName;
 
 import org.litepal.crud.LitePalSupport;
 
+import java.io.Serializable;
 import java.util.UUID;
 
-public class Journal extends LitePalSupport {
+public class Journal extends LitePalSupport implements Serializable {
     @SerializedName("id")
     private String mId;
     @SerializedName("cover")
@@ -21,6 +22,17 @@ public class Journal extends LitePalSupport {
     private String mFriends;
     @SerializedName("content")
     private String mContent;
+    @SerializedName("province")
+    private String mProvince;
+
+    public String getProvince() {
+        return mProvince;
+    }
+
+    public void setProvince(String province) {
+        mProvince = province;
+    }
+
     public String getCoverUrl() {
         return mCoverUrl;
     }

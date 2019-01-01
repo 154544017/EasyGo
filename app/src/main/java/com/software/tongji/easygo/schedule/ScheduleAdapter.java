@@ -25,9 +25,12 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
     private List<Schedule> mScheduleList;
     private ScheduleListPresenter mScheduleListPresenter;
 
-    public ScheduleAdapter(List<Schedule> scheduleList, ScheduleListPresenter scheduleListPresenter){
-        mScheduleList = scheduleList;
+    public ScheduleAdapter(ScheduleListPresenter scheduleListPresenter){
         mScheduleListPresenter = scheduleListPresenter;
+    }
+
+    public void updateList(List<Schedule> schedules){
+        mScheduleList = schedules;
     }
 
     @NonNull
@@ -64,20 +67,17 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
 
     @Override
     public int getItemCount() {
-        return mScheduleList.size();
+        return mScheduleList == null? 0 : mScheduleList.size();
     }
 
     @Override
     public void onItemMove(int fromPosition, int toPosition) {
-        Collections.swap(mScheduleList, fromPosition, toPosition);
-        notifyItemMoved(fromPosition, toPosition);
+        mScheduleListPresenter.swapSchedule(mScheduleList.get(fromPosition),mScheduleList.get(toPosition));
     }
 
     @Override
     public void onItemDismiss(int position) {
-        mScheduleList.remove(position);
-        mScheduleListPresenter.checkScheduleList();
-        notifyItemRemoved(position);
+        mScheduleListPresenter.deleteSchedule(mScheduleList.get(position));
     }
 
     public class ScheduleHolder extends RecyclerView.ViewHolder{

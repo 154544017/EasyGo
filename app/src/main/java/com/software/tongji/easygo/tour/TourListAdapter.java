@@ -35,8 +35,7 @@ public class TourListAdapter extends RecyclerView.Adapter<TourListAdapter.TourHo
 
     @Override
     public void onBindViewHolder(@NonNull TourHolder holder, int position) {
-        holder.mTourTitle.setText(mTourList.get(position).getTitle());
-        holder.mTourRemark.setText(mTourList.get(position).getRemark());
+        holder.bind(mTourList.get(position));
     }
 
     @Override
@@ -51,15 +50,21 @@ public class TourListAdapter extends RecyclerView.Adapter<TourListAdapter.TourHo
         @BindView(R.id.tour_remark)
         TextView mTourRemark;
 
+        private Tour mTour;
         public TourHolder(View itemView){
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
         }
 
+        public void bind(Tour tour){
+            mTour = tour;
+            mTourTitle.setText(tour.getTitle());
+            mTourRemark.setText(tour.getRemark());
+        }
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(view.getContext(), NavigationActivity.class);
+            Intent intent = NavigationActivity.newIntentGotoSchedule(view.getContext(),mTour.getId());
             view.getContext().startActivity(intent);
         }
     }

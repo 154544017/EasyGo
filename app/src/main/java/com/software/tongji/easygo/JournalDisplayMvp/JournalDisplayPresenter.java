@@ -21,16 +21,11 @@ public class JournalDisplayPresenter {
     private JournalLab mJournalLab;
     private List<Journal> mJournals;
 
-    public void addJournal(Journal journal){
-        mJournalLab.addJournal(journal);
-    }
-
     public void deleteJournal(Journal journal){
         mJournalLab.deleteJournal(journal);
     }
 
     public List<Journal> getJournals(){
-
         mJournalDisplayView.showLoadingDialog();
         rx.Observable.create(new rx.Observable.OnSubscribe<List<Journal>>() {
             @Override
@@ -58,6 +53,39 @@ public class JournalDisplayPresenter {
             }
         });
         return mJournals;
+    }
+
+    public void getJournalsByProvince(String provinceName){
+        mJournalDisplayView.showLoadingDialog();
+        rx.Observable.create(new rx.Observable.OnSubscribe<List<Journal>>() {
+            @Override
+            public void call(Subscriber<? super List<Journal>> subscriber) {
+                List<Journal> journals = mJournalLab.getJournalListByProvince(provinceName);
+                subscriber.onNext(journals);
+                subscriber.onCompleted();
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<Journal>>() {
+                    @Override
+                    public void onCompleted() {
+                        mJournalDisplayView.dismissLoadingDialog();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<Journal> journals) {
+                        if (journals.size() > 0) {
+                            mJournalDisplayView.updateAdapter(journals);
+                        }else{
+                            mJournalDisplayView.noJournals();
+                        }
+                    }
+                });
     }
 
     public void bind(Context context, JournalDisplayView journalDisplayView){

@@ -34,6 +34,8 @@ public class NewScheduleActivity extends AppCompatActivity implements NewSchedul
     public static final String NEW_SCHEDULE_TIME = "new_schedule_time";
     public static final String NEW_SCHEDULE_COST = "new_schedule_cost";
     public static final String NEW_SCHEDULE_REMARK = "new_schedule_remark";
+    public static final String NEW_SCHEDULE_LAT = "new_schedule_lat";
+    public static final String NEW_SCHEDULE_LON = "new_schedule_lon";
 
     private static final int REQUEST_PLACE = 1;
 
@@ -52,6 +54,8 @@ public class NewScheduleActivity extends AppCompatActivity implements NewSchedul
     @BindView(R.id.new_schedule_ok)
     FloatingActionButton mNewScheduleOk;
 
+    private double mLatitude;
+    private double mLongitude;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,12 +112,14 @@ public class NewScheduleActivity extends AppCompatActivity implements NewSchedul
                 if(mScheduleAddress.getText().toString().length() < 1){
                     Toast.makeText(NewScheduleActivity.this, "Please fill the address before your commit!", Toast.LENGTH_SHORT).show();
                 }else{
-                    intent.putExtra(NEW_SCHEDULE_ADDRESS, mScheduleAddress.getText().toString());
+                    intent.putExtra(NEW_SCHEDULE_ADDRESS,mScheduleAddress.getText().toString());
                     intent.putExtra(NEW_SCHEDULE_DATE, mScheduleDate.getText().toString());
                     intent.putExtra(NEW_SCHEDULE_TIME, mScheduleTime.getText().toString());
                     intent.putExtra(NEW_SCHEDULE_TYPE, mScheduleType.getSelectedItem().toString());
                     intent.putExtra(NEW_SCHEDULE_COST, mScheduleCost.getText().toString());
                     intent.putExtra(NEW_SCHEDULE_REMARK, mScheduleRemark.getText().toString());
+                    intent.putExtra(NEW_SCHEDULE_LAT, mLatitude);
+                    intent.putExtra(NEW_SCHEDULE_LON, mLongitude);
                     setResult(RESULT_OK, intent);
                     finish();
                 }
@@ -156,6 +162,8 @@ public class NewScheduleActivity extends AppCompatActivity implements NewSchedul
                 final Tip tip = data.getParcelableExtra("tip");
                 if (tip.getName() != null) {
                     mScheduleAddress.setText(tip.getName());
+                    mLatitude = tip.getPoint().getLatitude();
+                    mLongitude = tip.getPoint().getLongitude();
                 }
             }
         }

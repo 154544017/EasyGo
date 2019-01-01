@@ -16,6 +16,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,10 +24,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.software.tongji.easygo.R;
 import com.software.tongji.easygo.about.AboutActivity;
 import com.software.tongji.easygo.bean.Schedule;
-import com.software.tongji.easygo.bean.ScheduleLab;
 import com.software.tongji.easygo.bean.Tour;
 import com.software.tongji.easygo.bean.TourLab;
 import com.software.tongji.easygo.checklist.CheckListActivity;
@@ -35,6 +36,8 @@ import com.software.tongji.easygo.tour.SaveTourActivity;
 import com.software.tongji.easygo.tour.TourListActivity;
 
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -42,6 +45,7 @@ public class ScheduleListFragment extends Fragment implements ScheduleListView {
 
     public static final int REQUEST_CODE_NEW_SCHEDULE = 0;
     public static final int REQUEST_CODE_SAVE_SHCEDULE = 1;
+    private static final String DEFAULT_TOUR_ID = "00000000";
 
     @BindView(R.id.schedule_recycler_view)
     RecyclerView mRecyclerView;
@@ -62,9 +66,11 @@ public class ScheduleListFragment extends Fragment implements ScheduleListView {
     TextView mNoScheduleAlert;
 
     private ActionBarDrawerToggle mActionBarDrawerToggle;
-
     private ScheduleListPresenter mScheduleListPresenter = new ScheduleListPresenter();
     private ScheduleAdapter mScheduleAdapter;
+    private MaterialDialog mDialog;
+    private String mTourId;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,7 +85,6 @@ public class ScheduleListFragment extends Fragment implements ScheduleListView {
 
         ButterKnife.bind(this, view);
         mScheduleListPresenter.bind(this);
-        mScheduleListPresenter.checkScheduleList();
 
         ((AppCompatActivity)getActivity()).setSupportActionBar(mScheduleToolBar);
 
@@ -132,8 +137,7 @@ public class ScheduleListFragment extends Fragment implements ScheduleListView {
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setNestedScrollingEnabled(false);
 
-        //mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mScheduleAdapter = new ScheduleAdapter(ScheduleLab.get(getContext()).getScheduleList(), mScheduleListPresenter);
+        mScheduleAdapter = new ScheduleAdapter(mScheduleListPresenter);
         mRecyclerView.setAdapter(mScheduleAdapter);
         mRecyclerView.addItemDecoration(new SimplePaddingDecoration(getContext()));
 
@@ -176,20 +180,42 @@ public class ScheduleListFragment extends Fragment implements ScheduleListView {
 
         if(requestCode == REQUEST_CODE_NEW_SCHEDULE){
             String address = data.getStringExtra(NewScheduleActivity.NEW_SCHEDULE_ADDRESS);
+            double latitude = data.getDoubleExtra(NewScheduleActivity.NEW_SCHEDULE_LAT,0);
+            double longitude = data.getDoubleExtra(NewScheduleActivity.NEW_SCHEDULE_LON,0);
             String date = data.getStringExtra(NewScheduleActivity.NEW_SCHEDULE_DATE);
             String time = data.getStringExtra(NewScheduleActivity.NEW_SCHEDULE_TIME);
             String type = data.getStringExtra(NewScheduleActivity.NEW_SCHEDULE_TYPE);
             String cost = data.getStringExtra(NewScheduleActivity.NEW_SCHEDULE_COST);
             String remark = data.getStringExtra(NewScheduleActivity.NEW_SCHEDULE_REMARK);
-            Schedule schedule = new Schedule(address, date, time, type, cost, remark);
+            int position = mScheduleListPresenter.getNewSchedulePosition();
+            Schedule schedule = new Schedule(mTourId,address,latitude,longitude,date,time,type,cost,remark,position);
             mScheduleListPresenter.addSchedule(schedule);
-            mScheduleListPresenter.checkScheduleList();
-            mScheduleAdapter.notifyItemInserted(mScheduleListPresenter.getNewSchedulePosition());
+
         }else if(requestCode == REQUEST_CODE_SAVE_SHCEDULE){
             String title = data.getStringExtra(SaveTourActivity.NEW_TOUR_TITLE);
             String remark = data.getStringExtra(SaveTourActivity.NEW_TOUR_REMARK);
-            TourLab.get(getContext()).getTourList().add(new Tour(title, remark));
+            Tour tour = new Tour(title,remark);
+            mScheduleListPresenter.updateSchedules(mTourId, tour.getId());
+            TourLab.get(getContext()).addNewTour(tour);
+            mTourId = DEFAULT_TOUR_ID;
+
         }
+    }
+
+    public void getSchedules(){
+        if (mTourId == null) {
+            TourLab tourLab = TourLab.get(getContext());
+            if (tourLab.size() == 0) {
+                mTourId = DEFAULT_TOUR_ID;
+            } else {
+                mTourId = tourLab.latestTourId();
+            }
+        }
+        mScheduleListPresenter.getSchedules(mTourId);
+    }
+
+    public void setTourId(String tourId){
+        mTourId = tourId;
     }
 
     @Override
@@ -205,5 +231,35 @@ public class ScheduleListFragment extends Fragment implements ScheduleListView {
     @Override
     public void hideNoScheduleAlert() {
         mNoScheduleAlert.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showDialog() {
+        if (mDialog == null || mDialog.isCancelled()) {
+            mDialog = new MaterialDialog.Builder(getContext())
+                    .title(R.string.app_name)
+                    .content("Please Wait...")
+                    .progress(true, 0)
+                    .show();
+        }
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getSchedules();
+    }
+
+
+    @Override
+    public void dismissDialog() {
+        mDialog.dismiss();
+    }
+
+    @Override
+    public void refreshView(List<Schedule> scheduleList) {
+        mScheduleAdapter.updateList(scheduleList);
+        mScheduleAdapter.notifyDataSetChanged();
     }
 }

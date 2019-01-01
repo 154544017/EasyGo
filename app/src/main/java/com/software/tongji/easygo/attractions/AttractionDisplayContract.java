@@ -8,6 +8,7 @@ public class AttractionDisplayContract {
     interface AttractionDisplayPresenter {
         void getAllAttractions();
         void getAttractionsByProvince(String query);
+
     }
 
     interface AttractionDisplayView {
@@ -15,5 +16,6 @@ public class AttractionDisplayContract {
         void dismissLoading();
         void refreshUI(List<Attraction> attractionList);
         void showError(String message);
+        void findNoAttractions();
     }
 }

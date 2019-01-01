@@ -7,6 +7,7 @@ import com.software.tongji.easygo.net.ApiService;
 import com.software.tongji.easygo.net.BaseResponse;
 import com.software.tongji.easygo.net.DefaultObserver;
 import com.software.tongji.easygo.net.RetrofitServiceManager;
+import com.software.tongji.easygo.utils.MapHelper;
 
 import java.util.List;
 
@@ -62,7 +63,7 @@ public class AttractionDisplayPresenterImpl implements AttractionDisplayPresente
         RetrofitServiceManager.getInstance()
                 .getRetrofit()
                 .create(ApiService.class)
-                .getAttractionsByProvince(query)
+                .getAttractionsByProvince(MapHelper.provincePinYin.get(query))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DefaultObserver<BaseResponse<List<Attraction>>>(){
@@ -79,7 +80,7 @@ public class AttractionDisplayPresenterImpl implements AttractionDisplayPresente
                     @Override
                     public void onFail(String message) {
                         mAttractionDisplayView.dismissLoading();
-                        mAttractionDisplayView.showError(message);
+                        mAttractionDisplayView.findNoAttractions();
                     }
 
                     @Override

@@ -87,4 +87,7 @@
     <string name="tour_title">Title</string>
     <string name="tour_remark">TourRemark</string>
     <string name="tour_list">Tour List</string>
+
+    <string name="no_attraction">没有找到景点推荐\n请尝试换一个省份！</string>
+    <string name="no_journals">该省还没有添加游记\n请尝试换一个省份或添加游记！</string>
 </resources>

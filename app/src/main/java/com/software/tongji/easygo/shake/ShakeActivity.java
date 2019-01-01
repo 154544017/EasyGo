@@ -1,5 +1,6 @@
 package com.software.tongji.easygo.shake;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -16,13 +17,24 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.software.tongji.easygo.R;
+import com.software.tongji.easygo.bean.Attraction;
+import com.software.tongji.easygo.bean.UserData;
+import com.software.tongji.easygo.details.DetailsActivity;
+import com.software.tongji.easygo.net.ApiService;
+import com.software.tongji.easygo.net.BaseResponse;
+import com.software.tongji.easygo.net.DefaultObserver;
+import com.software.tongji.easygo.net.RetrofitServiceManager;
+import com.software.tongji.easygo.utils.HttpUtils;
 
 import java.lang.ref.WeakReference;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class ShakeActivity extends AppCompatActivity implements SensorEventListener{
 
@@ -192,10 +204,46 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
                 public void onAnimationEnd(Animation animation) {
                     mTopLine.setVisibility(View.GONE);
                     mBottomLine.setVisibility(View.GONE);
+                    startNewActivity();
                 }
             });
         }
         mTopLayout.startAnimation(topAnim);
         mBottomLayout.startAnimation(bottomAnim);
+    }
+
+    private void startNewActivity() {
+        RetrofitServiceManager.getInstance()
+                .getRetrofit()
+                .create(ApiService.class)
+                .getRandomAttraction()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DefaultObserver<BaseResponse<Attraction>>() {
+                    @Override
+                    public void onSuccess(Object result) {
+                        Attraction attraction = (Attraction) result;
+                        jump(attraction);
+                    }
+
+                    @Override
+                    public void onFail(String message){
+                        showError(message);
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        showError(message);
+                    }
+                });
+    }
+
+    public void showError(String message){
+        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
+    }
+
+    public void jump(Attraction attraction){
+        Intent intent = DetailsActivity.newIntent(ShakeActivity.this, attraction);
+        startActivity(intent);
     }
 }

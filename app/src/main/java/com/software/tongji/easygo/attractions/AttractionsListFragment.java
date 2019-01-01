@@ -2,6 +2,7 @@ package com.software.tongji.easygo.attractions;
 
 
 import android.content.Intent;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -24,6 +26,7 @@ import com.software.tongji.easygo.inputProvince.InputProvinceAdapter;
 import com.software.tongji.easygo.shake.ShakeActivity;
 import com.software.tongji.easygo.utils.MapHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -31,6 +34,8 @@ import butterknife.ButterKnife;
 
 public class AttractionsListFragment extends Fragment implements AttractionDisplayContract.AttractionDisplayView {
 
+    @BindView(R.id.no_attractions)
+    TextView mNoAttractionView;
     @BindView(R.id.search_linear_layout)
     LinearLayout mLinearLayout;
     @BindView(R.id.attractions_recycler_view)
@@ -42,10 +47,12 @@ public class AttractionsListFragment extends Fragment implements AttractionDispl
     @BindView(R.id.shake_button)
     FloatingActionButton mShakeButton;
 
+    private static final String NO_DEFAULT = "is_not_jump_from_map";
     private MaterialDialog mDialog;
     private AttractionDisplayPresenterImpl mPresenter;
     private AttractionsAdapter mAttractionsAdapter;
     private InputProvinceAdapter mProvinceListAdapter;
+    private String mProvinceArg = NO_DEFAULT;
 
 
     @Override
@@ -117,9 +124,16 @@ public class AttractionsListFragment extends Fragment implements AttractionDispl
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String province = (String)parent.getItemAtPosition(position);
+                if(mNoAttractionView.getVisibility() == View.VISIBLE){
+                    mNoAttractionView.setVisibility(View.GONE);
+                }
                 mSearchView.setQueryHint(province);
                 mSearchView.clearFocus();
-                mPresenter.getAttractionsByProvince(MapHelper.provincePinYin.get(province));
+                if(province.equals("显示全部")){
+                    mPresenter.getAllAttractions();
+                } else {
+                    mPresenter.getAttractionsByProvince(province);
+                }
             }
         });
     }
@@ -141,6 +155,7 @@ public class AttractionsListFragment extends Fragment implements AttractionDispl
 
     @Override
     public void refreshUI(List<Attraction> attractionList) {
+        mNoAttractionView.setVisibility(View.GONE);
         mAttractionsAdapter.updateItemData(attractionList);
         mAttractionsAdapter.notifyDataSetChanged();
     }
@@ -150,4 +165,29 @@ public class AttractionsListFragment extends Fragment implements AttractionDispl
         Toast.makeText(getContext(),message,Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void findNoAttractions() {
+        List<Attraction> attractions = new ArrayList<>();
+        refreshUI(attractions);
+        mNoAttractionView.setVisibility(View.VISIBLE);
+        mNoAttractionView.bringToFront();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if(!hidden){
+            if(mProvinceArg.equals(NO_DEFAULT)){
+                return;
+            }else{
+                mSearchView.setQueryHint(mProvinceArg);
+                mPresenter.getAttractionsByProvince(mProvinceArg);
+                mProvinceArg = NO_DEFAULT;
+            }
+        }
+    }
+
+    public void setDefaultProvince(String province){
+        mProvinceArg = province;
+    }
 }

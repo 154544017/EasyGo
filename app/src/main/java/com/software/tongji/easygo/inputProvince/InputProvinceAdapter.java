@@ -22,13 +22,13 @@ public class InputProvinceAdapter extends BaseAdapter implements Filterable {
     public InputProvinceAdapter(Context context) {
         mContext = context;
         ArrayList<String> provinces = new ArrayList<String>(Arrays.asList(
-                "安徽省","北京市","重庆市","福建省","广东省",
+                "显示全部","北京市","重庆市","福建省","广东省",
                 "甘肃省","广西省","贵州省","海南省","河北省",
                 "河南省","香港","黑龙江","湖南省","湖北省",
                 "吉林省","江苏省","江西省","辽宁省","澳门",
                 "内蒙古","宁夏区","青海省","陕西省","四川省",
                 "山东省","上海市","山西省","天津市","台湾",
-                "新疆区","西藏区","云南省","浙江省"
+                "新疆区","西藏区","云南省","浙江省","安徽省"
         ));
         mListProvinces = provinces;
         mTempProvinces = provinces;

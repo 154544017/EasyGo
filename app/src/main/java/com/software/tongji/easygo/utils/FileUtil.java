@@ -1,9 +1,19 @@
 package com.software.tongji.easygo.utils;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.FutureTarget;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.concurrent.ExecutionException;
 
 public class FileUtil {
     public static void copyFile(String oldPath, String newPath) {
@@ -24,4 +34,26 @@ public class FileUtil {
             e.printStackTrace();
         }
     }
+
+    public static void saveImage(Context context, String imgUrl, String savePath){
+        RequestOptions options = new RequestOptions()
+                .override(Target.SIZE_ORIGINAL); //指定图片大小(原图)
+        FutureTarget<File> target = Glide.with(context)
+                .asFile()
+                .load(imgUrl)
+                .apply(options)
+                .submit();
+        try {
+            final File imageFile = target.get();
+            copyFile(imageFile.getPath(), savePath);
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
 }

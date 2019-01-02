@@ -17,6 +17,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -204,8 +205,14 @@ public class ScheduleListFragment extends Fragment implements ScheduleListView {
     }
 
     public void resetToolBar(){
-        if(mTourId != null && !mTourId.equals(DEFAULT_TOUR_ID)){
-            String title = TourLab.get(getContext()).getTourTitle(mTourId);
+        if(mTourId != null){
+            String title;
+            if(mTourId.equals(DEFAULT_TOUR_ID))
+            {
+                title = getResources().getString(R.string.schedule_title);
+            }else {
+                title = TourLab.get(getContext()).getTourTitle(mTourId);
+            }
             mCollapsingToolbar.setTitle(title);
         }
     }
@@ -242,6 +249,7 @@ public class ScheduleListFragment extends Fragment implements ScheduleListView {
     @Override
     public void onResume() {
         super.onResume();
+        Log.e("schedule","OnResume");
         getSchedules();
     }
 

@@ -6,12 +6,12 @@
     <version value="10" />
 
     <list>
-        <mapping class='com.software.tongji.easygo.bean.Province' />
-        <mapping class='com.software.tongji.easygo.bean.Journal' />
-        <mapping class='com.software.tongji.easygo.bean.Attraction' />
-        <mapping class="com.software.tongji.easygo.bean.CheckItem" />
-        <mapping class="com.software.tongji.easygo.bean.Schedule" />
-        <mapping class="com.software.tongji.easygo.bean.Tour" />
+        <mapping class='com.software.tongji.easygo.Bean.Province' />
+        <mapping class='com.software.tongji.easygo.Bean.Journal' />
+        <mapping class='com.software.tongji.easygo.Bean.Attraction' />
+        <mapping class="com.software.tongji.easygo.Bean.CheckItem" />
+        <mapping class="com.software.tongji.easygo.Bean.Schedule" />
+        <mapping class="com.software.tongji.easygo.Bean.Tour" />
     </list>
 
 </litepal>

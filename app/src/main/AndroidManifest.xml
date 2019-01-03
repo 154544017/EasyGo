@@ -32,7 +32,7 @@
             android:value="454bde9b9ddd414955ceee80012e27bc" />
 
         <activity
-            android:name=".login.LoginActivity"
+            android:name=".Login.LoginActivity"
             android:theme="@style/AppNoBarTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -41,42 +41,42 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".navigation.NavigationActivity"
+            android:name=".Navigation.NavigationActivity"
             android:theme="@style/AppNoBarTheme" />
         <activity
-            android:name=".details.DetailsActivity"
+            android:name=".AttractinonsModule.AttractionsDetails.DetailsActivity"
             android:theme="@style/AppNoBarTheme" />
         <activity
-            android:name=".newschedule.NewScheduleActivity"
+            android:name=".TravelPlanModule.NewSchedule.NewScheduleActivity"
             android:theme="@style/AppNoBarTheme" />
         <activity
-            android:name=".journaledit.JournalEditActivity"
+            android:name=".JournalModule.JournalEdit.JournalEditActivity"
             android:theme="@style/AppNoBarTheme" />
         <activity
-            android:name=".journal.JournalShowActivity"
+            android:name=".JournalModule.JournalShow.JournalShowActivity"
             android:theme="@style/AppNoBarTheme" />
         <activity
-            android:name=".about.AboutActivity"
+            android:name=".DrawerModule.About.AboutActivity"
             android:theme="@style/AppNoBarTheme" />
         <activity
-            android:name=".checklist.CheckListActivity"
+            android:name=".DrawerModule.CheckList.CheckListActivity"
             android:theme="@style/AppNoBarTheme" />
         <activity
-            android:name=".shake.ShakeActivity"
+            android:name=".AttractinonsModule.Shake.ShakeActivity"
             android:theme="@style/AppNoBarTheme" />
         <activity
-            android:name=".tour.SaveTourActivity"
+            android:name=".DrawerModule.Tour.SaveTourActivity"
             android:theme="@style/AppNoBarTheme" />
         <activity
-            android:name=".tour.TourListActivity"
+            android:name=".DrawerModule.Tour.TourListActivity"
             android:theme="@style/AppNoBarTheme" />
         <activity
-            android:name=".inputTips.InputTipsActivity"
+            android:name=".InputTipModule.InputTips.InputTipsActivity"
             android:theme="@style/AppNoBarTheme" />
         <activity
-            android:name=".lineplanning.LinePlanningActivity"
+            android:name=".TravelPlanModule.RoutePlanning.RoutePlanningActivity"
             android:theme="@style/AppNoBarTheme" />
-        <activity android:name=".ScheduleShow.ScheduleShow"
+        <activity android:name=".TravelPlanModule.ScheduleShow.ScheduleShow"
             android:theme="@style/AppNoBarTheme"/>
     </application>
 

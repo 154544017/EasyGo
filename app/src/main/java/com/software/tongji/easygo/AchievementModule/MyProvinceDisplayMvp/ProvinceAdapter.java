@@ -53,6 +53,7 @@ public class ProvinceAdapter extends RecyclerView.Adapter<ProvinceAdapter.ViewHo
             mProvince = province;
             provinceName.setText(province.getName());
             if(province.isLocked()) {
+                //未解锁则将省份图片进行灰度处理
                 RequestOptions options = new RequestOptions()
                         .placeholder(R.drawable.province_place_holder)
                         .centerCrop();

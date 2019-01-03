@@ -18,7 +18,7 @@ import com.software.tongji.easygo.Bean.Province;
 
 import java.util.ArrayList;
 import java.util.List;
-
+//自定义MapView，可以点选，缩放，移动
 public class MyMapView extends View {
     private static final String UNSELECTED_PROVINCE_LINE_COLOR = "#00574B";
     private static final String SELECTED_PROVINCE_LINE_COLOR = "#D81B60";

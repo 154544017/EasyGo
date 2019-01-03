@@ -206,6 +206,8 @@ public class JournalEditActivity extends AppCompatActivity implements JournalEdi
         }
     }
 
+    //当选中相片时，将该相片存储到其文件目录下,并更新ImageView
+    //当选择地点时，根据返回Tip的District的前两个字符判断该地点的省份并记录(便于过滤)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == REQUEST_ALBUM){
@@ -216,7 +218,7 @@ public class JournalEditActivity extends AppCompatActivity implements JournalEdi
             FileUtil.copyFile(imagePath, mCoverFile.getPath());
             updateCoverImage();
         }else if(requestCode == REQUEST_PLACE){
-            if(resultCode == InputTipsActivity.RESULT_CODE_INPUTTIPS){
+            if(resultCode == InputTipsActivity.RESULT_CODE_INPUT_TIPS){
                 final Tip tip = data.getParcelableExtra("tip");
                 if (tip.getName() != null) {
                     mNewJournalLocation.setText(tip.getName());

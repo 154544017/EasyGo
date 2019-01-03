@@ -128,7 +128,7 @@ public class NewScheduleActivity extends AppCompatActivity implements NewSchedul
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_PLACE) {
-            if (resultCode == InputTipsActivity.RESULT_CODE_INPUTTIPS) {
+            if (resultCode == InputTipsActivity.RESULT_CODE_INPUT_TIPS) {
                 final Tip tip = data.getParcelableExtra("tip");
                 if (tip.getName() != null && tip.getPoint() != null) {
                     mScheduleAddress.setText(tip.getName());

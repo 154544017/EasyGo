@@ -108,6 +108,7 @@ public class ProvinceDialogFragment extends DialogFragment {
 
         Province province = ProvinceLab.getProvinceLab(getActivity()).getProvinceByName(provinceName);
         if(province.isLocked()){
+            //未解锁省份图片背景进行虚化处理
             RequestOptions options = getRequestOption();
             Glide.with(this).load(HttpUtils.getProvinceDisplayImageUrl(province.getPinYin()))
                     .apply(options)
@@ -126,6 +127,7 @@ public class ProvinceDialogFragment extends DialogFragment {
         }
         mLockedBack.setOnClickListener(v -> ProvinceDialogFragment.this.dismiss());
 
+        //点击解锁图标或文字，则重置背景图片并隐藏无关的控件
         mUnlockText.setOnClickListener(v -> {
             sendRequest(provinceName);
             RequestOptions requestOptions = getRequestOption();

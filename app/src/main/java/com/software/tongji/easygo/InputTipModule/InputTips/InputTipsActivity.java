@@ -22,7 +22,7 @@ public class InputTipsActivity extends AppCompatActivity{
     private InputTipsAdapter mInputTipsAdapter;
 
     public static String DEFAULT_CITY = "北京";
-    public static final int RESULT_CODE_INPUTTIPS = 101;
+    public static final int RESULT_CODE_INPUT_TIPS = 101;
     public static final int REQUEST_SUC = 1000;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +77,7 @@ public class InputTipsActivity extends AppCompatActivity{
                 Tip tip = (Tip) parent.getItemAtPosition(position);
                 Intent intent = new Intent();
                 intent.putExtra("tip", tip);
-                setResult(RESULT_CODE_INPUTTIPS, intent);
+                setResult(RESULT_CODE_INPUT_TIPS, intent);
                 InputTipsActivity.this.finish();
             }
         });

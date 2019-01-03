@@ -75,6 +75,7 @@ public class JournalAdapter extends RecyclerView.Adapter<JournalAdapter.ViewHold
             date.setText(journal.getDate());
             city.setText(journal.getLocation());
             if(journal.getCoverUrl() != null){
+                //因为更新游记后Glide因为缓存不更新图片，所以取消掉本地缓存
                 RequestOptions options = new RequestOptions()
                         .placeholder(R.mipmap.ic_launcher)
                         .centerCrop()

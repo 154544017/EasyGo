@@ -53,6 +53,7 @@ public class DetailsActivity extends AppCompatActivity{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //从Intent中获取该景点
         Attraction attraction = (Attraction) getIntent().getSerializableExtra(EXTRA_ATTRACTION);
 
         if(Build.VERSION.SDK_INT >= 21){

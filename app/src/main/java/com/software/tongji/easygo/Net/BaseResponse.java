@@ -2,6 +2,7 @@ package com.software.tongji.easygo.Net;
 
 import com.google.gson.annotations.SerializedName;
 
+//服务器返回的统一格式
 public class BaseResponse<T> {
     private String desc;
     private int status;

@@ -18,6 +18,7 @@ import com.software.tongji.easygo.R;
 
 import butterknife.Unbinder;
 
+//成就模块的控制fragment，用于显示成就地图还是成就省份列表
 public class AchievementFragment extends Fragment{
     private Unbinder mUnBinder;
     private FragmentManager mFragmentManager;

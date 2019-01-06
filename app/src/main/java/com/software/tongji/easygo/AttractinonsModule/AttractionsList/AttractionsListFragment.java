@@ -42,11 +42,13 @@ public class AttractionsListFragment extends Fragment implements AttractionDispl
     @BindView(R.id.shake_button)
     FloatingActionButton mShakeButton;
 
-    private static final String NO_DEFAULT = "is_not_jump_from_map";
     private MaterialDialog mDialog;
     private AttractionDisplayPresenterImpl mPresenter;
     private AttractionsAdapter mAttractionsAdapter;
     private InputProvinceAdapter mProvinceListAdapter;
+    //默认省份过滤(显示全部)
+    private static final String NO_DEFAULT = "is_not_jump_from_map";
+    //记录当前过滤的province
     private String mProvinceArg = NO_DEFAULT;
 
 
@@ -151,6 +153,7 @@ public class AttractionsListFragment extends Fragment implements AttractionDispl
         Toast.makeText(getContext(),message,Toast.LENGTH_LONG).show();
     }
 
+    //当没有找到景点时，显示无景点的View
     @Override
     public void findNoAttractions() {
         List<Attraction> attractions = new ArrayList<>();
@@ -159,6 +162,7 @@ public class AttractionsListFragment extends Fragment implements AttractionDispl
         mNoAttractionView.bringToFront();
     }
 
+    //当该Fragment被显示时，更新景点列表
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);

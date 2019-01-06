@@ -45,6 +45,7 @@ public class MapFragment extends Fragment implements MapContract.MapView {
         mProvinces = view.findViewById(R.id.province_achievement);
         mJournals = view.findViewById(R.id.journal_achievement);
         mMapView.setOnChoseProvince(provinceName -> {
+            //点击省份时，跳转到ProvinceDialogFragment让用户选择操作
             Toast.makeText(getActivity(), provinceName,Toast.LENGTH_SHORT).show();
             FragmentManager manager = getActivity().getSupportFragmentManager();
             ProvinceDialogFragment fragment = ProvinceDialogFragment.newInstance(provinceName);
@@ -57,6 +58,7 @@ public class MapFragment extends Fragment implements MapContract.MapView {
         return view;
     }
 
+    //当解锁命令传回时，通过Presenter更新数据库
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == Activity.RESULT_OK){
@@ -67,6 +69,7 @@ public class MapFragment extends Fragment implements MapContract.MapView {
         }
     }
 
+    //更新成就地图下方的显示
     public void updateAchievements(){
         int provinceCount = ProvinceLab.getProvinceLab(getContext()).getUnlockedSize();
         int journalCount = JournalLab.get(getContext()).size();

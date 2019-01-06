@@ -51,6 +51,7 @@ public interface ApiService {
     @GET("attraction/{provinceName}")
     Observable<BaseResponse<List<Attraction>>> getAttractionsByProvince(@Path("provinceName") String provinceName);
 
+    //获取随机景点推荐
     @GET("attraction/getRandom")
     Observable<BaseResponse<Attraction>> getRandomAttraction();
 

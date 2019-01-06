@@ -29,8 +29,10 @@ public class ProvinceDisplayFragment extends Fragment {
             NavigationActivity activity = (NavigationActivity) getActivity();
             if (activity != null) {
                 if (mode == 0) {
+                    //0代表未解锁，跳转到该省份的景点介绍界面
                     activity.changeSearchFragmentWithArgs(province);
                 } else {
+                    //1代表已解锁，跳转到该省份的游记展示界面
                     activity.changeJournalFragmentWithArgs(province);
                 }
             }

@@ -34,6 +34,7 @@ public abstract class DefaultObserver<T extends BaseResponse> implements Observe
 
 
 
+    //将数据从Response中剥离出来返回
     @Override
     public void onNext(@NonNull T t) {
         if(t.isSuccess()){

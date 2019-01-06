@@ -84,6 +84,7 @@ public class InputProvinceAdapter extends BaseAdapter implements Filterable {
         protected FilterResults performFiltering(CharSequence constraint) {
 
             List<String> newProvince = new ArrayList<>();
+            //遍历Provinces，如果包含constraint，就添加到newProvince
             if (constraint != null && constraint.toString().trim().length() > 0) {
                 for (int i = 0; i < mListProvinces.size(); i++) {
                     String content = mListProvinces.get(i);

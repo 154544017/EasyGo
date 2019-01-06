@@ -13,7 +13,9 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.concurrent.ExecutionException;
 
+//与文件操作有关的工具
 public class FileUtil {
+    //文件复制工具(从相册复制到newPath路径下)
     public static void copyFile(String oldPath, String newPath) {
         try {
             int byteRead;
@@ -32,7 +34,7 @@ public class FileUtil {
             e.printStackTrace();
         }
     }
-
+    //图片保存工具，将服务器中的图片保存到本地savePath下
     public static void saveImage(Context context, String imgUrl, String savePath){
         RequestOptions options = new RequestOptions()
                 .override(Target.SIZE_ORIGINAL); //指定图片大小(原图)

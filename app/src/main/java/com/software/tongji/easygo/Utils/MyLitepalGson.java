@@ -5,7 +5,8 @@ import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-
+//由于使用LitePal后，用Gson将Model转化为Json时会多很多没用的信息，如baseObjId等
+//于是自定义MyLitepalGson来过滤这些无用信息
 public class MyLitepalGson extends MyGson {
 
     public MyLitepalGson() {

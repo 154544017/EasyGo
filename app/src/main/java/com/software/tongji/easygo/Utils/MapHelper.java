@@ -3,7 +3,9 @@ package com.software.tongji.easygo.Utils;
 import java.util.HashMap;
 import java.util.Random;
 
+//与map，省份有关的映射
 public class MapHelper {
+    //省份名与索引的映射
     public static HashMap<String,Integer> provinceIndex= new HashMap<String,Integer>(){
         {
             put("安徽省",0);put("北京市",1);put("重庆市",2);put("福建省",3);put("广东省",4);
@@ -15,6 +17,8 @@ public class MapHelper {
             put("新疆区",30);put("西藏区",31);put("云南省",32);put("浙江省",33);
         }
     };
+    //省份名与拼音的映射(一开始服务端数据库搜索中文总是失败,于是将省份名用拼音保存，
+    // 为了方便访问，url中也用了拼音，但后来服务器修复了这个问题，但还没有该接口，所以还是用拼音就行访问)
     public static HashMap<String, String> provincePinYin = new HashMap<String, String>(){
         {
             put("安徽省","anhui");put("北京市","beijing");put("重庆市","chongqing");put("福建省","fujian");put("广东省","guangdong");
@@ -26,7 +30,7 @@ public class MapHelper {
             put("新疆区","xinjiang");put("西藏区","xizang");put("云南省","yunnan");put("浙江省","zhejiang");
         }
     };
-
+    //省份名拼音与汉字的映射，原因同上(过于愚蠢)
     public static HashMap<String, String> provinceHanzi = new HashMap<String, String>(){
         {
             put("anhui","安徽省");put("beijing","北京市");put("chongqing","重庆市");put("fujian","福建省");put("guangdong","广东省");
@@ -38,7 +42,7 @@ public class MapHelper {
             put("xinjiang","新疆区");put("xizang","西藏区");put("yunnan","云南省");put("zhejiang","浙江省");
         }
     };
-
+    //省份名的前两个字符与名字的映射，用于简化从Tip中获取省份名称
     public static HashMap<String,String> provinceBrief = new HashMap<String, String>(){
         {
             put("安徽","安徽省");put("北京","北京市");put("重庆","重庆市");put("福建","福建省");put("广东","广东省");
@@ -50,10 +54,7 @@ public class MapHelper {
             put("新疆","新疆区");put("西藏","西藏区");put("云南","云南省");put("浙江","浙江省");
         }
     };
-    /**  
-          * 获取十六进制的颜色代码.例如  "#6E36B4" , For HTML ,  
-          * @return String  
-          */
+    //获取十六进制的颜色代码.例如  "#6E36B4" , For HTML ,  
     public static String getRandColorCode() {
         String r, g, b;
         Random random = new Random();

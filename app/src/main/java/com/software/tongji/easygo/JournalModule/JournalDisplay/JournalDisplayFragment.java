@@ -45,11 +45,12 @@ public class JournalDisplayFragment extends Fragment implements JournalDisplayVi
     @BindView(R.id.journal_add_button)
     FloatingActionButton mAddJournalButton;
 
+    //用于判断该界面是否由成就界面跳转，并记录过滤的省份
     private static final String NO_DEFAULT = "is_not_jump_from_map";
+    private String mProvinceArg = NO_DEFAULT;
     private JournalAdapter mJournalAdapter;
     private boolean isFirstResume = true;
     private MaterialDialog mDialog;
-    private String mProvinceArg = NO_DEFAULT;
     private InputProvinceAdapter mProvinceListAdapter;
     private JournalDisplayPresenter mJournalDisplayPresenter = new JournalDisplayPresenter();
 
@@ -133,6 +134,7 @@ public class JournalDisplayFragment extends Fragment implements JournalDisplayVi
         }
 
         if(requestCode == REQUEST_CODE_NEW_JOURNAL){
+            //当新添加完游记后更新列表
            mJournalDisplayPresenter.getJournals();
         }
     }
@@ -166,6 +168,7 @@ public class JournalDisplayFragment extends Fragment implements JournalDisplayVi
         mJournalAdapter.notifyDataSetChanged();
     }
 
+    //显示没有游记的View
     @Override
     public void noJournals() {
         List<Journal> journals = new ArrayList<>();
@@ -177,6 +180,7 @@ public class JournalDisplayFragment extends Fragment implements JournalDisplayVi
     @Override
     public void onResume() {
         super.onResume();
+        //fragment添加到navigation时会第一次调用onResume，此时不获取游记，只有当跳转到该fragment调用onResume才更新
         if(isFirstResume){
             isFirstResume = false;
             return;
@@ -185,6 +189,7 @@ public class JournalDisplayFragment extends Fragment implements JournalDisplayVi
         Log.e("fragment", "onResume ");
     }
 
+    //当navigation显示该界面时，根据记录的province进行游记过滤
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);

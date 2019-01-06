@@ -29,6 +29,7 @@ public class AttractionsAdapter extends RecyclerView.Adapter<AttractionsAdapter.
     public void updateItemData(List<Attraction> newAttractions) {
         mAttractionList = newAttractions;
     }
+
     @NonNull
     @Override
     public AttractionsHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

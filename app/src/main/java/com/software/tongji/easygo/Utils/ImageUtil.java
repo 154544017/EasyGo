@@ -7,9 +7,9 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-
+//与相册有关的工具
 public class ImageUtil {
-
+    //返回相册选取图片的路径
     public static String handleImageOnKitkat(Context context, Intent data){
         String imagePath = null;
         Uri uri = data.getData();

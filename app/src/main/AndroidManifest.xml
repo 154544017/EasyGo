@@ -29,7 +29,7 @@
         tools:ignore="GoogleAppIndexingWarning">
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="454bde9b9ddd414955ceee80012e27bc" />
+            android:value="1acd87c18c1ead47dbae54fe1b69781e" />
 
         <activity
             android:name=".Login.LoginActivity"

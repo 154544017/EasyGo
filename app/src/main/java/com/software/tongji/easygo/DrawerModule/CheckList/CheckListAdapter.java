@@ -45,6 +45,7 @@ public class CheckListAdapter extends RecyclerView.Adapter<CheckListAdapter.Chec
     @Override
     public void onBindViewHolder(@NonNull CheckItemHolder holder, int position) {
         holder.mItemName.setText(mCheckItemList.get(position).getName());
+        //为每个item设置监听器
         holder.mCheckBox.setOnCheckedChangeListener((compoundButton, b) -> {
             CheckItem item = mCheckItemList.get(position);
             item.setCheck(b);

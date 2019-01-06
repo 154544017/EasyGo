@@ -107,9 +107,8 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
         mHandler = new Handler(Looper.getMainLooper());
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        //Check for Showing Daily Quote
         checkUserSession();
-        //Open SignUp
+        //注册界面
         mSignUp.setOnClickListener(view -> {
             mSignUp.setVisibility(View.GONE);
             mForgotPasswordText.setVisibility(View.GONE);
@@ -118,7 +117,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
             mLoginPresenter.signUp();
         });
 
-        // Open login
+        //登陆界面
         mLogin.setOnClickListener(view -> {
             mSignUp.setVisibility(View.VISIBLE);
             mForgotPasswordText.setVisibility(View.VISIBLE);
@@ -127,19 +126,20 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
             mLoginPresenter.login();
         });
 
-        // Call login
+        //调用登陆函数
         mOkLogin.setOnClickListener(view -> {
             String email = mEmailLogin.getText().toString();
             String password = mPassLogin.getText().toString();
             mLoginPresenter.okLogin(email, password, mHandler);
         });
 
-        //Call signup
+        //调用注册函数
         mOkSignUp.setOnClickListener(view -> {
             String email = mEmailSignUp.getText().toString();
             String password = mPassSignUp.getText().toString();
             String confirmPassword = mConfirmPassSignUp.getText().toString();
             String username = mUserName.getText().toString();
+            //检查邮箱，密码是否合法
             if (validateEmail(email)) {
                 if (validatePassword(password)) {
                     if (password.equals(confirmPassword)) {
@@ -153,7 +153,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
             }
         });
 
-        //open forgot password
+        //忘记密码界面
         mForgotPasswordText.setOnClickListener(view -> {
             mLogin.setVisibility(View.GONE);
             mSignUp.setVisibility(View.GONE);
@@ -162,7 +162,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
             mLoginPresenter.forgotPassword();
         });
 
-        //call submit password reset request
+        //调用重置密码函数
         mOkSubmitReset.setOnClickListener(view -> {
             String email = mEmailForgotPassword.getText().toString();
             if(validateEmail(email)){
@@ -171,7 +171,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
             }
         });
 
-        //back to login
+        //返回登陆界面
         mBackToLogin.setOnClickListener(view -> {
             mSignUp.setVisibility(View.VISIBLE);
             mForgotPasswordText.setVisibility(View.VISIBLE);
@@ -180,13 +180,13 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
             mLoginPresenter.login();
         });
 
-        //call resend reset code request
+        //再次发送重置密码验证码
         mResendCodeText.setOnClickListener(view -> {
             String email = mEmailForgotPassword.getText().toString();
             mLoginPresenter.resendResetCode(email, mHandler);
         });
 
-        //call confirm reset request
+        //验证重置密码验证码
         mOkConfirmReset.setOnClickListener(view -> {
             String email = mEmailForgotPassword.getText().toString();
             mLoginPresenter.okPasswordResetConfirm(email);
@@ -194,6 +194,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
 
     }
 
+    //注册界面
     @Override
     public void openSignUp() {
         mLoginLayout.setVisibility(View.GONE);
@@ -201,6 +202,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
         mSignUpLayout.setVisibility(View.VISIBLE);
     }
 
+    //登陆界面
     @Override
     public void openLogin() {
         mForgotPasswordLayout.setVisibility(View.GONE);
@@ -216,7 +218,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
         mEmailLogin.setText(userName);
     }
 
-
+    //忘记密码界面
     @Override
     public void forgotPassword() {
         mLoginLayout.setVisibility(View.GONE);
@@ -224,11 +226,12 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
         mForgotPasswordLayout.setVisibility(View.VISIBLE);
     }
 
-
+    //多次点击发送验证码
     @Override
     public void resendResetCode() {
         showMessage(getString(R.string.text_code_resent_alert));
     }
+
 
     @Override
     public void newPasswordInput() {
@@ -250,6 +253,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
         snackbar.show();
     }
 
+    //验证邮箱格式
     public boolean validateEmail(String email) {
         Matcher matcher = Patterns.EMAIL_ADDRESS.matcher(email);
         if (!email.equals("") && matcher.matches()) {
@@ -261,6 +265,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
         }
     }
 
+    //验证密码格式
     public boolean validatePassword(String password){
         if(password.length() >= 8){
             Pattern pattern;
@@ -284,6 +289,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
         }
     }
 
+    //检测本地数据库中是否有已登录信息
     @Override
     public void checkUserSession() {
         if (mSharedPreferences.getString(USER_TOKEN, null) != null) {
@@ -294,6 +300,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView{
     }
 
 
+    //持久化登陆
     @Override
     public void rememberUserInfo(String token, String email) {
           SharedPreferences.Editor editor = mSharedPreferences.edit();

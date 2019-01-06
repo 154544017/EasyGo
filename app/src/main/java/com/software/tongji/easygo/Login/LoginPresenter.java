@@ -42,6 +42,7 @@ public class LoginPresenter {
         mLoginView.newPasswordInput();
     }
 
+    //注册请求
     public void okSignUp(String username, String email,
                          String password, Handler handler) {
         mLoginView.showLoadingDialog();
@@ -72,6 +73,7 @@ public class LoginPresenter {
         mLoginView.dismissLoadingDialog();
     }
 
+    //登陆请求
     public void okLogin(String email, String password,Handler handler){
         mLoginView.showLoadingDialog();
         RetrofitServiceManager.getInstance()
@@ -102,15 +104,18 @@ public class LoginPresenter {
 
     }
 
+    //发送重置密码验证码（未完成）
     public void okPasswordResetRequest(String email, Handler handler){
         handler.post(()-> mLoginView.showLoadingDialog());
 
     }
 
+    //验证重置密码验证码（未完成）
     public void okPasswordResetConfirm(String email){
         mLoginView.confirmPasswordReset(email);
     }
 
+    //重置密码（未完成）
     public void okPasswordReset(String email, String code,
                                 String newPassword, Handler handler){
         handler.post(()->mLoginView.showLoadingDialog());

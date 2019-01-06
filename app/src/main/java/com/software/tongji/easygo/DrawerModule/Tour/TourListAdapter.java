@@ -25,6 +25,7 @@ public class TourListAdapter extends RecyclerView.Adapter<TourListAdapter.TourHo
         mTourList = tourList;
     }
 
+    //旅程点击事件监听器
     public interface OnTourClickListener{
         void changeToSchedule(String tourId);
     }
@@ -66,6 +67,8 @@ public class TourListAdapter extends RecyclerView.Adapter<TourListAdapter.TourHo
             mTourTitle.setText(tour.getTitle());
             mTourRemark.setText(tour.getRemark());
         }
+
+        //传递旅程ID，用以加载对应行程
         @Override
         public void onClick(View view) {
             mOnTourClickListener.changeToSchedule(mTour.getId());

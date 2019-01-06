@@ -44,6 +44,7 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
     private Vibrator mVibrator;
     private MyHandler mHandler;
 
+    //记录摇动状态
     private boolean mShake = false;
 
     @BindView(R.id.main_linear_top)
@@ -84,6 +85,7 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
     @Override
     protected void onPause() {
         super.onPause();
+        //注销mSensorManager
         if (mSensorManager != null) {
             mSensorManager.unregisterListener(this);
         }
@@ -158,6 +160,7 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
         }
     }
 
+    //开启摇一摇动画
     private void startAnimation(boolean isBack){
         int type = Animation.RELATIVE_TO_SELF;
 
@@ -177,12 +180,14 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
             bottomToY = 0.5f;
         }
 
+        //顶部图片的动画效果
         TranslateAnimation topAnim = new TranslateAnimation(
                 type, 0, type, 0, type, topFromY, type, topToY
         );
         topAnim.setDuration(200);
         topAnim.setFillAfter(true);
 
+        //底部图片的动画效果
         TranslateAnimation bottomAnim = new TranslateAnimation(
                 type, 0, type, 0, type, bottomFromY, type, bottomToY
         );
@@ -203,6 +208,7 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
                 }
             });
         }
+        //设置动画
         mTopLayout.startAnimation(topAnim);
         mBottomLayout.startAnimation(bottomAnim);
     }
@@ -237,6 +243,7 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
         Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
     }
 
+    //跳转到景点详情界面
     public void jump(Attraction attraction){
         Intent intent = DetailsActivity.newIntent(ShakeActivity.this, attraction);
         startActivity(intent);

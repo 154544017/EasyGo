@@ -40,13 +40,12 @@ import me.majiajie.pagerbottomtabstrip.listener.OnTabItemSelectedListener;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class NavigationActivity extends AppCompatActivity implements NavigationView {
+public class NavigationActivity extends AppCompatActivity {
 
     @BindView(R.id.bottom_tab_strip)
     PageNavigationView mPageNavigationView;
 
     private NavigationController mNavigationController;
-    private NavigationPresenter mNavigationPresenter;
     private FragmentManager mFragmentManager;
     private List<Fragment> mFragmentList;
     private MaterialDialog mDialog;
@@ -68,7 +67,6 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
 
         ButterKnife.bind(this);
 
-        mNavigationPresenter = new NavigationPresenter();
         mFragmentManager = getSupportFragmentManager();
 
         mNavigationController = mPageNavigationView.material()
@@ -94,6 +92,7 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
                 .show(mFragmentList.get(0))
                 .commit();
 
+        //界面跳转
         mNavigationController.addTabItemSelectedListener(new OnTabItemSelectedListener() {
             @Override
             public void onSelected(int index, int old) {
@@ -160,7 +159,7 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
                 });
     }
 
-
+    //跳转到景点搜索界面
     public void changeSearchFragmentWithArgs(String args){
         AttractionsListFragment fragment = (AttractionsListFragment)mFragmentList.get(3);
         fragment.setDefaultProvince(args);
@@ -173,6 +172,7 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
         mNavigationController.setSelect(3);
     }
 
+    //跳转到游记界面
     public void changeJournalFragmentWithArgs(String args){
         JournalDisplayFragment fragment = (JournalDisplayFragment) mFragmentList.get(2);
         fragment.setDefaultProvince(args);
@@ -189,6 +189,7 @@ public class NavigationActivity extends AppCompatActivity implements NavigationV
         Toast.makeText(this,message,Toast.LENGTH_LONG).show();
     }
 
+    //从服务器同步游记
     public void syncJournals(){
         if (UserInfo.journalCount != JournalLab.get(this).size()) {
             RetrofitServiceManager.getInstance()

@@ -56,6 +56,7 @@ public class CheckListActivity extends AppCompatActivity implements CheckListVie
         mListPresenter.getCheckLists();
     }
 
+    //加载提示
     @Override
     public void showLoadingDialog() {
         if (mDialog == null || mDialog.isCancelled()) {
@@ -77,6 +78,7 @@ public class CheckListActivity extends AppCompatActivity implements CheckListVie
         Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
     }
 
+    //刷新checklist
     @Override
     public void refreshView(List<CheckItem> checkItemList) {
         mCheckListAdapter.updateCheckList(checkItemList);

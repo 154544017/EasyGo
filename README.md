@@ -9,7 +9,7 @@
 
    - 界面截图
 
-     ![1563862867481](E:\course\course-2\easygo\EasyGo\Images\1563862867481.png)
+     ![1563862867481](Images/1563862867481.png)
 
    - 功能介绍
 
@@ -23,7 +23,7 @@
 
    - 界面截屏
 
-     ![1563862958185](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1563862958185.png)
+     ![1563862958185](Images\1563862958185.png)
 
    - 功能介绍
 
@@ -38,7 +38,7 @@
 
    - 界面截屏
 
-     ![1563862998767](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1563862998767.png)
+     ![1563862998767](Images\1563862998767.png)
 
    - 功能介绍
 
@@ -54,7 +54,7 @@
 
    - 界面截屏
 
-     ![1563863077530](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1563863077530.png)
+     ![1563863077530](Images\1563863077530.png)
 
    - 功能介绍
 
@@ -70,7 +70,7 @@
 
    - 界面截屏
 
-     ![1563863149603](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1563863149603.png)
+     ![1563863149603](Images\1563863149603.png)
 
    - 功能介绍
      - 根据行程在列表中的先后，标记现有行程列表中起点、途经点、终点位置
@@ -82,7 +82,7 @@
 
    - 界面截屏
 
-     ![1563863203242](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1563863203242.png)
+     ![1563863203242](Images\1563863203242.png)
 
    - 功能介绍
 
@@ -99,7 +99,7 @@
 
    - 界面截屏
 
-     ![1563863276002](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1563863276002.png)
+     ![1563863276002](Images\1563863276002.png)
 
    - 功能介绍
 
@@ -113,7 +113,7 @@
 
    - 界面截屏
 
-     ![1563863334531](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1563863334531.png)
+     ![1563863334531](Images\1563863334531.png)
 
    - 功能介绍
 
@@ -126,7 +126,7 @@
 
    - 界面截屏
 
-     ![1563863390405](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1563863390405.png)
+     ![1563863390405](Images\1563863390405.png)
 
    - 功能介绍
 
@@ -143,7 +143,7 @@
 
    - 界面截屏
 
-     ![1563863461304](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1563863461304.png)
+     ![1563863461304](Images\1563863461304.png)
 
    - 功能介绍
 
@@ -162,7 +162,7 @@
 
    - 界面截屏
 
-     ![1563863532555](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1563863532555.png)
+     ![1563863532555](Images\1563863532555.png)
 
    - 功能介绍
 
@@ -174,7 +174,7 @@
 
    - 界面截屏
 
-     ![1563863575491](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1563863575491.png)
+     ![1563863575491](Images\1563863575491.png)
 
    - 功能介绍
 
@@ -190,7 +190,7 @@
 
    - 界面截屏
 
-     ![1563863667852](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1563863667852.png)
+     ![1563863667852](Images\1563863667852.png)
 
    - 功能介绍
 
@@ -202,7 +202,7 @@
 
    - 界面截屏
 
-     ![1563863718404](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1563863718404.png)
+     ![1563863718404](Images\1563863718404.png)
 
    - 功能介绍
 
@@ -213,7 +213,7 @@
 
    - 界面截屏
 
-     ![1563863782658](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1563863782658.png)
+     ![1563863782658](Images\1563863782658.png)
 
    - 功能介绍
 
@@ -226,7 +226,7 @@
 
    - 界面截屏
 
-     ![1563863828188](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1563863828188.png)
+     ![1563863828188](Images\1563863828188.png)
 
    - 功能介绍
 

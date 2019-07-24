@@ -9,7 +9,7 @@
 
    - 界面截图
 
-     ![1563862867481](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1563862867481.png)
+     ![1563862867481](E:\course\course-2\easygo\EasyGo\Images\1563862867481.png)
 
    - 功能介绍
 
